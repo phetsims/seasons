@@ -14,6 +14,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var ResetAllButton2 = require( 'SUN/experimental/buttons/ResetAllButton2' );
+  var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
 
   function IntensityView( model ) {
     ScreenView.call( this, { renderer: 'svg' } );
@@ -26,6 +27,8 @@ define( function( require ) {
 
     var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10} );
     this.addChild( resetAllButton );
+
+    this.addChild( new FlashlightNode( null, {right: this.layoutBounds.right - 10, centerY: this.layoutBounds.centerY} ) );
   }
 
   return inherit( ScreenView, IntensityView );

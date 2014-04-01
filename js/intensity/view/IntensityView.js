@@ -45,7 +45,7 @@ define( function( require ) {
     this.addChild( new PanelNode( null, playAreaCenter, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} ) );
     this.addChild( new PanelNode( null, playAreaCenter, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} ) );
 
-    this.addChild( new TickMarksNode( new Vector2( this.layoutBounds.centerX, playAreaCenterY ) ) );
+    this.addChild( new TickMarksNode( playAreaCenter ) );
   }
 
   return inherit( ScreenView, IntensityView );

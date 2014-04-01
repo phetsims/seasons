@@ -19,6 +19,7 @@ define( function( require ) {
   var PanelNode = require( 'SEASONS/intensity/view/PanelNode' );
   var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
   var TargetOutlineNode = require( 'SEASONS/intensity/view/TargetOutlineNode' );
+  var Panel3DNode = require( 'SEASONS/intensity/view/Panel3DNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
   function IntensityView( model ) {
@@ -43,6 +44,7 @@ define( function( require ) {
     var playAreaCenter = new Vector2( this.layoutBounds.centerX, playAreaCenterY );
 
     this.addChild( new TargetOutlineNode( {leftCenter: playAreaCenter} ) );
+    this.addChild( new Panel3DNode( {leftCenter: playAreaCenter} ) );
 
     this.addChild( new PanelNode( null, playAreaCenter, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} ) );
     this.addChild( new PanelNode( null, playAreaCenter, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} ) );

@@ -16,7 +16,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  function PanelPanel( options ) {
+  function Toolbox( options ) {
     var WIDTH = 300;
     var HEIGHT = 100;
     var content = new Rectangle( 0, 0, WIDTH, HEIGHT );
@@ -35,7 +35,7 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Panel, PanelPanel, {
+  return inherit( Panel, Toolbox, {
 
     //Get the position each panel should take.  Panels positioned in view coordinates since their model is trivial
     getGlobalPanelPosition: function( index ) {

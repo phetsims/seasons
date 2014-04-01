@@ -15,7 +15,6 @@ define( function( require ) {
 
   /**
    *
-   * @param {Vector2} centroid the location the ticks radiate from (but do not touch)
    * @param options
    * @constructor
    */

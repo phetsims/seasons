@@ -44,7 +44,8 @@ define( function( require ) {
     var playAreaCenter = new Vector2( this.layoutBounds.centerX, playAreaCenterY );
 
     this.addChild( new TargetOutlineNode( {leftCenter: playAreaCenter} ) );
-    this.addChild( new Panel3DNode( {leftCenter: playAreaCenter} ) );
+    this.panel3DNode = new Panel3DNode( {leftCenter: playAreaCenter} );
+    this.addChild( this.panel3DNode );
 
     this.addChild( new PanelNode( null, playAreaCenter, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} ) );
     this.addChild( new PanelNode( null, playAreaCenter, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} ) );
@@ -53,5 +54,8 @@ define( function( require ) {
     this.addChild( new TickMarksNode( playAreaCenter ) );
   }
 
-  return inherit( ScreenView, IntensityView );
+  return inherit( ScreenView, IntensityView, {step: function() {
+//    console.log( 's);' );
+    this.panel3DNode.step();
+  }} );
 } );

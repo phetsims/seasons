@@ -74,6 +74,7 @@ define( function( require ) {
       }
     } ) );
 
+    this.angle = 0;
     this.setTranslation3D( 0, 0 );
     this.mutate( options );
   }
@@ -83,23 +84,27 @@ define( function( require ) {
     setTranslation3D: function( x, y ) {
       this.x3 = x;
       this.y3 = y;
-      console.log( x, y );
+//      console.log( x, y );
+      this.update();
+    },
+    update: function() {
+
+      var x = this.x3;
+      var y = this.y3;
       var HEIGHT = 120;
-      var bottomLeft = new Vector2( 0, 0 );
-      var topLeft = new Vector2( 0, HEIGHT );
       var VERTICAL_INSET = 0.9;
-      var topRight = new Vector2( 30, HEIGHT * VERTICAL_INSET );
-      var bottomRight = new Vector2( 30, HEIGHT * (1 - VERTICAL_INSET) );
       var fullDash = [10, 4];
       var partialDash = [10 / 3, 4 / 3];
 
       var u = new Vector3( 0, 0, -1 ).normalized();
-      var v = new Vector3( 0, 1, 0 );
+      var v = new Vector3( this.angle, 1, 0 );
 
-      var a = new Vector3( 50 + x, -50 + y, -100 );
-      var b = a.plus( v.times( 100 ) );
-      var c = b.plus( u.times( 100 ) );
-      var d = c.plus( v.times( -100 ) );
+      var length = 10;
+
+      var a = new Vector3( length / 2 + x, -length / 2 + y, -length );
+      var b = a.plus( v.times( length ) );
+      var c = b.plus( u.times( length ) );
+      var d = c.plus( v.times( -length ) );
 
       var bottomLeft = this.project( a );
       var topLeft = this.project( b );
@@ -118,23 +123,15 @@ define( function( require ) {
       var dx = vector.x, dy = vector.y, dz = vector.z;
       var ex = 0;
       var ey = 0;
-      var ez = 160;
+      var ez = 200;
 
       var bx = ez / dz * dx - ex;
       var by = ez / dz * dy - ey;
       return new Vector2( bx, by );
     },
-
-//    project: function( ax, ay, az, cx, cy, cz, thetax, thetay, thetaz, ex, ey, ez ) {
-//      var cy = Math.cos( thetay );
-//      var cz = Math.cos( thetaz );
-//      var dx = cy * (sz * y + cz * x) - sy * z;
-//      var dy = sx * (cy * z + sy * (sz * y + cz * x)) + cx * (cz * y - sx * x);
-//      var dz = cx * (cy * z + sy * (sz * y + cz * x)) - sx * (cz * y - sz * x);
-//
-//      var bx = ez / dz * dx - ex;
-//      var by = ez / dz * dy - ey;
-//      return new Vector2( bx, by );
-//    }
+    step: function() {
+      this.angle = Math.abs( Math.sin( Date.now() / 1000 / 2 ) );
+      this.update();
+    }
   } );
 } );

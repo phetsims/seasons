@@ -15,6 +15,7 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var ResetAllButton2 = require( 'SUN/experimental/buttons/ResetAllButton2' );
   var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
+  var PanelPanel = require( 'SEASONS/intensity/view/PanelPanel' );
 
   function IntensityView( model ) {
     ScreenView.call( this, { renderer: 'svg' } );
@@ -29,6 +30,8 @@ define( function( require ) {
     this.addChild( resetAllButton );
 
     this.addChild( new FlashlightNode( null, {right: this.layoutBounds.right - 10, centerY: this.layoutBounds.centerY} ) );
+
+    this.addChild( new PanelPanel( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} ) );
   }
 
   return inherit( ScreenView, IntensityView );

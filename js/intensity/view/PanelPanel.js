@@ -16,8 +16,14 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   function PanelPanel( options ) {
-    var content = new Rectangle( 0, 0, 300, 100 );
-    content.addChild( new Text( 'Solar', {fill: 'white'} ) );
+
+    var WIDTH = 300;
+    var HEIGHT = 100;
+    var content = new Rectangle( 0, 0, WIDTH, HEIGHT );
+    var fractionToSideLabels = 0.2;
+    content.addChild( new Text( 'Solar', {fill: 'white', centerX: WIDTH * fractionToSideLabels, bottom: HEIGHT - 5} ) );
+    content.addChild( new Text( 'Heat', {fill: 'white', centerX: WIDTH / 2, bottom: HEIGHT - 5} ) );
+    content.addChild( new Text( 'Intensity', {fill: 'white', centerX: WIDTH * (1 - fractionToSideLabels), bottom: HEIGHT - 5} ) );
 
     Panel.call( this, content, {fill: null, stroke: 'white'} );
 

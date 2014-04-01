@@ -16,6 +16,7 @@ define( function( require ) {
   var ResetAllButton2 = require( 'SUN/experimental/buttons/ResetAllButton2' );
   var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
   var PanelPanel = require( 'SEASONS/intensity/view/PanelPanel' );
+  var PanelNode = require( 'SEASONS/intensity/view/PanelNode' );
 
   function IntensityView( model ) {
     ScreenView.call( this, { renderer: 'svg' } );
@@ -31,7 +32,12 @@ define( function( require ) {
 
     this.addChild( new FlashlightNode( null, {right: this.layoutBounds.right - 10, centerY: this.layoutBounds.centerY} ) );
 
-    this.addChild( new PanelPanel( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} ) );
+    var panelPanel = new PanelPanel( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} );
+    this.addChild( panelPanel );
+
+    this.addChild( new PanelNode( null, {fill: 'red', centerBottom: this.globalToParentPoint( panelPanel.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} ) );
+    this.addChild( new PanelNode( null, {fill: 'green', centerBottom: this.globalToParentPoint( panelPanel.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} ) );
+    this.addChild( new PanelNode( null, {fill: 'blue', centerBottom: this.globalToParentPoint( panelPanel.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} ) );
   }
 
   return inherit( ScreenView, IntensityView );

@@ -17,9 +17,13 @@ define( function( require ) {
   var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
   var Toolbox = require( 'SEASONS/intensity/view/Toolbox' );
   var PanelNode = require( 'SEASONS/intensity/view/PanelNode' );
+  var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   function IntensityView( model ) {
     ScreenView.call( this, { renderer: 'svg' } );
+
+    var playAreaCenterY = this.layoutBounds.centerY - 45;
 
     var intensityBox = new AccordionBox( new Text( 'hello' ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
 
@@ -30,14 +34,18 @@ define( function( require ) {
     var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10} );
     this.addChild( resetAllButton );
 
-    this.addChild( new FlashlightNode( null, {right: this.layoutBounds.right - 10, centerY: this.layoutBounds.centerY} ) );
+    this.addChild( new FlashlightNode( null, {right: this.layoutBounds.right - 10, centerY: playAreaCenterY} ) );
 
     var toolbox = new Toolbox( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} );
     this.addChild( toolbox );
 
-    this.addChild( new PanelNode( null, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} ) );
-    this.addChild( new PanelNode( null, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} ) );
-    this.addChild( new PanelNode( null, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} ) );
+    var playAreaCenter = new Vector2( this.layoutBounds.centerX, playAreaCenterY );
+
+    this.addChild( new PanelNode( null, playAreaCenter, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} ) );
+    this.addChild( new PanelNode( null, playAreaCenter, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} ) );
+    this.addChild( new PanelNode( null, playAreaCenter, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} ) );
+
+    this.addChild( new TickMarksNode( new Vector2( this.layoutBounds.centerX, playAreaCenterY ) ) );
   }
 
   return inherit( ScreenView, IntensityView );

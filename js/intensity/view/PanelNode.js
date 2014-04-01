@@ -14,13 +14,13 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  function PanelNode( model, options ) {
+  function PanelNode( model, playAreaCenter, options ) {
     var panelNode = this;
     options = _.extend( {fill: 'green', cursor: 'pointer'}, options );
     Rectangle.call( this, 0, 0, 50, 50, {fill: options.fill} );
     this.stateProperty = new Property( 'dragging' );
     this.animatingProperty = new Property( false );
-    this.comparePosition = new Vector2( 415, 193 );
+    this.comparePosition = playAreaCenter;
 
     this.addInputListener( new NodeDragHandler( this, {
       startDrag: function() {

@@ -10,10 +10,6 @@ define( function( require ) {
 
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var RoundPushButton = require( 'SUN/experimental/buttons/RoundPushButton' );
-  var HStrut = require( 'SUN/HStrut' );
-  var Color = require( 'SCENERY/util/Color' );
   var Line = require( 'SCENERY/nodes/Line' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -25,8 +21,6 @@ define( function( require ) {
    */
   function TickMarksNode( centroid, options ) {
     Node.call( this );
-    this.addChild( new Text( 'centroid', {center: centroid, fill: 'white'} ) );
-    this.mutate( options );
     var totalAngleToSubtend = 60 * Math.PI / 180;//60 degrees in radians
     var tickSpacing = totalAngleToSubtend / 6;
     for ( var i = 0; i <= 6; i++ ) {
@@ -39,6 +33,7 @@ define( function( require ) {
       var line = new Line( pt1.x, pt1.y, pt2.x, pt2.y, {stroke: 'white', lineWidth: lineWidth} );
       this.addChild( line );
     }
+    this.mutate( options );
   }
 
   return inherit( Node, TickMarksNode );

@@ -12,6 +12,7 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var AccordionBox = require( 'SUN/AccordionBox' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ResetAllButton2 = require( 'SUN/experimental/buttons/ResetAllButton2' );
@@ -48,15 +49,24 @@ define( function( require ) {
       }
     };
 
+    //Overwrite the initial position so it will reset there, since the model was populated with dummy values before the view layout was produced
+    model.solarPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 ) );
+    model.heatPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 ) );
+    model.intensityPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 ) );
+    model.solarPanel.positionProperty.reset();
+    model.heatPanel.positionProperty.reset();
+    model.intensityPanel.positionProperty.reset();
+    console.log( model.solarPanel.position, ',.p' );
+
     //Create the different types of panels
-    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#d30e78', fill: '#1b179f', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} );
-    var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: '#0f104a', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} );
-    var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: 'black', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} );
+    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#d30e78', fill: '#1b179f'} );
+    var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: '#0f104a'} );
+    var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: 'black'} );
 
     var panelInCenter = solarPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ).
       or( heatPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) ).
       or( intensityPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) );
-    var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), {center: playAreaCenter} );
+    var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), {leftCenter: playAreaCenter} );
     this.addChild( targetOutlineNode );
 
     //Panels should go in front of the target outline
@@ -71,12 +81,15 @@ define( function( require ) {
 
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 10, centerY: playAreaCenter.y} ) );
 
-    this.addChild( new TickMarksNode( playAreaCenter.plusXY( -targetOutlineNode.width / 2, 0 ) ) );
+    this.addChild( new TickMarksNode( playAreaCenter ) );
 
     //Accordion boxes for charts
     var intensityBox = new AccordionBox( new Text( 'hello' ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
     var secondBox = new AccordionBox( new Text( 'hello again' ), {title: '-', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
     this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );
+
+    this.addChild( new Rectangle( playAreaCenter.x, playAreaCenter.y, 2, 2, {fill: 'green'} ) );
+    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );
   }
 
   return inherit( ScreenView, IntensityView, {step: function() {

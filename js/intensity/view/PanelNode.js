@@ -26,14 +26,14 @@ define( function( require ) {
       fill: null,
       cursor: 'pointer',
       stroke: null,
-      scale: 0.5
+//      scale: 0.5
     }, options );
 
     this.path = new Path( this.createShape(), {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
 
     //Location where objects can be put in front of the flashlight.
     //Account for the size of the knob here so the panel will still be centered
-    this.comparePosition = playAreaCenter.plusXY( 0, 10 );
+    this.comparePosition = playAreaCenter;
 
     //The handle
     var handleNode = new Rectangle( -2, this.path.height - 2, 18, 18, {fill: 'yellow'} );
@@ -68,11 +68,11 @@ define( function( require ) {
           panelModel.property( 'state' ).set( 'dragging' );
           translate( event );
 
-          new TWEEN.Tween( {scale: panelNode.getScaleVector().x} )
-            .to( {scale: 1}, 500 )
-            .easing( TWEEN.Easing.Cubic.InOut )
-            .onUpdate( function() { panelNode.setScaleMagnitude( this.scale, this.scale ); } )
-            .start();
+//          new TWEEN.Tween( {scale: panelNode.getScaleVector().x} )
+//            .to( {scale: 1}, 500 )
+//            .easing( TWEEN.Easing.Cubic.InOut )
+//            .onUpdate( function() { panelNode.setScaleMagnitude( this.scale, this.scale ); } )
+//            .start();
         }
         else {
 
@@ -96,7 +96,7 @@ define( function( require ) {
         if ( panelModel.state === 'dragging' ) {
           //Move to the start position or compare position, whichever is closer.
           var center = panelNode.center;
-          var distToStart = panelNode.startPosition.distance( center );
+          var distToStart = panelNode.panelModel.positionProperty.initialValue.distance( center );
           var distToCompare = panelNode.comparePosition.distance( center );
 
           if ( distToStart < distToCompare ) {
@@ -112,15 +112,8 @@ define( function( require ) {
 
     this.mutate( options );
 
-    //Overwrite the initial position so it will reset there, since the model was populated with dummy values before the view layout was produced
-    panelModel.property( 'position' ).storeInitialValue( this.center.plusXY( 0, 10 ) );
-    panelModel.property( 'position' ).reset();
-
-    this.startPosition = this.center.plusXY( 0, 10 );//TODO: do I have to make a copy of this in scenery 2
-    this.translation = this.startPosition;
-
     panelModel.property( 'position' ).link( function( position ) {
-      panelNode.translation = position;
+      panelNode.path.shape = panelNode.createShape();
     } );
     panelModel.on( 'reset', function() {
       //TODO: cancel all tweens
@@ -128,7 +121,7 @@ define( function( require ) {
       panelNode.setScaleMagnitude( 0.5, 0.5 );
 
       //Update the position again after the scale has changed
-      panelNode.translation = panelModel.position;
+//      panelNode.translation = panelModel.position;
     } );
 
     panelModel.property( 'angle' ).link( function( angle ) {
@@ -145,7 +138,9 @@ define( function( require ) {
       new TWEEN.Tween( {x: this.center.x, y: this.center.y} )
         .to( {x: this.comparePosition.x, y: this.comparePosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
-        .onUpdate( function() { panelNode.translation = new Vector2( this.x, this.y ); } )
+        .onUpdate( function() {
+          panelNode.panelModel.position = new Vector2( this.x, this.y );
+        } )
         .onComplete( function() {panelNode.panelModel.state = 'center';} )
         .start();
     },
@@ -155,16 +150,16 @@ define( function( require ) {
       var panelNode = this;
 
       //Shrink down
-      new TWEEN.Tween( {scale: this.getScaleVector().x} )
-        .to( {scale: 0.5}, 500 )
-        .easing( TWEEN.Easing.Cubic.Out )
-        .onUpdate( function() { panelNode.setScaleMagnitude( this.scale, this.scale ); } )
-        .start();
+//      new TWEEN.Tween( {scale: this.getScaleVector().x} )
+//        .to( {scale: 0.5}, 500 )
+//        .easing( TWEEN.Easing.Cubic.Out )
+//        .onUpdate( function() { panelNode.setScaleMagnitude( this.scale, this.scale ); } )
+//        .start();
 
       //Move to the toolbox
       this.panelModel.animating = true;
       new TWEEN.Tween( {x: this.x, y: this.y} )
-        .to( {x: this.startPosition.x, y: this.startPosition.y }, 500 )
+        .to( {x: panelNode.panelModel.positionProperty.initialValue.x, y: panelNode.panelModel.positionProperty.initialValue.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() { panelNode.translation = new Vector2( this.x, this.y ); } )
         .onComplete( function() {panelNode.panelModel.state = 'toolbox';} )
@@ -175,15 +170,17 @@ define( function( require ) {
       //Layout dimensions
       var HEIGHT = 120;
 
+      var x = this.panelModel.position.x;
+      var y = this.panelModel.position.y;
       var up = Vector2.createPolar( HEIGHT, this.panelModel.angle + Math.PI / 2 );
-      var centerLeft = new Vector2( 0, 0 );
+      var centerLeft = new Vector2( x, y );
       var bottomLeft = centerLeft.plus( up.times( -0.5 ) );
       var topLeft = bottomLeft.plus( up );
 
       //TODO: Should be a function of the angle
       var extensionLength = 50;
-      var topRight = topLeft.plus( topLeft.minus( new Vector2( this.playAreaCenter.x * 2, 0 ) ).normalized().times( extensionLength ) );
-      var bottomRight = bottomLeft.plus( bottomLeft.minus( new Vector2( this.playAreaCenter.x * 2, 0 ) ).normalized().times( extensionLength ) );
+      var topRight = topLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( topLeft ).normalized().times( extensionLength ) );
+      var bottomRight = bottomLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( bottomLeft ).normalized().times( extensionLength ) );
       return new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close()
     }
   } );

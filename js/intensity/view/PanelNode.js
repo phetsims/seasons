@@ -14,6 +14,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   function PanelNode( model, playAreaCenter, sendOtherPanelsHome, options ) {
@@ -34,7 +35,7 @@ define( function( require ) {
     var topRight = new Vector2( 30, HEIGHT * VERTICAL_INSET );
     var bottomRight = new Vector2( 30, HEIGHT * (1 - VERTICAL_INSET) );
 
-    Path.call( this, new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close(), {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
+    var path = new Path( new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close(), {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
 
     //State: whether dragging, in the toolbox or in the center
     this.stateProperty = new Property( 'toolbox' );
@@ -46,9 +47,10 @@ define( function( require ) {
     this.comparePosition = playAreaCenter.plusXY( 0, 10 );
 
     //The handle
-    var handleNode = new Rectangle( -2, this.height - 2, 18, 18, {fill: 'yellow'} );
+    var handleNode = new Rectangle( -2, path.height - 2, 18, 18, {fill: 'yellow'} );
     this.stateProperty.valueEquals( 'center' ).linkAttribute( handleNode, 'visible' );
-    this.addChild( handleNode );
+
+    Node.call( this, {children: [path, handleNode]} );
 
     this.addInputListener( new NodeDragHandler( this, {
 
@@ -95,7 +97,7 @@ define( function( require ) {
     this.center = this.startPosition;
   }
 
-  return inherit( Path, PanelNode, {
+  return inherit( Node, PanelNode, {
 
     //Animate the PanelNode to move to the target region
     animateToCenter: function() {

@@ -100,11 +100,11 @@ define( function( require ) {
       end: function( event ) {
         if ( panelModel.state === 'dragging' ) {
           //Move to the start position or compare position, whichever is closer.
-          var center = panelNode.center;
-          var distToStart = panelNode.panelModel.positionProperty.initialValue.distance( center );
-          var distToCompare = panelNode.comparePosition.distance( center );
+          var position = panelNode.panelModel.position;
+          var distToStart = panelNode.panelModel.positionProperty.initialValue.distance( position );
+          var distToCenter = panelNode.comparePosition.distance( position );
 
-          if ( distToStart < distToCompare ) {
+          if ( distToStart < distToCenter ) {
             panelNode.animateToToolbox();
           }
           else {

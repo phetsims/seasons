@@ -15,7 +15,6 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
   var Vector3 = require( 'DOT/Vector3' );
-  var Matrix4 = require( 'DOT/Matrix4' );
   var NodeDragHandler3D = require( 'SEASONS/intensity/view/NodeDragHandler3D' );
 
   /**
@@ -91,8 +90,6 @@ define( function( require ) {
 
       var x = this.x3;
       var y = this.y3;
-      var HEIGHT = 120;
-      var VERTICAL_INSET = 0.9;
       var fullDash = [10, 4];
       var partialDash = [10 / 3, 4 / 3];
 

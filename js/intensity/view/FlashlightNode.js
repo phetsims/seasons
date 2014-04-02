@@ -9,13 +9,11 @@ define( function( require ) {
   'use strict';
 
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var Text = require( 'SCENERY/nodes/Text' );
   var RoundPushButton = require( 'SUN/experimental/buttons/RoundPushButton' );
   var HStrut = require( 'SUN/HStrut' );
   var Color = require( 'SCENERY/util/Color' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   function FlashlightNode( flashlightOnProperty, options ) {
     HBox.call( this, { spacing: 4, children: [

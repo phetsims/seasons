@@ -2,6 +2,7 @@
 
 /**
  * Scenery node to show a panel using "faked" 3d perspective instead of real 3d projections.
+ * Also draws its own handle and the light projected onto it.
  *
  * @author Sam Reid
  */
@@ -38,8 +39,7 @@ define( function( require ) {
 
     this.lightPath = new Path( null, {fill: 'white'} );
 
-
-    flashlightOnProperty.linkAttribute( this.lightPath, 'visible' );
+    flashlightOnProperty.and( panelModel.stateProperty.valueEquals( 'center' ) ).and( panelModel.animatingProperty.valueEquals( false ) ).linkAttribute( this.lightPath, 'visible' );
 
     //Location where objects can be put in front of the flashlight.
     //Account for the size of the knob here so the panel will still be centered

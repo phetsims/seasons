@@ -58,7 +58,7 @@ define( function( require ) {
         .to( {x: this.comparePosition.x, y: this.comparePosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() { horizontalBarContainerNode.center = new Vector2( this.x, this.y ); } )
-        .onComplete( function() {horizontalBarContainerNode.stateProperty.value = 'compare';} )
+        .onComplete( function() {horizontalBarContainerNode.stateProperty.value = 'center';} )
         .start();
     },
     animateToStart: function() {

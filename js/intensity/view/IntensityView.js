@@ -42,15 +42,19 @@ define( function( require ) {
 
     var playAreaCenter = new Vector2( this.layoutBounds.centerX, playAreaCenterY );
 
-    this.addChild( new TargetOutlineNode( {leftCenter: playAreaCenter} ) );
+    var solarPanel = new PanelNode( null, playAreaCenter, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} );
+    var panel2 = new PanelNode( null, playAreaCenter, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} );
+    var panel3 = new PanelNode( null, playAreaCenter, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} );
+
+    var panelInCenter = solarPanel.stateProperty.valueEquals( 'center' ).
+      or( panel2.stateProperty.valueEquals( 'center' ) ).
+      or( panel3.stateProperty.valueEquals( 'center' ) );
+    this.addChild( new TargetOutlineNode( panelInCenter.derivedNot(), {leftCenter: playAreaCenter} ) );
     this.panel3DNode = new Panel3DNode( {leftCenter: playAreaCenter} );
     this.addChild( this.panel3DNode );
 
-    var solarPanel = new PanelNode( null, playAreaCenter, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} );
     this.addChild( solarPanel );
-    var panel2 = new PanelNode( null, playAreaCenter, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} );
     this.addChild( panel2 );
-    var panel3 = new PanelNode( null, playAreaCenter, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} );
     this.addChild( panel3 );
 
     var anyPanelDragging = solarPanel.stateProperty.valueEquals( 'dragging' ).or( panel2.stateProperty.valueEquals( 'dragging' ) ).or( panel3.stateProperty.valueEquals( 'dragging' ) );

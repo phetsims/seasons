@@ -18,9 +18,10 @@ define( function( require ) {
    * @param options
    * @constructor
    */
-  function TargetOutlineNode( options ) {
+  function TargetOutlineNode( visibleProperty, options ) {
     Node.call( this );
 
+    visibleProperty.linkAttribute( this, 'visible' );
     var HEIGHT = 120;
     var bottomLeft = new Vector2( 0, 0 );
     var topLeft = new Vector2( 0, HEIGHT );

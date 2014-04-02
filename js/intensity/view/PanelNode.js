@@ -16,7 +16,9 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var knobImage = require( 'image!SEASONS/knob.png' );
 
   function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, options ) {
     this.panelModel = panelModel;
@@ -25,9 +27,12 @@ define( function( require ) {
     options = _.extend( {
       fill: null,
       cursor: 'pointer',
-      stroke: null,
+      stroke: null
 //      scale: 0.5
     }, options );
+
+    //The handle
+    this.knobNode = new Image( knobImage, {scale: 0.25} );
 
     this.path = new Path( this.createShape(), {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
 
@@ -35,11 +40,9 @@ define( function( require ) {
     //Account for the size of the knob here so the panel will still be centered
     this.comparePosition = playAreaCenter;
 
-    //The handle
-    var handleNode = new Rectangle( -2, this.path.height - 2, 18, 18, {fill: 'yellow'} );
-    panelModel.property( 'state' ).valueEquals( 'center' ).linkAttribute( handleNode, 'visible' );
+    panelModel.property( 'state' ).valueEquals( 'center' ).linkAttribute( this.knobNode, 'visible' );
 
-    Node.call( this, {children: [this.path, handleNode]} );
+    Node.call( this, {children: [this.path, this.knobNode]} );
 
     // click in the track to change the value, continue dragging if desired
     var translate = function( event ) {
@@ -181,6 +184,8 @@ define( function( require ) {
       var extensionLength = 50;
       var topRight = topLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( topLeft ).normalized().times( extensionLength ) );
       var bottomRight = bottomLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( bottomLeft ).normalized().times( extensionLength ) );
+
+      this.knobNode.centerTop = bottomLeft;
       return new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close()
     }
   } );

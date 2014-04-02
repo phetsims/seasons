@@ -9,24 +9,27 @@ define( function( require ) {
   'use strict';
 
   var inherit = require( 'PHET_CORE/inherit' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var Text = require( 'SCENERY/nodes/Text' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var RoundPushButton = require( 'SUN/experimental/buttons/RoundPushButton' );
   var HStrut = require( 'SUN/HStrut' );
   var Color = require( 'SCENERY/util/Color' );
+  var Image = require( 'SCENERY/nodes/Image' );
+  var flashlightImage = require( 'image!SEASONS/flashlight.png' );
 
   function FlashlightNode( flashlightOnProperty, options ) {
-    HBox.call( this, { spacing: 4, children: [
-      new Text( 'Flashlight', {fill: 'white'} ),
+    var flashlightImageNode = new Image( flashlightImage, {scale: 0.4} );
+    Node.call( this, { children: [
+      flashlightImageNode,
       new RoundPushButton( new HStrut( 10 ), {
 
         //TODO: we should make roundPushButton support css color nicknames
         baseColor: new Color( 255, 0, 0 ),
-        listener: flashlightOnProperty.toggleFunction
+        listener: flashlightOnProperty.toggleFunction,
+        x: 35, y: flashlightImageNode.height / 2
       } )
     ]} );
     this.mutate( options );
   }
 
-  return inherit( HBox, FlashlightNode );
+  return inherit( Node, FlashlightNode );
 } );

@@ -18,7 +18,7 @@ define( function( require ) {
     var beamNode = new Rectangle( 0, 0, 300, 60, {opacity: 0.65, fill: 'white'} );
     this.addChild( beamNode );
     panelInPlayAreaProperty.link( function( panelInPlayArea ) {
-      beamNode.setRectWidth( panelInPlayArea ? 300 - 15 : 1200 );
+      beamNode.setRectWidth( panelInPlayArea ? 275 - 15 : 1200 );
       lightNode.right = right;
     } );
     flashlightOnProperty.linkAttribute( this, 'visible' );

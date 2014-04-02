@@ -138,7 +138,7 @@ define( function( require ) {
     animateToCenter: function() {
       this.panelModel.animating = true;
       var panelNode = this;
-      new TWEEN.Tween( {x: this.center.x, y: this.center.y} )
+      new TWEEN.Tween( {x: panelNode.panelModel.position.x, y: panelNode.panelModel.position.y} )
         .to( {x: this.comparePosition.x, y: this.comparePosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() {
@@ -161,10 +161,10 @@ define( function( require ) {
 
       //Move to the toolbox
       this.panelModel.animating = true;
-      new TWEEN.Tween( {x: this.x, y: this.y} )
+      new TWEEN.Tween( {x: panelNode.panelModel.position.x, y: panelNode.panelModel.position.y} )
         .to( {x: panelNode.panelModel.positionProperty.initialValue.x, y: panelNode.panelModel.positionProperty.initialValue.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
-        .onUpdate( function() { panelNode.translation = new Vector2( this.x, this.y ); } )
+        .onUpdate( function() { panelNode.panelModel.position = new Vector2( this.x, this.y ); } )
         .onComplete( function() {panelNode.panelModel.state = 'toolbox';} )
         .start();
     },

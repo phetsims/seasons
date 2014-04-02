@@ -32,7 +32,7 @@ define( function( require ) {
     }, options );
 
     //The handle
-    this.knobNode = new Image( knobImage, {scale: 0.25} );
+    this.knobNode = new Image( knobImage, {scale: 0.5} );
 
     this.path = new Path( null, {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
 
@@ -40,7 +40,12 @@ define( function( require ) {
     //Account for the size of the knob here so the panel will still be centered
     this.comparePosition = playAreaCenter;
 
-    panelModel.property( 'state' ).valueEquals( 'center' ).linkAttribute( this.knobNode, 'visible' );
+    panelModel.property( 'state' ).valueEquals( 'center' ).link( function( visible ) {
+      panelNode.knobNode.visible = visible;
+
+      //redraw the knob
+      panelNode.updateShape();
+    } );
 
     Node.call( this, {children: [this.path, this.knobNode]} );
 
@@ -54,9 +59,6 @@ define( function( require ) {
       var x = point.minus( panelModel.position );
       panelModel.unclampedAngle = x.angle() + Math.PI / 2;
     };
-
-    panelModel.angleProperty.debug( 'angle' );
-    panelModel.positionProperty.debug( 'position' );
 
     //TODO: Drag based on deltas
     this.addInputListener( new SimpleDragHandler( {
@@ -185,8 +187,11 @@ define( function( require ) {
       var topRight = topLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( topLeft ).normalized().times( extensionLength ) );
       var bottomRight = bottomLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( bottomLeft ).normalized().times( extensionLength ) );
 
+      //Translating the knob slows performance considerably, so only do it when the knob is visible
       //TODO: Rotate the knob
-      this.knobNode.centerTop = bottomLeft;
+      if ( this.panelModel.state !== 'dragging' ) {
+        this.knobNode.centerTop = bottomLeft;
+      }
       this.path.shape = new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close();
     }
   } );

@@ -59,9 +59,9 @@ define( function( require ) {
     console.log( model.solarPanel.position, ',.p' );
 
     //Create the different types of panels
-    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#d30e78', fill: '#1b179f'} );
-    var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: '#0f104a'} );
-    var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: 'black'} );
+    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, {stroke: '#d30e78', fill: '#1b179f'} );
+    var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, {stroke: '#cccccd', fill: '#0f104a'} );
+    var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, {stroke: '#cccccd', fill: 'black'} );
 
     var panelInCenter = solarPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ).
       or( heatPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) ).

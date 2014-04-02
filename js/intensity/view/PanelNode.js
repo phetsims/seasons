@@ -20,7 +20,7 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var knobImage = require( 'image!SEASONS/knob.png' );
 
-  function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, options ) {
+  function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, options ) {
     this.panelModel = panelModel;
     this.playAreaCenter = playAreaCenter;
     var panelNode = this;
@@ -34,6 +34,10 @@ define( function( require ) {
     this.knobNode = new Image( knobImage, {scale: 0.5} );
 
     this.path = new Path( null, {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
+
+    this.lightPath = new Path( null, {fill: 'white'} );
+
+    panelModel.stateProperty.valueEquals( 'center' ).and( flashlightOnProperty ).linkAttribute( this.lightPath, 'visible' );
 
     //Location where objects can be put in front of the flashlight.
     //Account for the size of the knob here so the panel will still be centered
@@ -54,7 +58,7 @@ define( function( require ) {
       }
     } );
 
-    Node.call( this, {children: [this.path, this.knobNode]} );
+    Node.call( this, {children: [this.path, this.knobNode, this.lightPath]} );
 
     // click in the track to change the value, continue dragging if desired
     var translate = function( event ) {
@@ -203,6 +207,46 @@ define( function( require ) {
         this.knobNode.centerTop = bottomLeft;
       }
       this.path.shape = new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close();
+
+      var centerRight = topRight.blend( bottomRight, 0.5 );
+      var center = centerRight.blend( centerLeft, 0.5 );
+
+      if ( this.panelModel.state === 'center' ) {
+        var ry = this.guessY( center, this.panelModel.angle );
+        //guess the light shape that gives the correct cross section
+
+        var ellipseWidth = centerRight.distance( centerLeft ) / 4 * Math.cos( this.panelModel.angle );
+
+        this.lightPath.shape = Shape.ellipse( center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
+      }
+    },
+
+    //Try to guess the y parameter for the ellipse that will match perfectly with the flashlight area
+    // could generate a table if that's better
+    guessY: function( center ) {
+
+      var lowerBound = 10;
+      var upperBound = 100;
+
+      var guess = (upperBound + lowerBound) / 2;
+      for ( var i = 0; i < 10; i++ ) {
+        guess = (upperBound + lowerBound) / 2;
+        var result = this.calculateY( center, guess );
+//        console.log( 'i', i, result );
+        if ( result > 181.5 ) {
+          lowerBound = guess;
+        }
+        else {
+          upperBound = guess;
+        }
+      }
+//      debugger;
+      return guess;
+    },
+
+    calculateY: function( center, guessY ) {
+      var ellipse = Shape.ellipse( center.x, center.y, 10, guessY, this.panelModel.angle );
+      return ellipse.bounds.top;
     }
   } );
 } );

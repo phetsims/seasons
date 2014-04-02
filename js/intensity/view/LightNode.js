@@ -15,7 +15,7 @@ define( function( require ) {
   function LightNode( flashlightOnProperty, panelInPlayAreaProperty, right, options ) {
     var lightNode = this;
     Node.call( this, {pickable: false} );
-    var beamNode = new Rectangle( 0, 0, 300, 60, {opacity: 0.65, fill: 'white'} );
+    var beamNode = new Rectangle( 0, 0, 300, 50, {opacity: 0.65, fill: 'white'} );
     this.addChild( beamNode );
     panelInPlayAreaProperty.link( function( panelInPlayArea ) {
       beamNode.setRectWidth( panelInPlayArea ? 275 - 15 : 1200 );

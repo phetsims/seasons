@@ -13,18 +13,15 @@ define( function( require ) {
 
   function IntensityModel() {
     PropertySet.call( this, {
+
+      //Boolean property indicating whether the flashlight button has been pressed
+      //Whether the light is visible also depends on whether a panel is in the target area
       flashlightOn: false
     } );
   }
 
-  inherit( PropertySet, IntensityModel, {
+  return inherit( PropertySet, IntensityModel, {
     step: function() {
-      //TODO: use dt
-    },
-    reset: function() {
-      PropertySet.prototype.reset.call( this );
     }
   } );
-
-  return IntensityModel;
 } );

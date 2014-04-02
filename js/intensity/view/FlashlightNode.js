@@ -1,7 +1,7 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * Flashlight node, includes the on/off button.
+ * Flashlight node, includes the on/off button (but doesn't include the light).
  *
  * @author Sam Reid
  */
@@ -20,10 +20,8 @@ define( function( require ) {
       new Text( 'Flashlight', {fill: 'white'} ),
       new RoundPushButton( new HStrut( 10 ), {
         baseColor: new Color( 255, 0, 0 ),
-        listener: function() {
-          console.log( 'hello' );
-          flashlightOnProperty.value = !flashlightOnProperty.value;
-        }} )
+        listener: flashlightOnProperty.toggleFunction
+      } )
     ]} );
     this.mutate( options );
   }

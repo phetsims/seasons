@@ -187,7 +187,7 @@ define( function( require ) {
       var topRight = topLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( topLeft ).normalized().times( extensionLength ) );
       var bottomRight = bottomLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( bottomLeft ).normalized().times( extensionLength ) );
 
-      //Translating the knob slows performance considerably, so only do it when the knob is visible
+      //Translating the knob slows performance considerably (on iPad3), so only do it when the knob is visible
       //TODO: Rotate the knob
       if ( this.panelModel.state !== 'dragging' ) {
         this.knobNode.centerTop = bottomLeft;

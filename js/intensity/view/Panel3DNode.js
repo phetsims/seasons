@@ -90,8 +90,8 @@ define( function( require ) {
 
       var x = this.x3;
       var y = this.y3;
-      var fullDash = [10, 4];
-      var partialDash = [10 / 3, 4 / 3];
+//      var fullDash = [10, 4];
+//      var partialDash = [10 / 3, 4 / 3];
 
       var u = new Vector3( 0, 0, -1 ).normalized();
       var v = new Vector3( this.angle, 1, 0 );
@@ -108,14 +108,14 @@ define( function( require ) {
       var topRight = this.project( c );
       var bottomRight = this.project( d );
       this.children = [new Path( new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close(), {fill: 'white', opacity: 0.2} ),
-        new Line( bottomLeft, topLeft, {stroke: 'red', lineDash: fullDash, lineWidth: 5} ),
-        new Line( topLeft, topRight, {stroke: 'green', lineDash: partialDash, lineWidth: 5} ),
-        new Line( topRight, bottomRight, {stroke: 'blue', lineDash: fullDash, lineWidth: 5} ),
-        new Line( bottomRight, bottomLeft, {stroke: 'white', lineDash: partialDash, lineWidth: 5} )
+        new Line( bottomLeft, topLeft, {stroke: 'red', lineWidth: 5} ),
+        new Line( topLeft, topRight, {stroke: 'green', lineWidth: 5} ),
+        new Line( topRight, bottomRight, {stroke: 'blue', lineWidth: 5} ),
+        new Line( bottomRight, bottomLeft, {stroke: 'white', lineWidth: 5} )
       ];
     },
     //See http://en.wikipedia.org/wiki/3D_projection
-    //assumes camera is at 0,0,0 with angle 0,0,0 and a fixed ez=100 from the viewing screen
+    //assumes camera is at 0,0,0 with angle 0,0,0 and a fixed ex = 0, ey = 0, ez!=0 from the viewing screen
     project: function( vector ) {
       var dx = vector.x, dy = vector.y, dz = vector.z;
       var ex = 0;

@@ -13,6 +13,7 @@ define( function( require ) {
   var AccordionBox = require( 'SUN/AccordionBox' );
   var Text = require( 'SCENERY/nodes/Text' );
   var HBox = require( 'SCENERY/nodes/HBox' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var ResetAllButton2 = require( 'SUN/experimental/buttons/ResetAllButton2' );
   var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
   var LightNode = require( 'SEASONS/intensity/view/LightNode' );
@@ -59,9 +60,8 @@ define( function( require ) {
     this.addChild( targetOutlineNode );
 
     //Panels should go in front of the target outline
-    this.addChild( panel1 );
-    this.addChild( panel2 );
-    this.addChild( panel3 );
+    var panelLayer = new Node( {children: [panel1, panel2, panel3]} );
+    this.addChild( panelLayer );
 
     //3D Panels (feasibility test)
 //    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );

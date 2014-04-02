@@ -45,6 +45,7 @@ define( function( require ) {
 
       //When starting the drag, animate to full size (if it was small in the toolbox)
       startDrag: function() {
+        panelNode.moveToFront();
         panelNode.stateProperty.set( 'dragging' );
 
         new TWEEN.Tween( {scale: panelNode.getScaleVector().x} )

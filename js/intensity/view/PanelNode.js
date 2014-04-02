@@ -16,7 +16,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
 
-  function PanelNode( model, playAreaCenter, options ) {
+  function PanelNode( model, playAreaCenter, sendOtherPanelsHome, options ) {
     var panelNode = this;
     options = _.extend( {fill: 'green', cursor: 'pointer', scale: 0.5}, options );
     var HEIGHT = 120;
@@ -57,6 +57,7 @@ define( function( require ) {
           panelNode.animateToStart();
         }
         else {
+          sendOtherPanelsHome( panelNode );
           panelNode.animateToComparison();
         }
       }

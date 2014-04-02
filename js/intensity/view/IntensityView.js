@@ -36,11 +36,23 @@ define( function( require ) {
 
     var playAreaCenter = new Vector2( this.layoutBounds.centerX, playAreaCenterY );
 
-    var solarPanel = new PanelNode( null, playAreaCenter, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} );
-    var panel2 = new PanelNode( null, playAreaCenter, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} );
-    var panel3 = new PanelNode( null, playAreaCenter, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} );
+    var sendOtherPanelsHome = function( panelNode ) {
+      if ( panelNode !== panel1 ) {
+        panel1.animateToStart();
+      }
+      if ( panelNode !== panel2 ) {
+        panel2.animateToStart();
+      }
+      if ( panelNode !== panel3 ) {
+        panel3.animateToStart();
+      }
+    };
 
-    var panelInCenter = solarPanel.stateProperty.valueEquals( 'center' ).
+    var panel1 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} );
+    var panel2 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} );
+    var panel3 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} );
+
+    var panelInCenter = panel1.stateProperty.valueEquals( 'center' ).
       or( panel2.stateProperty.valueEquals( 'center' ) ).
       or( panel3.stateProperty.valueEquals( 'center' ) );
     var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), {center: playAreaCenter} );
@@ -48,12 +60,12 @@ define( function( require ) {
 //    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );
 //    this.addChild( this.panel3DNode );
 
-    this.addChild( solarPanel );
+    this.addChild( panel1 );
     this.addChild( panel2 );
     this.addChild( panel3 );
 
-    var anyPanelDragging = solarPanel.stateProperty.valueEquals( 'dragging' ).or( panel2.stateProperty.valueEquals( 'dragging' ) ).or( panel3.stateProperty.valueEquals( 'dragging' ) );
-    var anyPanelCentered = solarPanel.stateProperty.valueEquals( 'center' ).or( panel2.stateProperty.valueEquals( 'center' ) ).or( panel3.stateProperty.valueEquals( 'center' ) );
+    var anyPanelDragging = panel1.stateProperty.valueEquals( 'dragging' ).or( panel2.stateProperty.valueEquals( 'dragging' ) ).or( panel3.stateProperty.valueEquals( 'dragging' ) );
+    var anyPanelCentered = panel1.stateProperty.valueEquals( 'center' ).or( panel2.stateProperty.valueEquals( 'center' ) ).or( panel3.stateProperty.valueEquals( 'center' ) );
 
     this.addChild( new LightNode( model.property( 'flashlightOn' ).and( anyPanelDragging.derivedNot() ), anyPanelCentered, {right: this.layoutBounds.right - 100, centerY: playAreaCenterY} ) );
 
@@ -71,5 +83,6 @@ define( function( require ) {
   return inherit( ScreenView, IntensityView, {step: function() {
 //    console.log( 's);' );
 //    this.panel3DNode.step();
-  }} );
+  }
+  } );
 } );

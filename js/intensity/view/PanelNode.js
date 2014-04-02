@@ -34,7 +34,7 @@ define( function( require ) {
     //The handle
     this.knobNode = new Image( knobImage, {scale: 0.25} );
 
-    this.path = new Path( this.createShape(), {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
+    this.path = new Path( null, {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
 
     //Location where objects can be put in front of the flashlight.
     //Account for the size of the knob here so the panel will still be centered
@@ -116,7 +116,7 @@ define( function( require ) {
     this.mutate( options );
 
     panelModel.property( 'position' ).link( function( position ) {
-      panelNode.path.shape = panelNode.createShape();
+      panelNode.updateShape();
     } );
     panelModel.on( 'reset', function() {
       //TODO: cancel all tweens
@@ -128,7 +128,7 @@ define( function( require ) {
     } );
 
     panelModel.property( 'angle' ).link( function( angle ) {
-      panelNode.path.shape = panelNode.createShape();
+      panelNode.updateShape();
     } );
   }
 
@@ -169,7 +169,7 @@ define( function( require ) {
         .start();
     },
 
-    createShape: function() {
+    updateShape: function() {
       //Layout dimensions
       var HEIGHT = 120;
 
@@ -187,7 +187,7 @@ define( function( require ) {
 
       //TODO: Rotate the knob
       this.knobNode.centerTop = bottomLeft;
-      return new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close()
+      this.path.shape = new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close();
     }
   } );
 } );

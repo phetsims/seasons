@@ -1,7 +1,7 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * Flashlight node, includes the on/off button.
+ * Node that shows the radial tick marks in the play area, which indicate the angle of the panel.
  *
  * @author Sam Reid
  */

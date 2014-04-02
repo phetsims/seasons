@@ -66,10 +66,10 @@ define( function( require ) {
 //        var distToCompare = panelNode.comparePosition.distance( center );
 //
 //        if ( distToStart < distToCompare ) {
-//          panelNode.animateToStart();
+//          panelNode.animateToToolbox();
 //        }
 //        else {
-//          panelNode.animateToComparison();
+//          panelNode.animateToCenter();
 //        }
       }
     } ) );

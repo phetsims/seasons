@@ -1,7 +1,7 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * Flashlight node, includes the on/off button.
+ * Shows the panel target outline in the center of the play area as a cue to drag panels there.
  *
  * @author Sam Reid
  */
@@ -13,15 +13,10 @@ define( function( require ) {
   var Line = require( 'SCENERY/nodes/Line' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   *
-   * @param options
-   * @constructor
-   */
   function TargetOutlineNode( visibleProperty, options ) {
     Node.call( this );
 
-    visibleProperty.linkAttribute( this, 'visible' );
+    //TODO: factor out this geometry with geometry in PanelNode
     var HEIGHT = 120;
     var bottomLeft = new Vector2( 0, 0 );
     var topLeft = new Vector2( 0, HEIGHT );
@@ -36,6 +31,8 @@ define( function( require ) {
     this.addChild( new Line( topRight, bottomRight, {stroke: 'white', lineDash: fullDash} ) );
     this.addChild( new Line( bottomRight, bottomLeft, {stroke: 'white', lineDash: partialDash} ) );
     this.mutate( options );
+
+    visibleProperty.linkAttribute( this, 'visible' );
   }
 
   return inherit( Node, TargetOutlineNode );

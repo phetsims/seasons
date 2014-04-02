@@ -37,13 +37,13 @@ define( function( require ) {
 
     var sendOtherPanelsHome = function( panelNode ) {
       if ( panelNode !== panel1 ) {
-        panel1.animateToStart();
+        panel1.animateToToolbox();
       }
       if ( panelNode !== panel2 ) {
-        panel2.animateToStart();
+        panel2.animateToToolbox();
       }
       if ( panelNode !== panel3 ) {
-        panel3.animateToStart();
+        panel3.animateToToolbox();
       }
     };
 

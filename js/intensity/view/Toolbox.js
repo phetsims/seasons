@@ -1,7 +1,7 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * Panel from which the user can select different panels.
+ * Toolbox from which the user can select different panels.
  *
  * @author Sam Reid
  */

@@ -12,9 +12,15 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
-  function LightNode( flashlightOnProperty, options ) {
+  function LightNode( flashlightOnProperty, panelInPlayAreaProperty, options ) {
+    var lightNode = this;
     Node.call( this, {pickable: false} );
-    this.addChild( new Rectangle( 0, 0, 300, 60, {opacity: 0.65, fill: 'white'} ) );
+    var beamNode = new Rectangle( 0, 0, 300, 60, {opacity: 0.65, fill: 'white'} );
+    this.addChild( beamNode );
+    panelInPlayAreaProperty.link( function( panelInPlayArea ) {
+      beamNode.setRectWidth( panelInPlayArea ? 300 - 15 : 1200 );
+      lightNode.mutate( options );
+    } );
     flashlightOnProperty.linkAttribute( this, 'visible' );
     this.mutate( options );
   }

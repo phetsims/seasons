@@ -28,12 +28,6 @@ define( function( require ) {
 
     var playAreaCenterY = this.layoutBounds.centerY - 45;
 
-    var intensityBox = new AccordionBox( new Text( 'hello' ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
-
-    var secondBox = new AccordionBox( new Text( 'hello again' ), {title: '-', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
-
-    this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );
-
     var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10} );
     this.addChild( resetAllButton );
 
@@ -59,12 +53,19 @@ define( function( require ) {
     this.addChild( panel3 );
 
     var anyPanelDragging = solarPanel.stateProperty.valueEquals( 'dragging' ).or( panel2.stateProperty.valueEquals( 'dragging' ) ).or( panel3.stateProperty.valueEquals( 'dragging' ) );
+    var anyPanelCentered = solarPanel.stateProperty.valueEquals( 'center' ).or( panel2.stateProperty.valueEquals( 'center' ) ).or( panel3.stateProperty.valueEquals( 'center' ) );
 
-    this.addChild( new LightNode( model.property( 'flashlightOn' ).and( anyPanelDragging.derivedNot() ), {right: this.layoutBounds.right - 100, centerY: playAreaCenterY} ) );
+    this.addChild( new LightNode( model.property( 'flashlightOn' ).and( anyPanelDragging.derivedNot() ), anyPanelCentered, {right: this.layoutBounds.right - 100, centerY: playAreaCenterY} ) );
 
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 10, centerY: playAreaCenterY} ) );
 
     this.addChild( new TickMarksNode( playAreaCenter.plusXY( -targetOutlineNode.width / 2, 0 ) ) );
+
+    var intensityBox = new AccordionBox( new Text( 'hello' ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
+
+    var secondBox = new AccordionBox( new Text( 'hello again' ), {title: '-', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
+
+    this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );
   }
 
   return inherit( ScreenView, IntensityView, {step: function() {

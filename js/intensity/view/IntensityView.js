@@ -50,9 +50,9 @@ define( function( require ) {
     };
 
     //Overwrite the initial position so it will reset there, since the model was populated with dummy values before the view layout was produced
-    model.solarPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 ) );
-    model.heatPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 ) );
-    model.intensityPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 ) );
+    model.solarPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 12, 43 ) );
+    model.heatPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 12, 43 ) );
+    model.intensityPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 12, 43 ) );
     model.solarPanel.positionProperty.reset();
     model.heatPanel.positionProperty.reset();
     model.intensityPanel.positionProperty.reset();
@@ -88,8 +88,8 @@ define( function( require ) {
     var secondBox = new AccordionBox( new Text( 'hello again' ), {title: '-', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
     this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );
 
-    this.addChild( new Rectangle( playAreaCenter.x, playAreaCenter.y, 2, 2, {fill: 'green'} ) );
-    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );
+//    this.addChild( new Rectangle( playAreaCenter.x, playAreaCenter.y, 2, 2, {fill: 'green'} ) );
+//    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );
   }
 
   return inherit( ScreenView, IntensityView, {step: function() {

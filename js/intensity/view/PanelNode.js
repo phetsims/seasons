@@ -124,9 +124,6 @@ define( function( require ) {
 
     this.mutate( options );
 
-    panelModel.property( 'position' ).link( function( position ) {
-      panelNode.updateShape();
-    } );
     panelModel.on( 'reset', function() {
       //TODO: cancel all tweens
 
@@ -136,7 +133,7 @@ define( function( require ) {
 //      panelNode.translation = panelModel.position;
     } );
 
-    panelModel.property( 'angle' ).link( function( angle ) {
+    panelModel.multilink( ['position', 'angle', 'scale'], function() {
       panelNode.updateShape();
     } );
   }
@@ -181,6 +178,7 @@ define( function( require ) {
         .start();
     },
 
+    //TODO: Performance on iPad3
     updateShape: function() {
       //Layout dimensions
       var HEIGHT = 120;

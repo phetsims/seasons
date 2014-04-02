@@ -58,10 +58,12 @@ define( function( require ) {
     model.intensityPanel.positionProperty.reset();
     console.log( model.solarPanel.position, ',.p' );
 
+    var lightNode = new LightNode( model.property( 'flashlightOn' ).and( model.anyPanelDragging.derivedNot() ), model.anyPanelCentered, this.layoutBounds.right - 100, {centerY: playAreaCenter.y} );
+
     //Create the different types of panels
-    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, {stroke: '#d30e78', fill: '#1b179f'} );
-    var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, {stroke: '#cccccd', fill: '#0f104a'} );
-    var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, {stroke: '#cccccd', fill: 'black'} );
+    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightTipAndTail.bind( lightNode ), {stroke: '#d30e78', fill: '#1b179f'} );
+    var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightTipAndTail.bind( lightNode ), {stroke: '#cccccd', fill: '#0f104a'} );
+    var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightTipAndTail.bind( lightNode ), {stroke: '#cccccd', fill: 'black'} );
 
     var panelInCenter = solarPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ).
       or( heatPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) ).
@@ -77,7 +79,7 @@ define( function( require ) {
 //    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );
 //    this.addChild( this.panel3DNode );
 
-    this.addChild( new LightNode( model.property( 'flashlightOn' ).and( model.anyPanelDragging.derivedNot() ), model.anyPanelCentered, this.layoutBounds.right - 100, {centerY: playAreaCenter.y} ) );
+    this.addChild( lightNode );
 
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 10, centerY: playAreaCenter.y} ) );
 

@@ -20,8 +20,9 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var knobImage = require( 'image!SEASONS/knob.png' );
 
-  function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, options ) {
+  function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, setLightTipAndTail, options ) {
     this.panelModel = panelModel;
+    this.setLightTipAndTail = setLightTipAndTail;
     this.playAreaCenter = playAreaCenter;
     var panelNode = this;
     options = _.extend( {
@@ -37,7 +38,8 @@ define( function( require ) {
 
     this.lightPath = new Path( null, {fill: 'white'} );
 
-    panelModel.stateProperty.valueEquals( 'center' ).and( flashlightOnProperty ).linkAttribute( this.lightPath, 'visible' );
+
+    flashlightOnProperty.linkAttribute( this.lightPath, 'visible' );
 
     //Location where objects can be put in front of the flashlight.
     //Account for the size of the knob here so the panel will still be centered
@@ -215,9 +217,13 @@ define( function( require ) {
         var ry = this.guessY( center, this.panelModel.angle );
         //guess the light shape that gives the correct cross section
 
-        var ellipseWidth = centerRight.distance( centerLeft ) / 4 * Math.cos( this.panelModel.angle );
+        //Meh, it's a heuristic that seems to work
+        var ellipseWidth = centerRight.distance( centerLeft ) / 4 * Math.pow( Math.abs( Math.cos( this.panelModel.angle ) ), 1.5 );
 
         this.lightPath.shape = Shape.ellipse( center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
+        var ellipseTail = new Vector2( 0, ry ).rotated( this.panelModel.angle ).plus( center );
+        var ellipseTip = new Vector2( 0, -ry ).rotated( this.panelModel.angle ).plus( center );
+        this.setLightTipAndTail( ellipseTip.x, ellipseTail.x );
       }
     },
 
@@ -229,7 +235,7 @@ define( function( require ) {
       var upperBound = 100;
 
       var guess = (upperBound + lowerBound) / 2;
-      for ( var i = 0; i < 10; i++ ) {
+      for ( var i = 0; i < 100; i++ ) {
         guess = (upperBound + lowerBound) / 2;
         var result = this.calculateY( center, guess );
 //        console.log( 'i', i, result );

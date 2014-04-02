@@ -83,15 +83,12 @@ define( function( require ) {
     setTranslation3D: function( x, y ) {
       this.x3 = x;
       this.y3 = y;
-//      console.log( x, y );
       this.update();
     },
     update: function() {
 
       var x = this.x3;
       var y = this.y3;
-//      var fullDash = [10, 4];
-//      var partialDash = [10 / 3, 4 / 3];
 
       var u = new Vector3( 0, 0, -1 ).normalized();
       var v = new Vector3( this.angle, 1, 0 );

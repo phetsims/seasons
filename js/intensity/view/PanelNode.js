@@ -40,10 +40,18 @@ define( function( require ) {
     this.comparePosition = playAreaCenter;
 
     panelModel.property( 'state' ).valueEquals( 'center' ).link( function( visible ) {
-      panelNode.knobNode.visible = visible;
 
       //redraw the knob
       panelNode.updateShape();
+    } );
+
+    panelModel.animatingProperty.derivedNot().and( panelModel.property( 'state' ).valueEquals( 'center' ) ).linkAttribute( this.knobNode, 'visible' );
+
+    //Update the knob location after the panel animates to the center
+    panelModel.property( 'animating' ).link( function( animating ) {
+      if ( !animating ) {
+        panelNode.updateShape();
+      }
     } );
 
     Node.call( this, {children: [this.path, this.knobNode]} );
@@ -145,7 +153,10 @@ define( function( require ) {
         .onUpdate( function() {
           panelNode.panelModel.position = new Vector2( this.x, this.y );
         } )
-        .onComplete( function() {panelNode.panelModel.state = 'center';} )
+        .onComplete( function() {
+          panelNode.panelModel.state = 'center';
+          panelNode.panelModel.animating = false;
+        } )
         .start();
     },
 
@@ -153,20 +164,20 @@ define( function( require ) {
     animateToToolbox: function() {
       var panelNode = this;
 
-      //Shrink down
-      new TWEEN.Tween( {scale: panelNode.panelModel.scale} )
-        .to( {scale: 0.5}, 500 )
-        .easing( TWEEN.Easing.Cubic.Out )
-        .onUpdate( function() { panelNode.panelModel.scale = this.scale; } )
-        .start();
-
-      //Move to the toolbox
+      //Shrink & Move to the toolbox
       this.panelModel.animating = true;
-      new TWEEN.Tween( {x: panelNode.panelModel.position.x, y: panelNode.panelModel.position.y} )
-        .to( {x: panelNode.panelModel.positionProperty.initialValue.x, y: panelNode.panelModel.positionProperty.initialValue.y }, 500 )
+      new TWEEN.Tween( {angle: panelNode.panelModel.angle, scale: panelNode.panelModel.scale, x: panelNode.panelModel.position.x, y: panelNode.panelModel.position.y} )
+        .to( {angle: panelNode.panelModel.angleProperty.initialValue, scale: 0.5, x: panelNode.panelModel.positionProperty.initialValue.x, y: panelNode.panelModel.positionProperty.initialValue.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
-        .onUpdate( function() { panelNode.panelModel.position = new Vector2( this.x, this.y ); } )
-        .onComplete( function() {panelNode.panelModel.state = 'toolbox';} )
+        .onUpdate( function() {
+          panelNode.panelModel.position = new Vector2( this.x, this.y );
+          panelNode.panelModel.scale = this.scale;
+          panelNode.panelModel.unclampedAngle = this.angle;
+        } )
+        .onComplete( function() {
+          panelNode.panelModel.state = 'toolbox';
+          panelNode.panelModel.animating = false;
+        } )
         .start();
     },
 
@@ -190,7 +201,7 @@ define( function( require ) {
 
       //Translating the knob slows performance considerably (on iPad3), so only do it when the knob is visible
       //TODO: Rotate the knob
-      if ( this.panelModel.state !== 'dragging' ) {
+      if ( this.panelModel.state !== 'dragging' && !this.panelModel.animating ) {
         this.knobNode.centerTop = bottomLeft;
       }
       this.path.shape = new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close();

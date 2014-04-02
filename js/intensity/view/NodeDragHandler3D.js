@@ -40,7 +40,8 @@ define( function( require ) {
         var location = parentPoint;
         var constrainedLocation = constrainBounds( location, options.dragBounds );
 //        node.setTranslation( constrainedLocation );
-        node.setTranslation3D( -constrainedLocation.x / 50, -constrainedLocation.y / 50 );
+        var scale = 10;
+        node.setTranslation3D( constrainedLocation.x * scale, constrainedLocation.y * scale );
         options.drag( event );
       },
 

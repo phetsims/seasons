@@ -50,7 +50,7 @@ define( function( require ) {
       or( panel2.stateProperty.valueEquals( 'center' ) ).
       or( panel3.stateProperty.valueEquals( 'center' ) );
     this.addChild( new TargetOutlineNode( panelInCenter.derivedNot(), {leftCenter: playAreaCenter} ) );
-    this.panel3DNode = new Panel3DNode( {leftCenter: playAreaCenter} );
+    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );
     this.addChild( this.panel3DNode );
 
     this.addChild( solarPanel );

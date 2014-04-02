@@ -57,6 +57,7 @@ define( function( require ) {
       drag: function() {
         //TODO: is 'changed' still used now that overlay is gone?
 //        panelNode.events.trigger( 'changed' );
+        this.center = new Vector2( this.x3, this.y3 );
       },
       endDrag: function() {
         //Move to the start position or compare position, whichever is closer.
@@ -87,23 +88,21 @@ define( function( require ) {
     },
     update: function() {
 
-      var x = this.x3;
-      var y = this.y3;
+      var origin = new Vector3( this.x3, this.y3 );
 
-      var u = new Vector3( 0, 0, -1 ).normalized();
-      var v = new Vector3( this.angle, 1, 0 );
+      var length = 2000;
 
-      var length = 10;
-
-      var a = new Vector3( length / 2 + x, -length / 2 + y, -length );
-      var b = a.plus( v.times( length ) );
-      var c = b.plus( u.times( length ) );
-      var d = c.plus( v.times( -length ) );
+      var a = new Vector3( 0, 0, 0 ).plus( origin );
+      var b = new Vector3( 0, 0, -length ).plus( origin );
+      var c = new Vector3( 0, length, -length ).plus( origin );
+      var d = new Vector3( 0, length, 0 ).plus( origin );
 
       var bottomLeft = this.project( a );
       var topLeft = this.project( b );
       var topRight = this.project( c );
       var bottomRight = this.project( d );
+
+//      console.log( bottomLeft.x, bottomLeft.y );
       this.children = [new Path( new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close(), {fill: 'white', opacity: 0.2} ),
         new Line( bottomLeft, topLeft, {stroke: 'red', lineWidth: 5} ),
         new Line( topLeft, topRight, {stroke: 'green', lineWidth: 5} ),
@@ -114,14 +113,30 @@ define( function( require ) {
     //See http://en.wikipedia.org/wiki/3D_projection
     //assumes camera is at 0,0,0 with angle 0,0,0 and a fixed ex = 0, ey = 0, ez!=0 from the viewing screen
     project: function( vector ) {
-      var dx = vector.x, dy = vector.y, dz = vector.z;
-      var ex = 0;
-      var ey = 0;
-      var ez = 200;
+//      var dx = vector.x, dy = vector.y, dz = vector.z;
+//      var ex = 0;
+//      var ey = 0;
+//      var ez = 200;
+//
+//      var bx = ez / dz * dx - ex;
+//      var by = ez / dz * dy - ey;
+//      return new Vector2( bx, by );
 
-      var bx = ez / dz * dx - ex;
-      var by = ez / dz * dy - ey;
-      return new Vector2( bx, by );
+      var camera = new THREE.PerspectiveCamera( 1, 1, 1, 10000 );
+//      camera.position.z = 100;
+//      camera.position.x = 9999999;
+//      camera.position.y = 100000;
+
+      // Place camera on x axis
+      camera.position.set( 5000, 0, 10000 );
+      camera.up = new THREE.Vector3( 0, 1, 0 );
+      camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
+      camera.updateMatrixWorld();
+
+      var projector = new THREE.Projector();
+      var projected = projector.projectVector( new THREE.Vector3( vector.x, vector.y, vector.z ), camera );
+//      console.log( 'xxx', projected.x, projected.y );
+      return new Vector2( projected.x, projected.y );
     },
     step: function() {
       this.angle = Math.abs( Math.sin( Date.now() / 1000 / 2 ) );

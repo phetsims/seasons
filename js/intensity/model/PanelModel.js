@@ -14,7 +14,9 @@ define( function( require ) {
 
   function PanelModel() {
     PropertySet.call( this, {
-      angle: 0,
+
+      //Track the angle the user tried to drag the panel to, so that the pointer will stay synced with the angle when clamping is accounted for
+      unclampedAngle: Math.PI,
 
       //In screen coordinates.  Initial value will be set by the view once it is instantiated
       position: new Vector2( 0, 0 ),
@@ -23,12 +25,11 @@ define( function( require ) {
       state: 'toolbox',
       animating: false
     } );
-    var length = 120;
-    this.addDerivedProperty( 'tail', ['angle', 'position'], function( angle, position ) {
-      return Vector2.createPolar( length / 2, angle + Math.PI ).plus( position );
-    } );
-    this.addDerivedProperty( 'tip', ['angle', 'position'], function( angle, position ) {
-      return Vector2.createPolar( length / 2, angle ).plus( position );
+    this.addDerivedProperty( 'angle', ['unclampedAngle'], function( unclampedAngle ) {
+      var sixtyDegrees = 60 * Math.PI / 180;
+      return unclampedAngle > Math.PI ? Math.PI :
+             unclampedAngle < Math.PI - sixtyDegrees ? Math.PI - sixtyDegrees :
+             unclampedAngle;
     } );
   }
 

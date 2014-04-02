@@ -15,6 +15,7 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var ResetAllButton2 = require( 'SUN/experimental/buttons/ResetAllButton2' );
   var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
+  var LightNode = require( 'SEASONS/intensity/view/LightNode' );
   var Toolbox = require( 'SEASONS/intensity/view/Toolbox' );
   var PanelNode = require( 'SEASONS/intensity/view/PanelNode' );
   var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
@@ -36,8 +37,6 @@ define( function( require ) {
     var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10} );
     this.addChild( resetAllButton );
 
-    this.addChild( new FlashlightNode( null, {right: this.layoutBounds.right - 10, centerY: playAreaCenterY} ) );
-
     var toolbox = new Toolbox( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} );
     this.addChild( toolbox );
 
@@ -50,6 +49,10 @@ define( function( require ) {
     this.addChild( new PanelNode( null, playAreaCenter, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} ) );
     this.addChild( new PanelNode( null, playAreaCenter, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} ) );
     this.addChild( new PanelNode( null, playAreaCenter, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} ) );
+
+    this.addChild( new LightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 100, centerY: playAreaCenterY} ) );
+
+    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 10, centerY: playAreaCenterY} ) );
 
     this.addChild( new TickMarksNode( playAreaCenter ) );
   }

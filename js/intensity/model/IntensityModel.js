@@ -13,6 +13,7 @@ define( function( require ) {
 
   function IntensityModel() {
     PropertySet.call( this, {
+      flashlightOn: false
     } );
   }
 

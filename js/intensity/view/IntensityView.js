@@ -48,9 +48,9 @@ define( function( require ) {
     };
 
     //Create the different types of panels
-    var panel1 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} );
-    var panel2 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} );
-    var panel3 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} );
+    var panel1 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {stroke: '#d30e78', fill: '#1b179f', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} );
+    var panel2 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: '#0f104a', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} );
+    var panel3 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: 'black', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} );
 
     var panelInCenter = panel1.stateProperty.valueEquals( 'center' ).
       or( panel2.stateProperty.valueEquals( 'center' ) ).

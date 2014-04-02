@@ -18,8 +18,9 @@ define( function( require ) {
   function PanelNode( model, playAreaCenter, sendOtherPanelsHome, options ) {
     var panelNode = this;
     options = _.extend( {
-      fill: 'green',
+      fill: null,
       cursor: 'pointer',
+      stroke: null,
       scale: 0.5
     }, options );
 
@@ -32,7 +33,7 @@ define( function( require ) {
     var topRight = new Vector2( 30, HEIGHT * VERTICAL_INSET );
     var bottomRight = new Vector2( 30, HEIGHT * (1 - VERTICAL_INSET) );
 
-    Path.call( this, new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close(), {fill: options.fill} );
+    Path.call( this, new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close(), {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
 
     //State: whether dragging, in the toolbox or in the center
     this.stateProperty = new Property( 'toolbox' );

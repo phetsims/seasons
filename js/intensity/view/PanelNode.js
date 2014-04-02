@@ -16,8 +16,9 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
 
-  function PanelNode( model, playAreaCenter, sendOtherPanelsHome, options ) {
+  function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, options ) {
     var panelNode = this;
     options = _.extend( {
       fill: null,
@@ -52,10 +53,19 @@ define( function( require ) {
 
     Node.call( this, {children: [path, handleNode]} );
 
-    this.addInputListener( new NodeDragHandler( this, {
+    // click in the track to change the value, continue dragging if desired
+    var handleEvent = function( event ) {
+      var point = panelNode.globalToParentPoint( event.pointer.point );
+      panelModel.position = point;//TODO: GC
+    };
+
+    //TODO: Drag based on deltas
+    this.addInputListener( new SimpleDragHandler( {
 
       //When starting the drag, animate to full size (if it was small in the toolbox)
-      startDrag: function() {
+      start: function( event ) {
+        handleEvent( event );
+
         panelNode.moveToFront();
         panelNode.stateProperty.set( 'dragging' );
 
@@ -64,19 +74,16 @@ define( function( require ) {
           .easing( TWEEN.Easing.Cubic.InOut )
           .onUpdate( function() { panelNode.setScaleMagnitude( this.scale, this.scale ); } )
           .start();
-
-      },
-
-      //TODO: is this function needed?
-      drag: function() {
-        //TODO: is 'changed' still used now that overlay is gone?
-//        panelNode.events.trigger( 'changed' );
       },
 
       //Release the panel and let it fly to whichever is closer, the toolbox or the target region
       //Reduce size if going to the toolbox
-      endDrag: function() {
 
+      drag: function( event ) {
+        handleEvent( event );
+      },
+
+      end: function( event ) {
         //Move to the start position or compare position, whichever is closer.
         var center = panelNode.center;
         var distToStart = panelNode.startPosition.distance( center );
@@ -95,6 +102,10 @@ define( function( require ) {
     this.mutate( options );
     this.startPosition = this.center.plusXY( 0, 10 );//TODO: do I have to make a copy of this in scenery 2
     this.center = this.startPosition;
+
+    panelModel.property( 'position' ).link( function( position ) {
+      panelNode.center = position;
+    } );
   }
 
   return inherit( Node, PanelNode, {

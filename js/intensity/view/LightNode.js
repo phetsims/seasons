@@ -18,7 +18,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   function LightNode( flashlightOnProperty, options ) {
-    Node.call( this, {} );
+    Node.call( this, {pickable: false} );
     this.addChild( new Rectangle( 0, 0, 300, 60, {opacity: 0.65, fill: 'white'} ) );
     flashlightOnProperty.linkAttribute( this, 'visible' );
     this.mutate( options );

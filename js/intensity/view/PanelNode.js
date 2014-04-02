@@ -18,7 +18,7 @@ define( function( require ) {
     var panelNode = this;
     options = _.extend( {fill: 'green', cursor: 'pointer'}, options );
     Rectangle.call( this, 0, 0, 50, 50, {fill: options.fill} );
-    this.stateProperty = new Property( 'dragging' );
+    this.stateProperty = new Property( 'start' );
     this.animatingProperty = new Property( false );
     this.comparePosition = playAreaCenter;
 
@@ -58,9 +58,8 @@ define( function( require ) {
         .to( {x: this.comparePosition.x, y: this.comparePosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() { horizontalBarContainerNode.center = new Vector2( this.x, this.y ); } )
-        .onComplete( function() {horizontalBarContainerNode.animatingProperty.value = false;} )
+        .onComplete( function() {horizontalBarContainerNode.stateProperty.value = 'compare';} )
         .start();
-      this.stateProperty.set( 'compare' );
     },
     animateToStart: function() {
       this.animatingProperty.value = true;
@@ -69,9 +68,8 @@ define( function( require ) {
         .to( {x: this.startPosition.x, y: this.startPosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() { horizontalBarContainerNode.center = new Vector2( this.x, this.y ); } )
-        .onComplete( function() {horizontalBarContainerNode.animatingProperty.value = false;} )
+        .onComplete( function() {horizontalBarContainerNode.stateProperty.value = 'start';} )
         .start();
-      this.stateProperty.set( 'start' );
     }
 
   } );

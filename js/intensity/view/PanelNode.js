@@ -14,6 +14,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   function PanelNode( model, playAreaCenter, sendOtherPanelsHome, options ) {
     var panelNode = this;
@@ -39,7 +40,15 @@ define( function( require ) {
     this.stateProperty = new Property( 'toolbox' );
 
     this.animatingProperty = new Property( false );
-    this.comparePosition = playAreaCenter;
+
+    //Location where objects can be put in front of the flashlight.
+    //Account for the size of the knob here so the panel will still be centered
+    this.comparePosition = playAreaCenter.plusXY( 0, 10 );
+
+    //The handle
+    var handleNode = new Rectangle( -2, this.height - 2, 18, 18, {fill: 'yellow'} );
+    this.stateProperty.valueEquals( 'center' ).linkAttribute( handleNode, 'visible' );
+    this.addChild( handleNode );
 
     this.addInputListener( new NodeDragHandler( this, {
 
@@ -82,7 +91,8 @@ define( function( require ) {
     } ) );
 
     this.mutate( options );
-    this.startPosition = this.center;//TODO: do I have to make a copy of this in scenery 2
+    this.startPosition = this.center.plusXY( 0, 10 );//TODO: do I have to make a copy of this in scenery 2
+    this.center = this.startPosition;
   }
 
   return inherit( Path, PanelNode, {

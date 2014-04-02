@@ -1,7 +1,7 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * Flashlight node, includes the on/off button.
+ * Feasibility test for showing panels in true 3d
  *
  * @author Sam Reid
  */

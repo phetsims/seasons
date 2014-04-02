@@ -9,7 +9,6 @@ define( function( require ) {
   'use strict';
 
   var inherit = require( 'PHET_CORE/inherit' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var NodeDragHandler = require( 'SEASONS/intensity/view/NodeDragHandler' );
   var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );

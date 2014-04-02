@@ -20,13 +20,10 @@ define( function( require ) {
   var PanelNode = require( 'SEASONS/intensity/view/PanelNode' );
   var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
   var TargetOutlineNode = require( 'SEASONS/intensity/view/TargetOutlineNode' );
-  var Panel3DNode = require( 'SEASONS/intensity/view/Panel3DNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
   function IntensityView( model ) {
     ScreenView.call( this, { renderer: 'svg' } );
-
-    var playAreaCenterY = this.layoutBounds.centerY - 45;
 
     var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10} );
     this.addChild( resetAllButton );
@@ -34,7 +31,9 @@ define( function( require ) {
     var toolbox = new Toolbox( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} );
     this.addChild( toolbox );
 
-    var playAreaCenter = new Vector2( this.layoutBounds.centerX, playAreaCenterY );
+    //Allow some room for the control panel at the bottom
+    //Offset down a little bit to account for the accordion box positioning
+    var playAreaCenter = new Vector2( this.layoutBounds.centerX, (this.layoutBounds.height - toolbox.height) / 2 + 10 );
 
     var sendOtherPanelsHome = function( panelNode ) {
       if ( panelNode !== panel1 ) {
@@ -48,6 +47,7 @@ define( function( require ) {
       }
     };
 
+    //Create the different types of panels
     var panel1 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {fill: 'red', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 0, 15 )} );
     var panel2 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {fill: 'green', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} );
     var panel3 = new PanelNode( null, playAreaCenter, sendOtherPanelsHome, {fill: 'blue', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} );
@@ -57,31 +57,33 @@ define( function( require ) {
       or( panel3.stateProperty.valueEquals( 'center' ) );
     var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), {center: playAreaCenter} );
     this.addChild( targetOutlineNode );
-//    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );
-//    this.addChild( this.panel3DNode );
 
+    //Panels should go in front of the target outline
     this.addChild( panel1 );
     this.addChild( panel2 );
     this.addChild( panel3 );
 
+    //3D Panels (feasibility test)
+//    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );
+//    this.addChild( this.panel3DNode );
+
+    //Properties to determine if any panel is dragging or centered, so that the flashlight can be toggled off during dragging
     var anyPanelDragging = panel1.stateProperty.valueEquals( 'dragging' ).or( panel2.stateProperty.valueEquals( 'dragging' ) ).or( panel3.stateProperty.valueEquals( 'dragging' ) );
     var anyPanelCentered = panel1.stateProperty.valueEquals( 'center' ).or( panel2.stateProperty.valueEquals( 'center' ) ).or( panel3.stateProperty.valueEquals( 'center' ) );
 
-    this.addChild( new LightNode( model.property( 'flashlightOn' ).and( anyPanelDragging.derivedNot() ), anyPanelCentered, {right: this.layoutBounds.right - 100, centerY: playAreaCenterY} ) );
+    this.addChild( new LightNode( model.property( 'flashlightOn' ).and( anyPanelDragging.derivedNot() ), anyPanelCentered, this.layoutBounds.right - 100, {centerY: playAreaCenter.y} ) );
 
-    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 10, centerY: playAreaCenterY} ) );
+    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 10, centerY: playAreaCenter.y} ) );
 
     this.addChild( new TickMarksNode( playAreaCenter.plusXY( -targetOutlineNode.width / 2, 0 ) ) );
 
+    //Accordion boxes for charts
     var intensityBox = new AccordionBox( new Text( 'hello' ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
-
     var secondBox = new AccordionBox( new Text( 'hello again' ), {title: '-', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
-
     this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );
   }
 
   return inherit( ScreenView, IntensityView, {step: function() {
-//    console.log( 's);' );
 //    this.panel3DNode.step();
   }
   } );

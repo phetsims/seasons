@@ -19,6 +19,8 @@ define( function( require ) {
     HBox.call( this, { spacing: 4, children: [
       new Text( 'Flashlight', {fill: 'white'} ),
       new RoundPushButton( new HStrut( 10 ), {
+
+        //TODO: we should make roundPushButton support css color nicknames
         baseColor: new Color( 255, 0, 0 ),
         listener: flashlightOnProperty.toggleFunction
       } )

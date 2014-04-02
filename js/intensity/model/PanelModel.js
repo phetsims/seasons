@@ -15,6 +15,8 @@ define( function( require ) {
   function PanelModel() {
     PropertySet.call( this, {
       angle: 0,
+
+      //In screen coordinates.  Initial value will be set by the view once it is instantiated
       position: new Vector2( 0, 0 )
     } );
     var length = 120;

@@ -13,11 +13,21 @@ define( function( require ) {
   var NodeDragHandler = require( 'SEASONS/intensity/view/NodeDragHandler' );
   var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Shape = require( 'KITE/Shape' );
+  var Path = require( 'SCENERY/nodes/Path' );
 
   function PanelNode( model, playAreaCenter, options ) {
     var panelNode = this;
-    options = _.extend( {fill: 'green', cursor: 'pointer'}, options );
-    Rectangle.call( this, 0, 0, 50, 50, {fill: options.fill} );
+    options = _.extend( {fill: 'green', cursor: 'pointer', scale: 0.5}, options );
+    var HEIGHT = 120;
+    var bottomLeft = new Vector2( 0, 0 );
+    var topLeft = new Vector2( 0, HEIGHT );
+    var VERTICAL_INSET = 0.9;
+    var topRight = new Vector2( 30, HEIGHT * VERTICAL_INSET );
+    var bottomRight = new Vector2( 30, HEIGHT * (1 - VERTICAL_INSET) );
+
+    Path.call( this, new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close(), {fill: options.fill} );
+
     this.stateProperty = new Property( 'start' );
     this.animatingProperty = new Property( false );
     this.comparePosition = playAreaCenter;
@@ -25,6 +35,13 @@ define( function( require ) {
     this.addInputListener( new NodeDragHandler( this, {
       startDrag: function() {
         panelNode.stateProperty.set( 'dragging' );
+
+        new TWEEN.Tween( {scale: panelNode.getScaleVector().x} )
+          .to( {scale: 1}, 500 )
+          .easing( TWEEN.Easing.Cubic.InOut )
+          .onUpdate( function() { panelNode.setScaleMagnitude( this.scale, this.scale ); } )
+          .start();
+
       },
       drag: function() {
         //TODO: is 'changed' still used now that overlay is gone?
@@ -49,7 +66,7 @@ define( function( require ) {
     this.startPosition = this.center;//TODO: do I have to make a copy of this in scenery 2
   }
 
-  return inherit( Rectangle, PanelNode, {
+  return inherit( Path, PanelNode, {
 
     animateToComparison: function() {
       this.animatingProperty.value = true;
@@ -62,6 +79,14 @@ define( function( require ) {
         .start();
     },
     animateToStart: function() {
+      var panelNode = this;
+
+      new TWEEN.Tween( {scale: this.getScaleVector().x} )
+        .to( {scale: 0.5}, 500 )
+        .easing( TWEEN.Easing.Cubic.Out )
+        .onUpdate( function() { panelNode.setScaleMagnitude( this.scale, this.scale ); } )
+        .start();
+
       this.animatingProperty.value = true;
       var horizontalBarContainerNode = this;
       new TWEEN.Tween( {x: this.center.x, y: this.center.y} )

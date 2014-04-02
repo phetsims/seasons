@@ -49,9 +49,10 @@ define( function( require ) {
     var panelInCenter = solarPanel.stateProperty.valueEquals( 'center' ).
       or( panel2.stateProperty.valueEquals( 'center' ) ).
       or( panel3.stateProperty.valueEquals( 'center' ) );
-    this.addChild( new TargetOutlineNode( panelInCenter.derivedNot(), {leftCenter: playAreaCenter} ) );
-    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );
-    this.addChild( this.panel3DNode );
+    var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), {center: playAreaCenter} );
+    this.addChild( targetOutlineNode );
+//    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );
+//    this.addChild( this.panel3DNode );
 
     this.addChild( solarPanel );
     this.addChild( panel2 );
@@ -63,11 +64,11 @@ define( function( require ) {
 
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 10, centerY: playAreaCenterY} ) );
 
-    this.addChild( new TickMarksNode( playAreaCenter ) );
+    this.addChild( new TickMarksNode( playAreaCenter.plusXY( -targetOutlineNode.width / 2, 0 ) ) );
   }
 
   return inherit( ScreenView, IntensityView, {step: function() {
 //    console.log( 's);' );
-    this.panel3DNode.step();
+//    this.panel3DNode.step();
   }} );
 } );

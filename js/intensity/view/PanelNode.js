@@ -28,7 +28,6 @@ define( function( require ) {
       fill: null,
       cursor: 'pointer',
       stroke: null
-//      scale: 0.5
     }, options );
 
     //The handle
@@ -73,11 +72,11 @@ define( function( require ) {
           panelModel.property( 'state' ).set( 'dragging' );
           translate( event );
 
-//          new TWEEN.Tween( {scale: panelNode.getScaleVector().x} )
-//            .to( {scale: 1}, 500 )
-//            .easing( TWEEN.Easing.Cubic.InOut )
-//            .onUpdate( function() { panelNode.setScaleMagnitude( this.scale, this.scale ); } )
-//            .start();
+          new TWEEN.Tween( {scale: panelModel.scale} )
+            .to( {scale: 1}, 500 )
+            .easing( TWEEN.Easing.Cubic.InOut )
+            .onUpdate( function() { panelModel.scale = this.scale; } )
+            .start();
         }
         else {
 
@@ -155,11 +154,11 @@ define( function( require ) {
       var panelNode = this;
 
       //Shrink down
-//      new TWEEN.Tween( {scale: this.getScaleVector().x} )
-//        .to( {scale: 0.5}, 500 )
-//        .easing( TWEEN.Easing.Cubic.Out )
-//        .onUpdate( function() { panelNode.setScaleMagnitude( this.scale, this.scale ); } )
-//        .start();
+      new TWEEN.Tween( {scale: panelNode.panelModel.scale} )
+        .to( {scale: 0.5}, 500 )
+        .easing( TWEEN.Easing.Cubic.Out )
+        .onUpdate( function() { panelNode.panelModel.scale = this.scale; } )
+        .start();
 
       //Move to the toolbox
       this.panelModel.animating = true;
@@ -175,15 +174,17 @@ define( function( require ) {
       //Layout dimensions
       var HEIGHT = 120;
 
+      var scale = this.panelModel.scale;
+
       var x = this.panelModel.position.x;
       var y = this.panelModel.position.y;
       var up = Vector2.createPolar( HEIGHT, this.panelModel.angle + Math.PI / 2 );
       var centerLeft = new Vector2( x, y );
-      var bottomLeft = centerLeft.plus( up.times( -0.5 ) );
-      var topLeft = bottomLeft.plus( up );
+      var bottomLeft = centerLeft.plus( up.times( -0.5 * scale ) );
+      var topLeft = bottomLeft.plus( up.times( scale ) );
 
       //TODO: Should be a function of the angle
-      var extensionLength = 50;
+      var extensionLength = 50 * scale;
       var topRight = topLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( topLeft ).normalized().times( extensionLength ) );
       var bottomRight = bottomLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( bottomLeft ).normalized().times( extensionLength ) );
 

@@ -18,6 +18,9 @@ define( function( require ) {
       //Track the angle the user tried to drag the panel to, so that the pointer will stay synced with the angle when clamping is accounted for
       unclampedAngle: Math.PI,
 
+      //Animate the size of the panel when dragging out of the toolbox
+      scale: 0.5,
+
       //In screen coordinates.  Initial value will be set by the view once it is instantiated
       position: new Vector2( 0, 0 ),
 

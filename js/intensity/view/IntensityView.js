@@ -26,7 +26,7 @@ define( function( require ) {
   function IntensityView( model ) {
     ScreenView.call( this, { renderer: 'svg' } );
 
-    var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10} );
+    var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10, listener: model.reset.bind( model )} );
     this.addChild( resetAllButton );
 
     var toolbox = new Toolbox( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} );
@@ -53,9 +53,9 @@ define( function( require ) {
     var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: '#0f104a', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 0, 15 )} );
     var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, {stroke: '#cccccd', fill: 'black', centerBottom: this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 0, 15 )} );
 
-    var panelInCenter = solarPanelNode.stateProperty.valueEquals( 'center' ).
-      or( heatPanelNode.stateProperty.valueEquals( 'center' ) ).
-      or( intensityPanelNode.stateProperty.valueEquals( 'center' ) );
+    var panelInCenter = solarPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ).
+      or( heatPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) ).
+      or( intensityPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) );
     var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), {center: playAreaCenter} );
     this.addChild( targetOutlineNode );
 
@@ -67,11 +67,7 @@ define( function( require ) {
 //    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );
 //    this.addChild( this.panel3DNode );
 
-    //Properties to determine if any panel is dragging or centered, so that the flashlight can be toggled off during dragging
-    var anyPanelDragging = solarPanelNode.stateProperty.valueEquals( 'dragging' ).or( heatPanelNode.stateProperty.valueEquals( 'dragging' ) ).or( intensityPanelNode.stateProperty.valueEquals( 'dragging' ) );
-    var anyPanelCentered = solarPanelNode.stateProperty.valueEquals( 'center' ).or( heatPanelNode.stateProperty.valueEquals( 'center' ) ).or( intensityPanelNode.stateProperty.valueEquals( 'center' ) );
-
-    this.addChild( new LightNode( model.property( 'flashlightOn' ).and( anyPanelDragging.derivedNot() ), anyPanelCentered, this.layoutBounds.right - 100, {centerY: playAreaCenter.y} ) );
+    this.addChild( new LightNode( model.property( 'flashlightOn' ).and( model.anyPanelDragging.derivedNot() ), model.anyPanelCentered, this.layoutBounds.right - 100, {centerY: playAreaCenter.y} ) );
 
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 10, centerY: playAreaCenter.y} ) );
 

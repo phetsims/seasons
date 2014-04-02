@@ -19,6 +19,7 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
 
   function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, options ) {
+    this.panelModel = panelModel;
     var panelNode = this;
     options = _.extend( {
       fill: null,
@@ -38,18 +39,13 @@ define( function( require ) {
 
     var path = new Path( new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close(), {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
 
-    //State: whether dragging, in the toolbox or in the center
-    this.stateProperty = new Property( 'toolbox' );
-
-    this.animatingProperty = new Property( false );
-
     //Location where objects can be put in front of the flashlight.
     //Account for the size of the knob here so the panel will still be centered
     this.comparePosition = playAreaCenter.plusXY( 0, 10 );
 
     //The handle
     var handleNode = new Rectangle( -2, path.height - 2, 18, 18, {fill: 'yellow'} );
-    this.stateProperty.valueEquals( 'center' ).linkAttribute( handleNode, 'visible' );
+    panelModel.property( 'state' ).valueEquals( 'center' ).linkAttribute( handleNode, 'visible' );
 
     Node.call( this, {children: [path, handleNode]} );
 
@@ -67,7 +63,7 @@ define( function( require ) {
         handleEvent( event );
 
         panelNode.moveToFront();
-        panelNode.stateProperty.set( 'dragging' );
+        panelModel.property( 'state' ).set( 'dragging' );
 
         new TWEEN.Tween( {scale: panelNode.getScaleVector().x} )
           .to( {scale: 1}, 500 )
@@ -100,11 +96,24 @@ define( function( require ) {
     } ) );
 
     this.mutate( options );
+
+    //Overwrite the initial position so it will reset there, since the model was populated with dummy values before the view layout was produced
+    panelModel.property( 'position' ).storeInitialValue( this.center.plusXY( 0, 10 ) );
+    panelModel.property( 'position' ).reset();
+
     this.startPosition = this.center.plusXY( 0, 10 );//TODO: do I have to make a copy of this in scenery 2
     this.center = this.startPosition;
 
     panelModel.property( 'position' ).link( function( position ) {
       panelNode.center = position;
+    } );
+    panelModel.on( 'reset', function() {
+      //TODO: cancel all tweens
+
+      panelNode.setScaleMagnitude( 0.5, 0.5 );
+
+      //Update the position again after the scale has changed
+      panelNode.center = panelModel.position;
     } );
   }
 
@@ -112,13 +121,13 @@ define( function( require ) {
 
     //Animate the PanelNode to move to the target region
     animateToCenter: function() {
-      this.animatingProperty.value = true;
-      var horizontalBarContainerNode = this;
+      this.panelModel.animating = true;
+      var panelNode = this;
       new TWEEN.Tween( {x: this.center.x, y: this.center.y} )
         .to( {x: this.comparePosition.x, y: this.comparePosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
-        .onUpdate( function() { horizontalBarContainerNode.center = new Vector2( this.x, this.y ); } )
-        .onComplete( function() {horizontalBarContainerNode.stateProperty.value = 'center';} )
+        .onUpdate( function() { panelNode.center = new Vector2( this.x, this.y ); } )
+        .onComplete( function() {panelNode.panelModel.state = 'center';} )
         .start();
     },
 
@@ -134,13 +143,13 @@ define( function( require ) {
         .start();
 
       //Move to the toolbox
-      this.animatingProperty.value = true;
-      var horizontalBarContainerNode = this;
+      this.panelModel.animating = true;
+      var panelNode = this;
       new TWEEN.Tween( {x: this.center.x, y: this.center.y} )
         .to( {x: this.startPosition.x, y: this.startPosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
-        .onUpdate( function() { horizontalBarContainerNode.center = new Vector2( this.x, this.y ); } )
-        .onComplete( function() {horizontalBarContainerNode.stateProperty.value = 'toolbox';} )
+        .onUpdate( function() { panelNode.center = new Vector2( this.x, this.y ); } )
+        .onComplete( function() {panelNode.panelModel.state = 'toolbox';} )
         .start();
     }
   } );

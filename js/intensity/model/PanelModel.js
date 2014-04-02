@@ -17,7 +17,11 @@ define( function( require ) {
       angle: 0,
 
       //In screen coordinates.  Initial value will be set by the view once it is instantiated
-      position: new Vector2( 0, 0 )
+      position: new Vector2( 0, 0 ),
+
+      //State: whether dragging, in the toolbox or in the center
+      state: 'toolbox',
+      animating: false
     } );
     var length = 120;
     this.addDerivedProperty( 'tail', ['angle', 'position'], function( angle, position ) {
@@ -28,5 +32,10 @@ define( function( require ) {
     } );
   }
 
-  return inherit( PropertySet, PanelModel );
+  return inherit( PropertySet, PanelModel, {
+    reset: function() {
+      PropertySet.prototype.reset.call( this );
+      this.trigger( 'reset' );
+    }
+  } );
 } );

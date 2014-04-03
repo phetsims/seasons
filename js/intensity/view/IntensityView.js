@@ -22,6 +22,8 @@ define( function( require ) {
   var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
   var TargetOutlineNode = require( 'SEASONS/intensity/view/TargetOutlineNode' );
   var Vector2 = require( 'DOT/Vector2' );
+//  var mockupImage = require( 'image!SEASONS/app-768.png' );
+//  var Image = require( 'SCENERY/nodes/Image' );
 
   function IntensityView( model ) {
     ScreenView.call( this, { renderer: 'svg' } );
@@ -34,7 +36,7 @@ define( function( require ) {
 
     //Allow some room for the control panel at the bottom
     //Offset down a little bit to account for the accordion box positioning
-    var playAreaCenter = new Vector2( this.layoutBounds.centerX, (this.layoutBounds.height - toolbox.height) / 2 + 10 );
+    var playAreaCenter = new Vector2( this.layoutBounds.centerX, (this.layoutBounds.height - toolbox.height) / 2 + 25 );
 
     var sendOtherPanelsHome = function( panelNode ) {
       if ( panelNode !== solarPanelNode ) {
@@ -57,7 +59,7 @@ define( function( require ) {
     model.intensityPanel.positionProperty.reset();
     console.log( model.solarPanel.position, ',.p' );
 
-    var lightNode = new LightNode( model.property( 'flashlightOn' ).and( model.anyPanelDragging.derivedNot() ), model.anyPanelCentered, this.layoutBounds.right - 100, {centerY: playAreaCenter.y} );
+    var lightNode = new LightNode( playAreaCenter.y, model.property( 'flashlightOn' ).and( model.anyPanelDragging.derivedNot() ), model.anyPanelCentered, this.layoutBounds.right - 20, {centerY: playAreaCenter.y} );
 
     //Create the different types of panels
     var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightTipAndTail.bind( lightNode ), {stroke: '#d30e78', fill: '#1b179f'} );
@@ -80,7 +82,7 @@ define( function( require ) {
 
     this.addChild( lightNode );
 
-    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {right: this.layoutBounds.right - 10, centerY: playAreaCenter.y} ) );
+    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {left: this.layoutBounds.right - 93, centerY: playAreaCenter.y} ) );
 
     this.addChild( new TickMarksNode( playAreaCenter ) );
 
@@ -91,6 +93,8 @@ define( function( require ) {
 
 //    this.addChild( new Rectangle( playAreaCenter.x, playAreaCenter.y, 2, 2, {fill: 'green'} ) );
 //    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );
+
+//    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
   }
 
   return inherit( ScreenView, IntensityView, {step: function() {

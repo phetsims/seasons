@@ -13,8 +13,11 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
 
-  function LightNode( flashlightOnProperty, panelInPlayAreaProperty, right, options ) {
+  function LightNode( beamCenterY, flashlightOnProperty, panelInPlayAreaProperty, right, options ) {
     this.rightLayout = right;
+    var beamWidth = 90;
+    this.beamTop = beamCenterY - beamWidth / 2;
+    this.beamBottom = beamCenterY + beamWidth / 2;
     this.panelInPlayAreaProperty = panelInPlayAreaProperty;
     var lightNode = this;
     Node.call( this, {pickable: false} );
@@ -30,7 +33,7 @@ define( function( require ) {
 
   return inherit( Node, LightNode, {
     setLightTipAndTail: function( tailX, tipX ) {
-      this.beamNode.shape = new Shape().moveTo( tailX, 350 ).lineTo( tipX, 300 ).lineTo( this.rightLayout, 300 ).lineTo( this.rightLayout, 350 ).close();
+      this.beamNode.shape = new Shape().moveTo( tailX, this.beamBottom ).lineTo( tipX, this.beamTop ).lineTo( this.rightLayout, this.beamTop ).lineTo( this.rightLayout, this.beamBottom ).close();
     }
   } );
 } );

@@ -14,8 +14,8 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   function Toolbox( options ) {
-    var WIDTH = 300;
-    var HEIGHT = 100;
+    var WIDTH = 355;
+    var HEIGHT = 150;
     var content = new Rectangle( 0, 0, WIDTH, HEIGHT );
     var fractionToSideLabels = 0.2;
     var solarText = new Text( 'Solar', {fill: 'white', centerX: WIDTH * fractionToSideLabels, bottom: HEIGHT - 5} );

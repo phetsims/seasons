@@ -184,7 +184,7 @@ define( function( require ) {
     //TODO: Performance on iPad3
     updateShape: function() {
       //Layout dimensions
-      var HEIGHT = 240 * 0.9;
+      var HEIGHT = 240 * 0.85;
 
       var scale = this.panelModel.scale;
 
@@ -196,7 +196,7 @@ define( function( require ) {
       var topLeft = bottomLeft.plus( up.times( scale ) );
 
       //TODO: Should be a function of the angle
-      var extensionLength = 100 * scale * 0.9;
+      var extensionLength = 60 * 0.9 * scale;
       var topRight = topLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( topLeft ).normalized().times( extensionLength ) );
       var bottomRight = bottomLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( bottomLeft ).normalized().times( extensionLength ) );
 
@@ -215,7 +215,7 @@ define( function( require ) {
         //guess the light shape that gives the correct cross section
 
         //Meh, it's a heuristic that seems to work
-        var ellipseWidth = centerRight.distance( centerLeft ) / 4 * Math.pow( Math.abs( Math.cos( this.panelModel.angle ) ), 1.5 );
+        var ellipseWidth = centerRight.distance( centerLeft ) * 0.4 * Math.pow( Math.abs( Math.cos( this.panelModel.angle ) ), 1.5 );
 
         this.lightPath.shape = Shape.ellipse( center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
         var ellipseTail = new Vector2( 0, ry ).rotated( this.panelModel.angle ).plus( center );
@@ -236,7 +236,7 @@ define( function( require ) {
         guess = (upperBound + lowerBound) / 2;
         var result = this.calculateY( center, guess );
 //        console.log( 'i', i, result );
-        if ( result > 181.5 ) {
+        if ( result > 152 ) {
           lowerBound = guess;
         }
         else {

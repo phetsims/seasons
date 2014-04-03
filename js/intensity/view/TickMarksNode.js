@@ -25,7 +25,7 @@ define( function( require ) {
     var tickSpacing = totalAngleToSubtend / 6;
     for ( var i = 0; i <= 6; i++ ) {
       var angle = -i * tickSpacing - Math.PI / 2;
-      var startDistance = 80;
+      var startDistance = 110;
       var tickLength = (i === 0 || i === 6) ? 16 : 10;
       var lineWidth = (i === 0 || i === 6) ? 1.5 : 1;
       var pt1 = Vector2.createPolar( startDistance, angle ).plus( centroid );

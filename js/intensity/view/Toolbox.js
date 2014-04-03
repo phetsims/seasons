@@ -12,17 +12,20 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var FONT = new PhetFont( 16 );
 
   function Toolbox( options ) {
     var WIDTH = 355;
     var HEIGHT = 150;
     var content = new Rectangle( 0, 0, WIDTH, HEIGHT );
     var fractionToSideLabels = 0.2;
-    var solarText = new Text( 'Solar', {fill: 'white', centerX: WIDTH * fractionToSideLabels, bottom: HEIGHT - 5} );
+    var textBottom = HEIGHT - 4;
+    var solarText = new Text( 'Solar', {fill: 'white', font: FONT, centerX: WIDTH * fractionToSideLabels, bottom: textBottom} );
     content.addChild( solarText );
-    var heatText = new Text( 'Heat', {fill: 'white', centerX: WIDTH / 2, bottom: HEIGHT - 5} );
+    var heatText = new Text( 'Heat', {fill: 'white', font: FONT, centerX: WIDTH / 2, bottom: textBottom} );
     content.addChild( heatText );
-    var intensityText = new Text( 'Intensity', {fill: 'white', centerX: WIDTH * (1 - fractionToSideLabels), bottom: HEIGHT - 5} );
+    var intensityText = new Text( 'Intensity', {fill: 'white', font: FONT, centerX: WIDTH * (1 - fractionToSideLabels), bottom: textBottom} );
     content.addChild( intensityText );
 
     this.texts = [solarText, heatText, intensityText];

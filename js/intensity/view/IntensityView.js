@@ -22,10 +22,13 @@ define( function( require ) {
   var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
   var TargetOutlineNode = require( 'SEASONS/intensity/view/TargetOutlineNode' );
   var Vector2 = require( 'DOT/Vector2' );
+
+  //For comparing to mockup
 //  var mockupImage = require( 'image!SEASONS/app-768.png' );
 //  var Image = require( 'SCENERY/nodes/Image' );
 
   function IntensityView( model ) {
+    var intensityView = this;
     ScreenView.call( this, { renderer: 'svg' } );
 
     var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10, listener: model.reset.bind( model )} );
@@ -36,7 +39,7 @@ define( function( require ) {
 
     //Allow some room for the control panel at the bottom
     //Offset down a little bit to account for the accordion box positioning
-    var playAreaCenter = new Vector2( this.layoutBounds.centerX, (this.layoutBounds.height - toolbox.height) / 2 + 25 );
+    var playAreaCenter = new Vector2( this.layoutBounds.centerX + 31, (this.layoutBounds.height - toolbox.height) / 2 + 25 );
 
     var sendOtherPanelsHome = function( panelNode ) {
       if ( panelNode !== solarPanelNode ) {
@@ -51,9 +54,11 @@ define( function( require ) {
     };
 
     //Overwrite the initial position so it will reset there, since the model was populated with dummy values before the view layout was produced
-    model.solarPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 0 ) ).minusXY( 12, 43 ) );
-    model.heatPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 1 ) ).minusXY( 12, 43 ) );
-    model.intensityPanel.positionProperty.storeInitialValue( this.globalToParentPoint( toolbox.getGlobalPanelPosition( 2 ) ).minusXY( 12, 43 ) );
+    var offset = new Vector2( 24, 67 );
+    var getPanelPosition = function( index ) { return intensityView.globalToParentPoint( toolbox.getGlobalPanelPosition( index ) ).minus( offset );};
+    model.solarPanel.positionProperty.storeInitialValue( getPanelPosition( 0 ) );
+    model.heatPanel.positionProperty.storeInitialValue( getPanelPosition( 1 ) );
+    model.intensityPanel.positionProperty.storeInitialValue( getPanelPosition( 2 ) );
     model.solarPanel.positionProperty.reset();
     model.heatPanel.positionProperty.reset();
     model.intensityPanel.positionProperty.reset();

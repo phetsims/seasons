@@ -184,7 +184,7 @@ define( function( require ) {
     //TODO: Performance on iPad3
     updateShape: function() {
       //Layout dimensions
-      var HEIGHT = 120;
+      var HEIGHT = 240 * 0.9;
 
       var scale = this.panelModel.scale;
 
@@ -196,7 +196,7 @@ define( function( require ) {
       var topLeft = bottomLeft.plus( up.times( scale ) );
 
       //TODO: Should be a function of the angle
-      var extensionLength = 50 * scale;
+      var extensionLength = 100 * scale * 0.9;
       var topRight = topLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( topLeft ).normalized().times( extensionLength ) );
       var bottomRight = bottomLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( bottomLeft ).normalized().times( extensionLength ) );
 

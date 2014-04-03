@@ -24,8 +24,8 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   //For comparing to mockup
-//  var mockupImage = require( 'image!SEASONS/app-768.png' );
-//  var Image = require( 'SCENERY/nodes/Image' );
+  var mockupImage = require( 'image!SEASONS/app-768.png' );
+  var Image = require( 'SCENERY/nodes/Image' );
 
   function IntensityView( model ) {
     var intensityView = this;
@@ -54,7 +54,7 @@ define( function( require ) {
     };
 
     //Overwrite the initial position so it will reset there, since the model was populated with dummy values before the view layout was produced
-    var offset = new Vector2( 24, 67 );
+    var offset = new Vector2( 12, 64 );
     var getPanelPosition = function( index ) { return intensityView.globalToParentPoint( toolbox.getGlobalPanelPosition( index ) ).minus( offset );};
     model.solarPanel.positionProperty.storeInitialValue( getPanelPosition( 0 ) );
     model.heatPanel.positionProperty.storeInitialValue( getPanelPosition( 1 ) );
@@ -62,7 +62,6 @@ define( function( require ) {
     model.solarPanel.positionProperty.reset();
     model.heatPanel.positionProperty.reset();
     model.intensityPanel.positionProperty.reset();
-    console.log( model.solarPanel.position, ',.p' );
 
     var lightNode = new LightNode( playAreaCenter.y, model.property( 'flashlightOn' ).and( model.anyPanelDragging.derivedNot() ), model.anyPanelCentered, this.layoutBounds.right - 20, {centerY: playAreaCenter.y} );
 
@@ -74,7 +73,7 @@ define( function( require ) {
     var panelInCenter = solarPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ).
       or( heatPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) ).
       or( intensityPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) );
-    var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), {leftCenter: playAreaCenter} );
+    var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), playAreaCenter );
     this.addChild( targetOutlineNode );
 
     //Panels should go in front of the target outline
@@ -99,7 +98,7 @@ define( function( require ) {
 //    this.addChild( new Rectangle( playAreaCenter.x, playAreaCenter.y, 2, 2, {fill: 'green'} ) );
 //    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );
 
-//    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
+    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
   }
 
   return inherit( ScreenView, IntensityView, {step: function() {

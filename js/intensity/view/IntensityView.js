@@ -24,8 +24,8 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   //For comparing to mockup
-  var mockupImage = require( 'image!SEASONS/app-768.png' );
-  var Image = require( 'SCENERY/nodes/Image' );
+//  var mockupImage = require( 'image!SEASONS/app-768.png' );
+//  var Image = require( 'SCENERY/nodes/Image' );
 
   function IntensityView( model ) {
     var intensityView = this;
@@ -98,7 +98,7 @@ define( function( require ) {
 //    this.addChild( new Rectangle( playAreaCenter.x, playAreaCenter.y, 2, 2, {fill: 'green'} ) );
 //    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );
 
-    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
+//    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
   }
 
   return inherit( ScreenView, IntensityView, {step: function() {

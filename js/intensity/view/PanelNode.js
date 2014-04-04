@@ -42,20 +42,13 @@ define( function( require ) {
     //Account for the size of the knob here so the panel will still be centered
     this.comparePosition = playAreaCenter;
 
-    panelModel.property( 'state' ).valueEquals( 'center' ).link( function( visible ) {
-
-      //redraw the knob
-      panelNode.updateShape();
-    } );
+    //Update the knob location when the panel arrives in the center
+    panelModel.property( 'state' ).onValue( 'center', function() {panelNode.updateShape();} );
 
     panelModel.animatingProperty.derivedNot().and( panelModel.property( 'state' ).valueEquals( 'center' ) ).linkAttribute( this.knobNode, 'visible' );
 
     //Update the knob location after the panel animates to the center
-    panelModel.property( 'animating' ).link( function( animating ) {
-      if ( !animating ) {
-        panelNode.updateShape();
-      }
-    } );
+    panelModel.property( 'animating' ).onValue( false, function() {panelNode.updateShape();} );
 
     Node.call( this, {children: [this.path, this.knobNode, this.lightPath]} );
 

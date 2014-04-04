@@ -30,6 +30,15 @@ define( function( require ) {
     } );
     this.addDerivedProperty( 'angle', ['unclampedAngle'], function( unclampedAngle ) {
       var sixtyDegrees = 60 * Math.PI / 180;
+
+      //TODO: Better clamping code
+      while ( unclampedAngle < 0 ) {
+        unclampedAngle = unclampedAngle + Math.PI * 2;
+      }
+      while ( unclampedAngle > Math.PI * 2 ) {
+        unclampedAngle = unclampedAngle - Math.PI * 2;
+      }
+
       return unclampedAngle > Math.PI ? Math.PI :
              unclampedAngle < Math.PI - sixtyDegrees ? Math.PI - sixtyDegrees :
              unclampedAngle;

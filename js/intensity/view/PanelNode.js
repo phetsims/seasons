@@ -60,8 +60,13 @@ define( function( require ) {
     var rotate = function( event ) {
       var point = panelNode.globalToParentPoint( event.pointer.point );
       var x = point.minus( panelModel.position );
-      panelModel.unclampedAngle = x.angle() + Math.PI / 2;
+      panelModel.unclampedAngle = originalAngle + x.angle() - angleRelativeToPivot;
+//      console.log( point.x, point.y, x.x, x.y, panelModel.unclampedAngle, panelModel.angle );
+//      console.log( panelModel.position, x );
     };
+
+    var angleRelativeToPivot = 0;
+    var originalAngle = 0;
 
     //TODO: Drag based on deltas
     this.addInputListener( new SimpleDragHandler( {
@@ -84,6 +89,10 @@ define( function( require ) {
         }
         else {
 
+          var dx = panelNode.globalToParentPoint( event.pointer.point ).minus( panelModel.position );
+          angleRelativeToPivot = dx.angle();
+          originalAngle = panelModel.angle;
+          console.log( 'angleRelativeToPivot', angleRelativeToPivot, 'originalAngle', panelModel.angle );
         }
       },
 

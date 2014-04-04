@@ -22,6 +22,7 @@ define( function( require ) {
   var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
   var TargetOutlineNode = require( 'SEASONS/intensity/view/TargetOutlineNode' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   //For comparing to mockup
 //  var mockupImage = require( 'image!SEASONS/app-768.png' );
@@ -99,6 +100,10 @@ define( function( require ) {
 //    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );
 
 //    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
+
+    var rectangle = new Rectangle( 0, 0, 5, 5, {fill: 'yellow'} );
+    solarPanelNode.panelModel.property( 'position' ).link( function( position ) {rectangle.setRect( position.x, position.y, 5, 5 )} );
+    this.addChild( rectangle );
   }
 
   return inherit( ScreenView, IntensityView, {step: function() {

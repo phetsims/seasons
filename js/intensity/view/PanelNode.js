@@ -228,6 +228,7 @@ define( function( require ) {
     // could generate a table if that's better
     guessY: function( center ) {
 
+      //Use a binary search to find a good y-value
       var lowerBound = 10;
       var upperBound = 100;
 
@@ -235,7 +236,6 @@ define( function( require ) {
       for ( var i = 0; i < 100; i++ ) {
         guess = (upperBound + lowerBound) / 2;
         var result = this.calculateY( center, guess );
-//        console.log( 'i', i, result );
         if ( result > 152 ) {
           lowerBound = guess;
         }
@@ -243,7 +243,6 @@ define( function( require ) {
           upperBound = guess;
         }
       }
-//      debugger;
       return guess;
     },
 

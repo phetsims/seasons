@@ -63,6 +63,8 @@ define( function( require ) {
     model.heatPanel.positionProperty.reset();
     model.intensityPanel.positionProperty.reset();
 
+    this.addChild( new TickMarksNode( playAreaCenter ) );
+
     var lightNode = new LightNode( playAreaCenter.y, model.property( 'flashlightOn' ).and( model.anyPanelDragging.derivedNot() ), model.anyPanelCentered, this.layoutBounds.right - 20, {centerY: playAreaCenter.y} );
 
     //Create the different types of panels
@@ -87,8 +89,6 @@ define( function( require ) {
     this.addChild( lightNode );
 
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {left: this.layoutBounds.right - 93, centerY: playAreaCenter.y} ) );
-
-    this.addChild( new TickMarksNode( playAreaCenter ) );
 
     //Accordion boxes for charts
     var intensityBox = new AccordionBox( new Text( 'hello' ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );

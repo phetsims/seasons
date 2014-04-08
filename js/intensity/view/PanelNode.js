@@ -129,15 +129,6 @@ define( function( require ) {
 
     this.mutate( options );
 
-    panelModel.on( 'reset', function() {
-      //TODO: cancel all tweens
-
-      panelNode.setScaleMagnitude( 0.5, 0.5 );
-
-      //Update the position again after the scale has changed
-//      panelNode.translation = panelModel.position;
-    } );
-
     panelModel.multilink( ['position', 'angle', 'scale'], function() {
       panelNode.updateShape();
     } );

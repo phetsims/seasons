@@ -102,7 +102,18 @@ define( function( require ) {
       drag: function( event ) {
 
         if ( panelModel.state === 'center' ) {
-          rotate( event );
+
+
+          //If the user dragged far enough from the center of the panel, it should snap to the touch event and become translation again
+          var position = panelNode.globalToParentPoint( event.pointer.point );
+          var home = panelNode.panelModel.positionProperty.initialValue;
+          var distanceToHome = home.distance( position );
+          if ( distanceToHome < 50 ) {
+            panelModel.state = 'dragging';
+          }
+          else {
+            rotate( event );
+          }
         }
         else {
           translate( event );

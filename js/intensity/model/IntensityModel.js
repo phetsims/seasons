@@ -21,9 +21,9 @@ define( function( require ) {
       //Whether the light is visible also depends on whether a panel is in the target area
       flashlightOn: false
     } );
-    this.solarPanel = new PanelModel();
-    this.heatPanel = new PanelModel();
-    this.intensityPanel = new PanelModel();
+    this.solarPanel = new PanelModel( 'solar' );
+    this.heatPanel = new PanelModel( 'heat' );
+    this.intensityPanel = new PanelModel( 'intensity' );
 
     //Properties to determine if any panel is dragging or centered, so that the flashlight can be toggled off during dragging
     this.anyPanelDraggingProperty = this.solarPanel.property( 'state' ).valueEquals( 'dragging' ).

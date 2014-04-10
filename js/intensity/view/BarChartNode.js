@@ -36,7 +36,6 @@ define( function( require ) {
       text.centerY = 26 / 2;
 
       var barHeight = value * HEIGHT;
-      console.log( 'vp changed', value, percentage, barHeight );
       barNode.setRect( WIDTH / 2 - BAR_WIDTH / 2, -barHeight, BAR_WIDTH, barHeight );
     } );
 

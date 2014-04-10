@@ -38,9 +38,13 @@ define( function( require ) {
     this.lightPath = new Path( null, {fill: 'white'} );
 
     var linearFunction = new LinearFunction( 0, 1, 0.5, 1 );
-    panelModel.intensityProperty.link( function( intensity ) {
-      panelNode.lightPath.opacity = linearFunction( intensity );
-    } );
+
+    //For the intensity panel, show opacity
+    if ( panelModel.type === 'intensity' ) {
+      panelModel.intensityProperty.link( function( intensity ) {
+        panelNode.lightPath.opacity = linearFunction( intensity );
+      } );
+    }
 
     flashlightOnProperty.and( panelModel.stateProperty.valueEquals( 'center' ) ).and( panelModel.animatingProperty.valueEquals( false ) ).linkAttribute( this.lightPath, 'visible' );
 

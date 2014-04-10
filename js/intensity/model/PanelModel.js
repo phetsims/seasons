@@ -12,7 +12,12 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  function PanelModel() {
+  function PanelModel( type ) {
+
+    //Keep track of whether it is solar, intensity or heat panel
+
+    //TODO: Perhaps change type/if pattern to strategy pattern?
+    this.type = type;
     PropertySet.call( this, {
 
       //Track the angle the user tried to drag the panel to, so that the pointer will stay synced with the angle when clamping is accounted for

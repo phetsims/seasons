@@ -13,7 +13,6 @@ define( function( require ) {
   var BarChartNode = require( 'SEASONS/intensity/view/BarChartNode' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var AccordionBox = require( 'SUN/AccordionBox' );
-  var Text = require( 'SCENERY/nodes/Text' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ResetAllButton2 = require( 'SUN/experimental/buttons/ResetAllButton2' );
@@ -104,7 +103,7 @@ define( function( require ) {
 //    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
 
     var rectangle = new Rectangle( 0, 0, 5, 5, {fill: 'yellow'} );
-    solarPanelNode.panelModel.property( 'position' ).link( function( position ) {rectangle.setRect( position.x, position.y, 5, 5 )} );
+    solarPanelNode.panelModel.property( 'position' ).link( function( position ) {rectangle.setRect( position.x, position.y, 5, 5 );} );
     this.addChild( rectangle );
   }
 

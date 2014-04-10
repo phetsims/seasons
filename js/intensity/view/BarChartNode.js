@@ -27,7 +27,20 @@ define( function( require ) {
     var WIDTH = 75;
 
     var BAR_WIDTH = 8;
-    var barNode = new Rectangle( WIDTH / 2 - BAR_WIDTH / 2, -100, BAR_WIDTH, 100, {fill: 'white'} );
+    var barNode = new Rectangle( 0, 0, 0, 0, {fill: 'white'} );
+    var text = new Text( '', {font: FONT} );
+
+    valueProperty.link( function( value ) {
+      var percentage = Math.round( value * 100 );
+      text.text = percentage + '%';
+      text.centerX = WIDTH * 0.8 / 2;
+      text.centerY = 26 / 2;
+
+      var barHeight = value * HEIGHT;
+      console.log( 'vp changed', value, percentage, barHeight );
+      barNode.setRect( WIDTH / 2 - BAR_WIDTH / 2, -barHeight, BAR_WIDTH, barHeight );
+    } );
+
     this.addChild( new VBox( {
         spacing: 5,
         children: [
@@ -45,12 +58,14 @@ define( function( require ) {
 
               //The horizontal axis
               new Line( 0, 0, WIDTH, 0, {stroke: 'white'} ),
-              barNode]} ),
+              barNode
+            ]
+          } ),
 
           new Node( {
             children: [
               new Rectangle( 0, 0, WIDTH * 0.8, 26, 10, 10, {fill: 'white'} ),
-              new Text( valueProperty.value + '%', {font: FONT, centerX: WIDTH * 0.8 / 2, centerY: 26 / 2} )//TODO: MessageFormat
+              text//TODO: MessageFormat
             ]
           } )
         ]} )

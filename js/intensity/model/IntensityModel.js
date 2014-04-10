@@ -40,6 +40,17 @@ define( function( require ) {
     this.anyPanelCenteredProperty = new DerivedProperty( [this.centeredPanelProperty], function( centeredPanel ) {
       return centeredPanel !== null;
     } );
+
+    //Property for the angle of the panel in the center, or null if no panel is in the center.
+    this.centeredPanelAngleProperty = new DerivedProperty( [this.centeredPanelProperty, this.solarPanel.angleProperty, this.heatPanel.angleProperty, this.intensityPanel.angleProperty],
+      function( centeredPanel ) {
+        return centeredPanel ? centeredPanel.angle :
+               null;
+      } );
+
+    this.intensityProperty = new DerivedProperty( [this.centeredPanelAngleProperty, this.flashlightOnProperty], function( centeredPanelAngle, flashlightOn ) {
+      return (centeredPanelAngle === null || !flashlightOn) ? 0 : Math.abs( Math.cos( centeredPanelAngle ) );
+    } );
   }
 
   return inherit( PropertySet, IntensityModel, {

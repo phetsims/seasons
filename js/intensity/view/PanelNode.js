@@ -21,7 +21,7 @@ define( function( require ) {
 
   function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, setLightTipAndTail, options ) {
     this.panelModel = panelModel;
-    this.setLightTipAndTail = setLightTipAndTail;
+    this.setLightProjection = setLightTipAndTail;
     this.playAreaCenter = playAreaCenter;
     var panelNode = this;
     options = _.extend( {
@@ -230,7 +230,7 @@ define( function( require ) {
         this.lightPath.shape = Shape.ellipse( center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
         var ellipseTail = new Vector2( 0, ry ).rotated( this.panelModel.angle ).plus( center );
         var ellipseTip = new Vector2( 0, -ry ).rotated( this.panelModel.angle ).plus( center );
-        this.setLightTipAndTail( ellipseTip.x, ellipseTail.x, center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
+        this.setLightProjection( ellipseTip.x, ellipseTail.x, center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
       }
     },
 

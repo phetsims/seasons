@@ -25,20 +25,31 @@ define( function( require ) {
     this.addChild( this.beamNode );
     panelInPlayAreaProperty.link( function( panelInPlayArea ) {
       var x = panelInPlayArea ? 260 : 0;
-      lightNode.setLightTipAndTail( x, x );
+      lightNode.setLightRect( x );
     } );
     flashlightOnProperty.linkAttribute( this, 'visible' );
     this.mutate( options );
   }
 
   return inherit( Node, LightNode, {
-    setLightTipAndTail: function( tailX, tipX, centerX, centerY, radiusX, radiusY, rotation ) {
 
+    //The shape of the light when no panel is in the way, and it passes through
+    setLightRect: function( tailX ) {
       this.beamNode.shape = new Shape().
-        moveTo( this.rightLayout, this.beamBottom - 152 ).
-        lineTo( tailX, this.beamBottom - 152 ).
-        ellipticalArc( centerX, centerY - 152, radiusX, radiusY, rotation, 3 * Math.PI / 2, 3 * Math.PI / 2 + Math.PI, true ).
-        lineTo( this.rightLayout, this.beamTop - 152 ).
+        moveTo( this.rightLayout, this.beamBottom ).
+        lineTo( tailX, this.beamBottom ).
+        lineTo( tailX, this.beamTop ).
+        lineTo( this.rightLayout, this.beamTop ).
+        close();
+    },
+
+    //The shape of the light when it falls on a panel.  See PanelNode's ellipse rendering to see how the ellipse arcs match up.
+    setLightProjection: function( tailX, tipX, centerX, centerY, radiusX, radiusY, rotation ) {
+      this.beamNode.shape = new Shape().
+        moveTo( this.rightLayout, this.beamBottom ).
+        lineTo( tailX, this.beamBottom ).
+        ellipticalArc( centerX, centerY, radiusX, radiusY, rotation, 3 * Math.PI / 2, 3 * Math.PI / 2 + Math.PI, true ).
+        lineTo( this.rightLayout, this.beamTop ).
         close();
     }
   } );

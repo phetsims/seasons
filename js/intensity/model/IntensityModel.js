@@ -11,8 +11,10 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PanelModel = require( 'SEASONS/intensity/model/PanelModel' );
+  var DerivedProperty = require( 'AXON/DerivedProperty' );
 
   function IntensityModel() {
+    var intensityModel = this;
     PropertySet.call( this, {
 
       //Boolean property indicating whether the flashlight button has been pressed
@@ -24,13 +26,20 @@ define( function( require ) {
     this.intensityPanel = new PanelModel();
 
     //Properties to determine if any panel is dragging or centered, so that the flashlight can be toggled off during dragging
-    this.anyPanelDragging = this.solarPanel.property( 'state' ).valueEquals( 'dragging' ).
+    this.anyPanelDraggingProperty = this.solarPanel.property( 'state' ).valueEquals( 'dragging' ).
       or( this.heatPanel.property( 'state' ).valueEquals( 'dragging' ) ).
       or( this.intensityPanel.property( 'state' ).valueEquals( 'dragging' ) );
 
-    this.anyPanelCentered = this.solarPanel.stateProperty.valueEquals( 'center' ).
-      or( this.heatPanel.stateProperty.valueEquals( 'center' ) ).
-      or( this.intensityPanel.stateProperty.valueEquals( 'center' ) );
+    this.centeredPanelProperty = new DerivedProperty( [this.solarPanel.stateProperty, this.heatPanel.stateProperty, this.intensityPanel.stateProperty], function( solarPanelState, heatPanelState, intensityPanelState ) {
+      return solarPanelState === 'center' ? intensityModel.solarPanel :
+             heatPanelState === 'center' ? intensityModel.heatPanel :
+             intensityPanelState === 'center' ? intensityModel.intensityPanel :
+             null;
+    } );
+
+    this.anyPanelCenteredProperty = new DerivedProperty( [this.centeredPanelProperty], function( centeredPanel ) {
+      return centeredPanel !== null;
+    } );
   }
 
   return inherit( PropertySet, IntensityModel, {

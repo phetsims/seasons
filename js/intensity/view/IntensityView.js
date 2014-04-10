@@ -68,7 +68,7 @@ define( function( require ) {
 
     this.addChild( new TickMarksNode( playAreaCenter ) );
 
-    var lightNode = new LightNode( playAreaCenter.y, model.property( 'flashlightOn' ).and( model.anyPanelDragging.derivedNot() ), model.anyPanelCentered, this.layoutBounds.right - 20, {centerY: playAreaCenter.y} );
+    var lightNode = new LightNode( playAreaCenter.y, model.property( 'flashlightOn' ).and( model.anyPanelDraggingProperty.derivedNot() ), model.anyPanelCenteredProperty, this.layoutBounds.right - 20, {centerY: playAreaCenter.y} );
 
     //Create the different types of panels
     var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightTipAndTail.bind( lightNode ), {stroke: '#d30e78', fill: '#1b179f'} );

@@ -36,6 +36,10 @@ define( function( require ) {
 
     this.lightPath = new Path( null, {fill: 'white'} );
 
+    panelModel.intensityProperty.link( function( intensity ) {
+      panelNode.lightPath.opacity = intensity;
+    } );
+
     flashlightOnProperty.and( panelModel.stateProperty.valueEquals( 'center' ) ).and( panelModel.animatingProperty.valueEquals( false ) ).linkAttribute( this.lightPath, 'visible' );
 
     //Location where objects can be put in front of the flashlight.

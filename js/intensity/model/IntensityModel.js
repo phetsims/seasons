@@ -51,6 +51,13 @@ define( function( require ) {
     this.intensityProperty = new DerivedProperty( [this.centeredPanelAngleProperty, this.flashlightOnProperty], function( centeredPanelAngle, flashlightOn ) {
       return (centeredPanelAngle === null || !flashlightOn) ? 0 : Math.abs( Math.cos( centeredPanelAngle ) );
     } );
+
+    //Forward intensity values to the panels, to update the light view in the panel node.
+    this.intensityProperty.link( function( intensity ) {
+      if ( intensity !== null && intensityModel.centeredPanelProperty.value !== null ) {
+        intensityModel.centeredPanelProperty.value.intensity = intensity;
+      }
+    } );
   }
 
   return inherit( PropertySet, IntensityModel, {

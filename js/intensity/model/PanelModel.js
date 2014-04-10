@@ -26,7 +26,10 @@ define( function( require ) {
 
       //State: whether dragging, in the toolbox or in the center
       state: 'toolbox',
-      animating: false
+      animating: false,
+
+      //The intensity of the light (0-1), or null if no light is shining on it.
+      intensity: null
     } );
     this.addDerivedProperty( 'angle', ['unclampedAngle'], function( unclampedAngle ) {
       var sixtyDegrees = 60 * Math.PI / 180;

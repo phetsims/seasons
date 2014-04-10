@@ -32,8 +32,14 @@ define( function( require ) {
   }
 
   return inherit( Node, LightNode, {
-    setLightTipAndTail: function( tailX, tipX ) {
-      this.beamNode.shape = new Shape().moveTo( tailX, this.beamBottom ).lineTo( tipX, this.beamTop ).lineTo( this.rightLayout, this.beamTop ).lineTo( this.rightLayout, this.beamBottom ).close();
+    setLightTipAndTail: function( tailX, tipX, centerX, centerY, radiusX, radiusY, rotation ) {
+
+      this.beamNode.shape = new Shape().
+        moveTo( this.rightLayout, this.beamBottom - 152 ).
+        lineTo( tailX, this.beamBottom - 152 ).
+        ellipticalArc( centerX, centerY - 152, radiusX, radiusY, rotation, 3 * Math.PI / 2, 3 * Math.PI / 2 + Math.PI, true ).
+        lineTo( this.rightLayout, this.beamTop - 152 ).
+        close();
     }
   } );
 } );

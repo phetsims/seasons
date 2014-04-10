@@ -17,6 +17,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var knobImage = require( 'image!SEASONS/knob.png' );
+  var LinearFunction = require( 'DOT/LinearFunction' );
 
   function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, setLightTipAndTail, options ) {
     this.panelModel = panelModel;
@@ -36,8 +37,9 @@ define( function( require ) {
 
     this.lightPath = new Path( null, {fill: 'white'} );
 
+    var linearFunction = new LinearFunction( 0, 1, 0.5, 1 );
     panelModel.intensityProperty.link( function( intensity ) {
-      panelNode.lightPath.opacity = intensity;
+      panelNode.lightPath.opacity = linearFunction( intensity );
     } );
 
     flashlightOnProperty.and( panelModel.stateProperty.valueEquals( 'center' ) ).and( panelModel.animatingProperty.valueEquals( false ) ).linkAttribute( this.lightPath, 'visible' );
@@ -228,7 +230,7 @@ define( function( require ) {
         this.lightPath.shape = Shape.ellipse( center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
         var ellipseTail = new Vector2( 0, ry ).rotated( this.panelModel.angle ).plus( center );
         var ellipseTip = new Vector2( 0, -ry ).rotated( this.panelModel.angle ).plus( center );
-        this.setLightTipAndTail( ellipseTip.x, ellipseTail.x );
+        this.setLightTipAndTail( ellipseTip.x, ellipseTail.x, center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
       }
     },
 

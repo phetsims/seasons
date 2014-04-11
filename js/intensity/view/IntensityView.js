@@ -36,7 +36,7 @@ define( function( require ) {
     var intensityView = this;
     ScreenView.call( this, { renderer: 'svg' } );
 
-    var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10, listener: model.reset.bind( model )} );
+    var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10, listener: function() {model.reset();}} );
     this.addChild( resetAllButton );
 
     var toolbox = new Toolbox( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} );
@@ -127,6 +127,12 @@ define( function( require ) {
 
     var secondBox = new AccordionBox( secondaryBarChart, {title: secondBoxTitleProperty.value, initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
     secondBoxTitleProperty.linkAttribute( secondBox, 'title' );
+
+    //Close the accordion boxes on reset
+    model.on( 'reset', function() {
+      intensityBox.open.reset();
+      secondBox.open.reset();
+    } );
 
     this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );
 

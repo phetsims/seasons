@@ -79,6 +79,7 @@ define( function( require ) {
       this.solarPanel.reset();
       this.heatPanel.reset();
       this.intensityPanel.reset();
+      this.trigger( 'reset' );
     }
   } );
 } );

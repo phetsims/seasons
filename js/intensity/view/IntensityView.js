@@ -95,14 +95,15 @@ define( function( require ) {
     var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
 
     var secondaryBarChart = new BarChartNode( model.intensityProperty );
-    var secondBox = new AccordionBox( secondaryBarChart, {title: '-', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
 
-    model.centeredPanelProperty.map( function( centeredPanel ) {
+    var secondBoxTitleProperty = model.centeredPanelProperty.map( function( centeredPanel ) {
       return centeredPanel === null ? '-' :
              centeredPanel.type === 'intensity' ? 'Light Area' :
              centeredPanel.type === 'heat' ? 'Temperature' :
              'Power';
-    } ).linkAttribute( secondBox, 'title' );
+    } );
+    var secondBox = new AccordionBox( secondaryBarChart, {title: secondBoxTitleProperty.value, initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
+    secondBoxTitleProperty.linkAttribute( secondBox, 'title' );
 
     this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );
 

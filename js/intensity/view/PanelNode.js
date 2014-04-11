@@ -18,6 +18,7 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var knobImage = require( 'image!SEASONS/knob.png' );
   var LinearFunction = require( 'DOT/LinearFunction' );
+  var Color = require( 'SCENERY/util/Color' );
 
   function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, setLightTipAndTail, options ) {
     this.panelModel = panelModel;
@@ -43,6 +44,45 @@ define( function( require ) {
     if ( panelModel.type === 'intensity' ) {
       panelModel.intensityProperty.link( function( intensity ) {
         panelNode.lightPath.opacity = linearFunction( intensity );
+      } );
+    }
+
+    //Color values sampled from http://herschel.cf.ac.uk/files/spire_files/IR_0401.jpg every five pixels from bottom totop, see the google doc
+    //So the first values here are the "low heat" values
+    var heatMap = [
+      [0, 23, 34],
+      [0, 6 , 72],
+      [34, 0, 121],
+      [60, 2, 140],
+      [103, 0, 158],
+      [125, 3, 166],
+      [151, 4, 157],
+      [171, 20, 151],
+      [196, 28, 124],
+      [202, 41, 109],
+      [218, 57, 91],
+      [231, 72, 76],
+      [242, 94, 48],
+      [251, 110, 31],
+      [254, 134, 14],
+      [252, 156, 0],
+      [255, 169, 1],
+      [251, 188, 0],
+      [251, 205, 5],
+      [250, 219, 32],
+      [250, 239, 63],
+      [242, 242, 110],
+      [245, 255, 177],
+      [241, 251, 240]
+    ];
+
+    var intensityToHeatMapIndex = new LinearFunction( 0.5, 1, 6, heatMap.length - 1, true );
+    if ( panelModel.type === 'heat' ) {
+      panelModel.intensityProperty.link( function( intensity ) {
+        var index = Math.round( intensityToHeatMapIndex( intensity ) );//TODO: interpolation
+        console.log( intensity, index );
+        var rgb = heatMap[index];
+        panelNode.lightPath.fill = new Color( rgb[0], rgb[1], rgb[2] );
       } );
     }
 

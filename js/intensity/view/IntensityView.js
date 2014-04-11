@@ -26,6 +26,7 @@ define( function( require ) {
   var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var LinearFunction = require( 'DOT/LinearFunction' );
+  var Circle = require( 'SCENERY/nodes/Circle' );
 
   //For comparing to mockup
 //  var mockupImage = require( 'image!SEASONS/app-768.png' );
@@ -134,9 +135,11 @@ define( function( require ) {
 
 //    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
 
-    var rectangle = new Rectangle( 0, 0, 5, 5, {fill: 'yellow'} );
-    solarPanelNode.panelModel.property( 'position' ).link( function( position ) {rectangle.setRect( position.x, position.y, 5, 5 );} );
-    this.addChild( rectangle );
+    var pivot = new Circle( 1, {fill: 'white'} );
+    solarPanelNode.panelModel.property( 'position' ).link( function( position ) {
+      pivot.setTranslation( position.x, position.y );
+    } );
+    this.addChild( pivot );
   }
 
   return inherit( ScreenView, IntensityView );

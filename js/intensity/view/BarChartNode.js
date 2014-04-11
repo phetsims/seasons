@@ -18,27 +18,22 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   var FONT = new PhetFont( 16 );
+  var HEIGHT = 200;
+  var WIDTH = 75;
+  var BAR_WIDTH = 8;
 
   function BarChartNode( valueProperty, options ) {
+
+    this.valueProperty = valueProperty;
+    //TODO: Move to options
+    this._units = '%';
     var barChartNode = this;
     Node.call( this );
 
-    var HEIGHT = 200;
-    var WIDTH = 75;
-
-    var BAR_WIDTH = 8;
     this.barNode = new Rectangle( 0, 0, 0, 0, {fill: 'white'} );
-    var text = new Text( '', {font: FONT} );
+    this.text = new Text( '', {font: FONT} );
 
-    valueProperty.link( function( value ) {
-      var percentage = Math.round( value * 100 );
-      text.text = percentage + '%';
-      text.centerX = WIDTH * 0.8 / 2;
-      text.centerY = 26 / 2;
-
-      var barHeight = value * HEIGHT;
-      barChartNode.barNode.setRect( WIDTH / 2 - BAR_WIDTH / 2, -barHeight, BAR_WIDTH, barHeight );
-    } );
+    valueProperty.link( function() {barChartNode.updateReadout();} );
 
     this.addChild( new VBox( {
         spacing: 5,
@@ -64,7 +59,7 @@ define( function( require ) {
           new Node( {
             children: [
               new Rectangle( 0, 0, WIDTH * 0.8, 26, 10, 10, {fill: 'white'} ),
-              text//TODO: MessageFormat
+              this.text//TODO: MessageFormat
             ]
           } )
         ]} )
@@ -72,5 +67,18 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Node, BarChartNode );
+  return inherit( Node, BarChartNode, {
+    set units( u ) { this._units = u; },
+    get units() {return this._units;},
+    updateReadout: function() {
+      var value = this.valueProperty.value;
+      var percentage = Math.round( value * 100 );
+      this.text.text = percentage + this._units;
+      this.text.centerX = WIDTH * 0.8 / 2;
+      this.text.centerY = 26 / 2;
+
+      var barHeight = value * HEIGHT;
+      this.barNode.setRect( WIDTH / 2 - BAR_WIDTH / 2, -barHeight, BAR_WIDTH, barHeight );
+    }
+  } );
 } );

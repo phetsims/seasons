@@ -111,6 +111,13 @@ define( function( require ) {
              'Power';
     } );
 
+    model.centeredPanelProperty.map( function( centeredPanel ) {
+      return centeredPanel === null ? '-' :
+             centeredPanel.type === 'intensity' ? 'm^2' :
+             centeredPanel.type === 'heat' ? ' \u2103' :
+             '%';
+    } ).linkAttribute( secondaryBarChart, 'units' );
+
     //Update the color of the secondary bar chart
     //TODO: No need to call the heat map twice, if it is too expensive.  Could factor it to a heat panel property
     new DerivedProperty( [model.heatPanel.timeAveragedIntensityProperty, model.centeredPanelProperty], function( heatPanelIntensity, centeredPanel ) {

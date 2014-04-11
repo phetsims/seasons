@@ -112,8 +112,8 @@ define( function( require ) {
     } );
 
     model.centeredPanelProperty.map( function( centeredPanel ) {
-      return centeredPanel === null ? '-' :
-             centeredPanel.type === 'intensity' ? 'm^2' :
+      return centeredPanel === null ? '' :
+             centeredPanel.type === 'intensity' ? ' m^2' :
              centeredPanel.type === 'heat' ? ' \u2103' :
              '%';
     } ).linkAttribute( secondaryBarChart, 'units' );

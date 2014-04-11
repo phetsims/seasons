@@ -117,8 +117,5 @@ define( function( require ) {
     this.addChild( rectangle );
   }
 
-  return inherit( ScreenView, IntensityView, {
-    step: function() {
-    }
-  } );
+  return inherit( ScreenView, IntensityView );
 } );

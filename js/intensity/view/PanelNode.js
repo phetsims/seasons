@@ -19,6 +19,7 @@ define( function( require ) {
   var knobImage = require( 'image!SEASONS/knob.png' );
   var LinearFunction = require( 'DOT/LinearFunction' );
   var Color = require( 'SCENERY/util/Color' );
+  var Util = require( 'DOT/Util' );
 
   function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, setLightTipAndTail, options ) {
     this.panelModel = panelModel;
@@ -77,12 +78,33 @@ define( function( require ) {
     ];
 
     //For the heat panel, show time average of intensity on heat panel to account for latency of heating up/cooling down
+    //TODO: make sure this code only runs when heat panel is active
     var intensityToHeatMapIndex = new LinearFunction( 0.5, 1, 6, heatMap.length - 1, true );
     if ( panelModel.type === 'heat' ) {
       panelModel.timeAveragedIntensityProperty.link( function( intensity ) {
-        var index = Math.round( intensityToHeatMapIndex( intensity ) );//TODO: interpolation
-        var rgb = heatMap[index];
-        panelNode.lightPath.fill = new Color( rgb[0], rgb[1], rgb[2] );
+
+        //Interpolate linearly sampled values from above
+        var floatingPointIndex = intensityToHeatMapIndex( intensity );
+//        if ( floatingPointIndex < 0 ) {
+//          floatingPointIndex = 0.5;
+//        }
+//        if ( floatingPointIndex >= heatMap.length ) {
+//          floatingPointIndex = heatMap.length - 1.5;
+//        }
+        var floor = Math.floor( floatingPointIndex );
+        var ceil = Math.ceil( floatingPointIndex );
+        if ( floor === ceil ) {
+          floor = ceil - 1;
+        }
+        var red = Util.linear( floor, ceil, heatMap[floor][0], heatMap[ceil][0], floatingPointIndex );
+        var green = Util.linear( floor, ceil, heatMap[floor][1], heatMap[ceil][1], floatingPointIndex );
+        var blue = Util.linear( floor, ceil, heatMap[floor][2], heatMap[ceil][2], floatingPointIndex );
+
+        //TODO: Remove this debug code
+//        if ( flashlightOnProperty.value ) {
+//          console.log( {heatMapLength: heatMap.length, floor: floor, ceil: ceil, floatingPointIndex: floatingPointIndex, red: red, green: green, blue: blue} );
+//        }
+        panelNode.lightPath.fill = new Color( red, green, blue );
       } );
     }
 

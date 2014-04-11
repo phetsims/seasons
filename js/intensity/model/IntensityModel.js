@@ -58,11 +58,21 @@ define( function( require ) {
         intensityModel.centeredPanelProperty.value.intensity = intensity;
       }
     } );
+
+    //Clear the heat from the heat panel when it is removed
+    this.centeredPanelProperty.link( function( centeredPanel, oldCenteredPanel ) {
+      if ( oldCenteredPanel === intensityModel.heatPanel ) {
+        intensityModel.heatPanel.intensity = 0;
+        intensityModel.heatPanel.timeAveragedIntensity = 0;
+      }
+    } );
   }
 
   return inherit( PropertySet, IntensityModel, {
     step: function( dt ) {
-      this.heatPanel.step( dt );
+      if ( this.centeredPanelProperty.value === this.heatPanel ) {
+        this.heatPanel.step( dt );
+      }
     },
     reset: function() {
       PropertySet.prototype.reset.call( this );

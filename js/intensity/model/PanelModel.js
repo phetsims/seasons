@@ -62,11 +62,20 @@ define( function( require ) {
     //Only for the heat panel, show time average of intensity on heat panel to account for latency of heating up/cooling down
     step: function( dt ) {
       //step toward the new intensity value.
-      var intensity = this.intensity === null ? 0 : this.intensity;
+      var intensity = (this.intensity === null || typeof this.intensity === 'undefined') ? 0 : this.intensity;
 
-      //Higher alpha means longer latency to heat/cool
-      var alpha = 0.9 * dt / 0.016;
-      this.timeAveragedIntensity = this.timeAveragedIntensity * alpha + intensity * (1 - alpha);
+
+      //TODO: account for dt
+      //Lower alpha means longer latency to heat/cool
+      var alpha = 0.04 * dt / 0.016;
+      if ( alpha > 1 ) {
+        alpha = 1;
+      }
+      if ( alpha < 0 ) {
+        alpha = 0;
+      }
+      this.timeAveragedIntensity = this.timeAveragedIntensity * (1 - alpha) + intensity * alpha;
+//      console.log( this.intensity, intensity, this.timeAveragedIntensity );
     },
     reset: function() {
       PropertySet.prototype.reset.call( this );

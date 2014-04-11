@@ -93,8 +93,18 @@ define( function( require ) {
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {left: this.layoutBounds.right - 93, centerY: playAreaCenter.y} ) );
 
     //Accordion boxes for charts
-    var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
-    var secondBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {title: '-', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white'} );
+    var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
+
+    var secondaryBarChart = new BarChartNode( model.intensityProperty );
+    var secondBox = new AccordionBox( secondaryBarChart, {title: '-', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
+
+    model.centeredPanelProperty.map( function( centeredPanel ) {
+      return centeredPanel === null ? '-' :
+             centeredPanel.type === 'intensity' ? 'Light Area' :
+             centeredPanel.type === 'heat' ? 'Temperature' :
+             'Power';
+    } ).linkAttribute( secondBox, 'title' );
+
     this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );
 
 //    this.addChild( new Rectangle( playAreaCenter.x, playAreaCenter.y, 2, 2, {fill: 'green'} ) );

@@ -11,7 +11,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var RoundToggleButton = require( 'SUN/experimental/buttons/RoundToggleButton' );
-  var HStrut = require( 'SUN/HStrut' );
   var Color = require( 'SCENERY/util/Color' );
   var Image = require( 'SCENERY/nodes/Image' );
   var flashlightImage = require( 'image!SEASONS/flashlight.png' );

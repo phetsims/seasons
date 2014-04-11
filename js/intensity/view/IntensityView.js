@@ -22,7 +22,6 @@ define( function( require ) {
   var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
   var TargetOutlineNode = require( 'SEASONS/intensity/view/TargetOutlineNode' );
   var Vector2 = require( 'DOT/Vector2' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var LinearFunction = require( 'DOT/LinearFunction' );
@@ -121,7 +120,7 @@ define( function( require ) {
 
     //Update the color of the secondary bar chart
     //TODO: No need to call the heat map twice, if it is too expensive.  Could factor it to a heat panel property
-    new DerivedProperty( [model.heatPanel.timeAveragedIntensityProperty, model.centeredPanelProperty], function( heatPanelIntensity, centeredPanel ) {
+    DerivedProperty.multilink( [model.heatPanel.timeAveragedIntensityProperty, model.centeredPanelProperty], function( heatPanelIntensity, centeredPanel ) {
       secondaryBarChart.barNode.fill = centeredPanel === model.heatPanel ? HeatMap.intensityToColor( heatPanelIntensity ) : 'white';
     } );
 

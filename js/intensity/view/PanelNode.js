@@ -18,8 +18,6 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var knobImage = require( 'image!SEASONS/knob.png' );
   var LinearFunction = require( 'DOT/LinearFunction' );
-  var Color = require( 'SCENERY/util/Color' );
-  var Util = require( 'DOT/Util' );
   var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
 
   function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, setLightTipAndTail, options ) {

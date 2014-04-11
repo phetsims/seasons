@@ -9,7 +9,6 @@ define( function( require ) {
   'use strict';
 
   var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
   var BarChartNode = require( 'SEASONS/intensity/view/BarChartNode' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var AccordionBox = require( 'SUN/AccordionBox' );

@@ -23,7 +23,7 @@ define( function( require ) {
     Node.call( this, {pickable: false} );
     this.beamNode = new Path( new Shape(), {opacity: 0.65, fill: 'white'} );
     this.addChild( this.beamNode );
-    panelInPlayAreaProperty.onValue( false, function() {lightNode.setLightRect()} );
+    panelInPlayAreaProperty.onValue( false, function() {lightNode.setLightRect();} );
     flashlightOnProperty.linkAttribute( this, 'visible' );
     this.mutate( options );
   }

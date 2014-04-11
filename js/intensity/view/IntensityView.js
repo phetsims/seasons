@@ -117,8 +117,8 @@ define( function( require ) {
     this.addChild( rectangle );
   }
 
-  return inherit( ScreenView, IntensityView, {step: function() {
-//    this.panel3DNode.step();
-  }
+  return inherit( ScreenView, IntensityView, {
+    step: function() {
+    }
   } );
 } );

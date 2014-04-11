@@ -61,7 +61,8 @@ define( function( require ) {
   }
 
   return inherit( PropertySet, IntensityModel, {
-    step: function() {
+    step: function( dt ) {
+      this.heatPanel.step( dt );
     },
     reset: function() {
       PropertySet.prototype.reset.call( this );

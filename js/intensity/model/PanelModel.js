@@ -34,7 +34,11 @@ define( function( require ) {
       animating: false,
 
       //The intensity of the light (0-1), or null if no light is shining on it.
-      intensity: null
+      intensity: null,
+
+      //Time averaged intensity (over a window of a few seconds) to add some latency to the heat view for the heat panel.
+      //Not used for Solar panel and Intensity panel
+      timeAveragedIntensity: 0
     } );
     this.addDerivedProperty( 'angle', ['unclampedAngle'], function( unclampedAngle ) {
       var sixtyDegrees = 60 * Math.PI / 180;
@@ -54,6 +58,16 @@ define( function( require ) {
   }
 
   return inherit( PropertySet, PanelModel, {
+
+    //Only for the heat panel, show time average of intensity on heat panel to account for latency of heating up/cooling down
+    step: function( dt ) {
+      //step toward the new intensity value.
+      var intensity = this.intensity === null ? 0 : this.intensity;
+
+      //Higher alpha means longer latency to heat/cool
+      var alpha = 0.9 * dt / 0.016;
+      this.timeAveragedIntensity = this.timeAveragedIntensity * alpha + intensity * (1 - alpha);
+    },
     reset: function() {
       PropertySet.prototype.reset.call( this );
       this.trigger( 'reset' );

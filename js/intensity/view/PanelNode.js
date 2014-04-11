@@ -76,11 +76,11 @@ define( function( require ) {
       [241, 251, 240]
     ];
 
+    //For the heat panel, show time average of intensity on heat panel to account for latency of heating up/cooling down
     var intensityToHeatMapIndex = new LinearFunction( 0.5, 1, 6, heatMap.length - 1, true );
     if ( panelModel.type === 'heat' ) {
-      panelModel.intensityProperty.link( function( intensity ) {
+      panelModel.timeAveragedIntensityProperty.link( function( intensity ) {
         var index = Math.round( intensityToHeatMapIndex( intensity ) );//TODO: interpolation
-        console.log( intensity, index );
         var rgb = heatMap[index];
         panelNode.lightPath.fill = new Color( rgb[0], rgb[1], rgb[2] );
       } );

@@ -25,6 +25,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
+  var LinearFunction = require( 'DOT/LinearFunction' );
 
   //For comparing to mockup
 //  var mockupImage = require( 'image!SEASONS/app-768.png' );
@@ -92,7 +93,16 @@ define( function( require ) {
     //Accordion boxes for charts
     var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
 
-    var secondaryBarChart = new BarChartNode( model.intensityProperty );
+    //Map the values for the secondary properties for each of the panels
+    var temperatureMap = new LinearFunction( 0.5, 1, 0.2, 0.8, true );
+    var secondaryProperty = new DerivedProperty( [model.centeredPanelProperty, model.intensityProperty, model.heatPanel.timeAveragedIntensityProperty], function( centeredPanel, intensity, heatPanelIntensity ) {
+      return centeredPanel === null ? 0 :
+             centeredPanel.type === 'solar' ? intensity / 2 :
+             centeredPanel.type === 'heat' ? temperatureMap( heatPanelIntensity ) :
+             intensity;
+    } );
+
+    var secondaryBarChart = new BarChartNode( secondaryProperty );
 
     var secondBoxTitleProperty = model.centeredPanelProperty.map( function( centeredPanel ) {
       return centeredPanel === null ? '-' :

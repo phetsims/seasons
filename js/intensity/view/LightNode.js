@@ -23,10 +23,7 @@ define( function( require ) {
     Node.call( this, {pickable: false} );
     this.beamNode = new Path( new Shape(), {opacity: 0.65, fill: 'white'} );
     this.addChild( this.beamNode );
-    panelInPlayAreaProperty.link( function( panelInPlayArea ) {
-      var x = panelInPlayArea ? 260 : 0;
-      lightNode.setLightRect( x );
-    } );
+    panelInPlayAreaProperty.onValue( false, function() {lightNode.setLightRect()} );
     flashlightOnProperty.linkAttribute( this, 'visible' );
     this.mutate( options );
   }
@@ -34,11 +31,11 @@ define( function( require ) {
   return inherit( Node, LightNode, {
 
     //The shape of the light when no panel is in the way, and it passes through
-    setLightRect: function( tailX ) {
+    setLightRect: function() {
       this.beamNode.shape = new Shape().
         moveTo( this.rightLayout, this.beamBottom ).
-        lineTo( tailX, this.beamBottom ).
-        lineTo( tailX, this.beamTop ).
+        lineTo( -1000, this.beamBottom ).
+        lineTo( -1000, this.beamTop ).
         lineTo( this.rightLayout, this.beamTop ).
         close();
     },

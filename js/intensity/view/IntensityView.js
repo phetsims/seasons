@@ -23,6 +23,8 @@ define( function( require ) {
   var TargetOutlineNode = require( 'SEASONS/intensity/view/TargetOutlineNode' );
   var Vector2 = require( 'DOT/Vector2' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
+  var DerivedProperty = require( 'AXON/DerivedProperty' );
 
   //For comparing to mockup
 //  var mockupImage = require( 'image!SEASONS/app-768.png' );
@@ -83,10 +85,6 @@ define( function( require ) {
     var panelLayer = new Node( {children: [solarPanelNode, heatPanelNode, intensityPanelNode]} );
     this.addChild( panelLayer );
 
-    //3D Panels (feasibility test)
-//    this.panel3DNode = new Panel3DNode( {x: this.layoutBounds.centerX, y: this.layoutBounds.centerY} );
-//    this.addChild( this.panel3DNode );
-
     this.addChild( lightNode );
 
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {left: this.layoutBounds.right - 93, centerY: playAreaCenter.y} ) );
@@ -102,6 +100,13 @@ define( function( require ) {
              centeredPanel.type === 'heat' ? 'Temperature' :
              'Power';
     } );
+
+    //Update the color of the secondary bar chart
+    //TODO: No need to call the heat map twice, if it is too expensive.  Could factor it to a heat panel property
+    new DerivedProperty( [model.heatPanel.timeAveragedIntensityProperty, model.centeredPanelProperty], function( heatPanelIntensity, centeredPanel ) {
+      secondaryBarChart.barNode.fill = centeredPanel === model.heatPanel ? HeatMap.intensityToColor( heatPanelIntensity ) : 'white';
+    } );
+
     var secondBox = new AccordionBox( secondaryBarChart, {title: secondBoxTitleProperty.value, initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
     secondBoxTitleProperty.linkAttribute( secondBox, 'title' );
 

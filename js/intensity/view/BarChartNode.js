@@ -20,13 +20,14 @@ define( function( require ) {
   var FONT = new PhetFont( 16 );
 
   function BarChartNode( valueProperty, options ) {
+    var barChartNode = this;
     Node.call( this );
 
     var HEIGHT = 200;
     var WIDTH = 75;
 
     var BAR_WIDTH = 8;
-    var barNode = new Rectangle( 0, 0, 0, 0, {fill: 'white'} );
+    this.barNode = new Rectangle( 0, 0, 0, 0, {fill: 'white'} );
     var text = new Text( '', {font: FONT} );
 
     valueProperty.link( function( value ) {
@@ -36,7 +37,7 @@ define( function( require ) {
       text.centerY = 26 / 2;
 
       var barHeight = value * HEIGHT;
-      barNode.setRect( WIDTH / 2 - BAR_WIDTH / 2, -barHeight, BAR_WIDTH, barHeight );
+      barChartNode.barNode.setRect( WIDTH / 2 - BAR_WIDTH / 2, -barHeight, BAR_WIDTH, barHeight );
     } );
 
     this.addChild( new VBox( {
@@ -56,7 +57,7 @@ define( function( require ) {
 
               //The horizontal axis
               new Line( 0, 0, WIDTH, 0, {stroke: 'white'} ),
-              barNode
+              barChartNode.barNode
             ]
           } ),
 

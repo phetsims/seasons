@@ -48,12 +48,13 @@ define( function( require ) {
     this.horizontalGridLineWidth = 4 * s;
 
     this.horizontalGridLines = [];
-    for ( var i = 0; i < options.numberHorizontalGridLines; i++ ) {
+    var i;
+    for ( i = 0; i < options.numberHorizontalGridLines; i++ ) {
       this.horizontalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: this.horizontalGridLineWidth, stroke: gridLineStroke} ) );
     }
 
     this.verticalGridLines = [];
-    for ( var i = 0; i < options.numberVerticalGridLines; i++ ) {
+    for ( i = 0; i < options.numberVerticalGridLines; i++ ) {
       this.verticalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: this.verticalGridLineWidth, stroke: gridLineStroke} ) );
     }
 
@@ -91,10 +92,10 @@ define( function( require ) {
 
     //TODO: separate the background and border but only where grid lines applied (for performance)
     var children = [this.background];
-    for ( var i = 0; i < this.horizontalGridLines.length; i++ ) {
+    for ( i = 0; i < this.horizontalGridLines.length; i++ ) {
       children.push( this.horizontalGridLines[i] );
     }
-    for ( var i = 0; i < this.verticalGridLines.length; i++ ) {
+    for ( i = 0; i < this.verticalGridLines.length; i++ ) {
       children.push( this.verticalGridLines[i] );
     }
     children.push( this.frame, this.knobNode, this.lightPath );
@@ -263,13 +264,13 @@ define( function( require ) {
       this.background.shape = shape;
       this.frame.shape = shape;
 
+      var centerRight = topRight.blend( bottomRight, 0.5 );
+
       if ( this.horizontalGridLines.length ) {
         var nearTopLeft = bottomLeft.blend( topLeft, 3 / 4 );
         var nearTopRight = bottomRight.blend( topRight, 3 / 4 );
         var nearBottomLeft = bottomLeft.blend( topLeft, 1 / 4 );
         var nearBottomRight = bottomRight.blend( topRight, 1 / 4 );
-        var centerLeft = bottomLeft.blend( topLeft, 0.5 );
-        var centerRight = topRight.blend( bottomRight, 0.5 );
         this.horizontalGridLines[0].setLine( nearTopLeft.x, nearTopLeft.y, nearTopRight.x, nearTopRight.y );
         this.horizontalGridLines[1].setLine( centerLeft.x, centerLeft.y, centerRight.x, centerRight.y );
         this.horizontalGridLines[2].setLine( nearBottomLeft.x, nearBottomLeft.y, nearBottomRight.x, nearBottomRight.y );
@@ -295,7 +296,6 @@ define( function( require ) {
         this.verticalGridLines[2].lineWidth = this.verticalGridLineWidth * scale;
       }
 
-      var centerRight = topRight.blend( bottomRight, 0.5 );
       var center = centerRight.blend( centerLeft, 0.5 );
 
       if ( this.panelModel.state === 'center' ) {

@@ -25,7 +25,6 @@ define( function( require ) {
   var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var LinearFunction = require( 'DOT/LinearFunction' );
-  var Circle = require( 'SCENERY/nodes/Circle' );
 
   //For comparing to mockup
 //  var mockupImage = require( 'image!SEASONS/app-768.png' );

@@ -95,11 +95,11 @@ define( function( require ) {
 
     //Map the values for the secondary properties for each of the panels
     var temperatureMap = new LinearFunction( 0.5, 1, 0.2, 0.8, true );
-    var secondaryProperty = new DerivedProperty( [model.centeredPanelProperty, model.intensityProperty, model.heatPanel.timeAveragedIntensityProperty], function( centeredPanel, intensity, heatPanelIntensity ) {
+    var secondaryProperty = new DerivedProperty( [model.intensityPanel.angleProperty, model.centeredPanelProperty, model.intensityProperty, model.heatPanel.timeAveragedIntensityProperty], function( intensityPanelAngle, centeredPanel, intensity, heatPanelIntensity ) {
       return centeredPanel === null ? 0 :
              centeredPanel.type === 'solar' ? intensity / 2 :
              centeredPanel.type === 'heat' ? temperatureMap( heatPanelIntensity ) :
-             intensity;
+             0.5 / Math.sin( intensityPanelAngle - Math.PI / 2 );//intensity, see http://mathcentral.uregina.ca/QQ/database/QQ.09.98/connor1.html
     } );
 
     var secondaryBarChart = new BarChartNode( secondaryProperty );

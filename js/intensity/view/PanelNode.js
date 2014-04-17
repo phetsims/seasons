@@ -30,23 +30,31 @@ define( function( require ) {
       fill: null,
       cursor: 'pointer',
       stroke: null,
-      numberHorizontalGridLines: 3,
-      numberVerticalGridLines: 3
+      numberHorizontalGridLines: 0,
+      numberVerticalGridLines: 0
     }, options );
 
     //The handle
     this.knobNode = new Image( knobImage, {scale: 0.5} );
 
-    this.path = new Path( null, {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
+    //Separate background and frame into separate layers so the grid lines (if any) can intervene
+    //TODO: to improve performance, join these layers if no gridlines?
+    this.background = new Path( null, {fill: options.fill} );
+    this.frame = new Path( null, {stroke: options.stroke, lineWidth: 3} );
+
+    var gridLineStroke = 'white';
+    var scale = 0.7;
+    var verticalGridLineWidth = 2.8 * scale;
+    var horizontalGridLineWidth = 4 * scale;
 
     this.horizontalGridLines = [];
     for ( var i = 0; i < options.numberHorizontalGridLines; i++ ) {
-      this.horizontalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: 2, stroke: 'green'} ) );
+      this.horizontalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: horizontalGridLineWidth, stroke: gridLineStroke} ) );
     }
 
     this.verticalGridLines = [];
     for ( var i = 0; i < options.numberVerticalGridLines; i++ ) {
-      this.verticalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: 2, stroke: 'green'} ) );
+      this.verticalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: verticalGridLineWidth, stroke: gridLineStroke} ) );
     }
 
     this.lightPath = new Path( null, {fill: 'white'} );
@@ -82,14 +90,14 @@ define( function( require ) {
     panelModel.property( 'animating' ).onValue( false, function() {panelNode.updateShape();} );
 
     //TODO: separate the background and border but only where grid lines applied (for performance)
-    var children = [this.path];
+    var children = [this.background];
     for ( var i = 0; i < this.horizontalGridLines.length; i++ ) {
       children.push( this.horizontalGridLines[i] );
     }
     for ( var i = 0; i < this.verticalGridLines.length; i++ ) {
       children.push( this.verticalGridLines[i] );
     }
-    children.push( this.knobNode, this.lightPath );
+    children.push( this.frame, this.knobNode, this.lightPath );
     Node.call( this, {children: children} );
 
     // click in the track to change the value, continue dragging if desired
@@ -249,27 +257,35 @@ define( function( require ) {
       if ( this.panelModel.state !== 'dragging' && !this.panelModel.animating ) {
         this.knobNode.centerTop = bottomLeft;
       }
-      this.path.shape = new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close();
+      var shape = new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close();
 
-      var nearTopLeft = bottomLeft.blend( topLeft, 3 / 4 );
-      var nearTopRight = bottomRight.blend( topRight, 3 / 4 );
-      var nearBottomLeft = bottomLeft.blend( topLeft, 1 / 4 );
-      var nearBottomRight = bottomRight.blend( topRight, 1 / 4 );
-      var centerLeft = bottomLeft.blend( topLeft, 0.5 );
-      var centerRight = topRight.blend( bottomRight, 0.5 );
-      this.horizontalGridLines[0].setLine( nearTopLeft.x, nearTopLeft.y, nearTopRight.x, nearTopRight.y );
-      this.horizontalGridLines[1].setLine( centerLeft.x, centerLeft.y, centerRight.x, centerRight.y );
-      this.horizontalGridLines[2].setLine( nearBottomLeft.x, nearBottomLeft.y, nearBottomRight.x, nearBottomRight.y );
+      //TODO: is it safe in scenery to assign same shape to two objects?
+      this.background.shape = shape;
+      this.frame.shape = shape;
 
-      var a = topLeft.blend( topRight, 3 / 4 );
-      var b = bottomLeft.blend( bottomRight, 3 / 4 );
-      var c = topLeft.blend( topRight, 1 / 4 );
-      var d = bottomLeft.blend( bottomRight, 1 / 4 );
-      var e = topLeft.blend( topRight, 0.5 );
-      var f = bottomLeft.blend( bottomRight, 0.5 );
-      this.verticalGridLines[0].setLine( a.x, a.y, b.x, b.y );
-      this.verticalGridLines[1].setLine( c.x, c.y, d.x, d.y );
-      this.verticalGridLines[2].setLine( e.x, e.y, f.x, f.y );
+      if ( this.horizontalGridLines.length ) {
+        var nearTopLeft = bottomLeft.blend( topLeft, 3 / 4 );
+        var nearTopRight = bottomRight.blend( topRight, 3 / 4 );
+        var nearBottomLeft = bottomLeft.blend( topLeft, 1 / 4 );
+        var nearBottomRight = bottomRight.blend( topRight, 1 / 4 );
+        var centerLeft = bottomLeft.blend( topLeft, 0.5 );
+        var centerRight = topRight.blend( bottomRight, 0.5 );
+        this.horizontalGridLines[0].setLine( nearTopLeft.x, nearTopLeft.y, nearTopRight.x, nearTopRight.y );
+        this.horizontalGridLines[1].setLine( centerLeft.x, centerLeft.y, centerRight.x, centerRight.y );
+        this.horizontalGridLines[2].setLine( nearBottomLeft.x, nearBottomLeft.y, nearBottomRight.x, nearBottomRight.y );
+      }
+
+      if ( this.verticalGridLines.length ) {
+        var a = topLeft.blend( topRight, 3 / 4 );
+        var b = bottomLeft.blend( bottomRight, 3 / 4 );
+        var c = topLeft.blend( topRight, 1 / 4 );
+        var d = bottomLeft.blend( bottomRight, 1 / 4 );
+        var e = topLeft.blend( topRight, 0.5 );
+        var f = bottomLeft.blend( bottomRight, 0.5 );
+        this.verticalGridLines[0].setLine( a.x, a.y, b.x, b.y );
+        this.verticalGridLines[1].setLine( c.x, c.y, d.x, d.y );
+        this.verticalGridLines[2].setLine( e.x, e.y, f.x, f.y );
+      }
 
       var centerRight = topRight.blend( bottomRight, 0.5 );
       var center = centerRight.blend( centerLeft, 0.5 );

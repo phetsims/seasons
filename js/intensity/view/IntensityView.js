@@ -72,7 +72,7 @@ define( function( require ) {
     var lightNode = new LightNode( playAreaCenter.y, model.property( 'flashlightOn' ).and( model.anyPanelDraggingProperty.derivedNot() ), model.anyPanelCenteredProperty, this.layoutBounds.right - 20, {centerY: playAreaCenter.y} );
 
     //Create the different types of panels
-    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {stroke: '#d30e78', fill: '#1b179f'} );
+    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {stroke: '#d30e78', fill: '#1b179f', numberHorizontalGridLines: 3, numberVerticalGridLines: 3} );
     var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {stroke: '#cccccd', fill: '#0f104a'} );
     var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {stroke: '#cccccd', fill: 'black'} );
 

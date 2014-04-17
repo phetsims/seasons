@@ -19,6 +19,7 @@ define( function( require ) {
   var knobImage = require( 'image!SEASONS/knob.png' );
   var LinearFunction = require( 'DOT/LinearFunction' );
   var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
+  var Line = require( 'SCENERY/nodes/Line' );
 
   function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, setLightTipAndTail, options ) {
     this.panelModel = panelModel;
@@ -28,13 +29,25 @@ define( function( require ) {
     options = _.extend( {
       fill: null,
       cursor: 'pointer',
-      stroke: null
+      stroke: null,
+      numberHorizontalGridLines: 3,
+      numberVerticalGridLines: 3
     }, options );
 
     //The handle
     this.knobNode = new Image( knobImage, {scale: 0.5} );
 
     this.path = new Path( null, {fill: options.fill, stroke: options.stroke, lineWidth: 3} );
+
+    this.horizontalGridLines = [];
+    for ( var i = 0; i < options.numberHorizontalGridLines; i++ ) {
+      this.horizontalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: 2, stroke: 'green'} ) );
+    }
+
+    this.verticalGridLines = [];
+    for ( var i = 0; i < options.numberVerticalGridLines; i++ ) {
+      this.verticalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: 2, stroke: 'green'} ) );
+    }
 
     this.lightPath = new Path( null, {fill: 'white'} );
 
@@ -68,7 +81,16 @@ define( function( require ) {
     //Update the knob location after the panel animates to the center
     panelModel.property( 'animating' ).onValue( false, function() {panelNode.updateShape();} );
 
-    Node.call( this, {children: [this.path, this.knobNode, this.lightPath]} );
+    //TODO: separate the background and border but only where grid lines applied (for performance)
+    var children = [this.path];
+    for ( var i = 0; i < this.horizontalGridLines.length; i++ ) {
+      children.push( this.horizontalGridLines[i] );
+    }
+    for ( var i = 0; i < this.verticalGridLines.length; i++ ) {
+      children.push( this.verticalGridLines[i] );
+    }
+    children.push( this.knobNode, this.lightPath );
+    Node.call( this, {children: children} );
 
     // click in the track to change the value, continue dragging if desired
     var translate = function( event ) {
@@ -228,6 +250,26 @@ define( function( require ) {
         this.knobNode.centerTop = bottomLeft;
       }
       this.path.shape = new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close();
+
+      var nearTopLeft = bottomLeft.blend( topLeft, 3 / 4 );
+      var nearTopRight = bottomRight.blend( topRight, 3 / 4 );
+      var nearBottomLeft = bottomLeft.blend( topLeft, 1 / 4 );
+      var nearBottomRight = bottomRight.blend( topRight, 1 / 4 );
+      var centerLeft = bottomLeft.blend( topLeft, 0.5 );
+      var centerRight = topRight.blend( bottomRight, 0.5 );
+      this.horizontalGridLines[0].setLine( nearTopLeft.x, nearTopLeft.y, nearTopRight.x, nearTopRight.y );
+      this.horizontalGridLines[1].setLine( centerLeft.x, centerLeft.y, centerRight.x, centerRight.y );
+      this.horizontalGridLines[2].setLine( nearBottomLeft.x, nearBottomLeft.y, nearBottomRight.x, nearBottomRight.y );
+
+      var a = topLeft.blend( topRight, 3 / 4 );
+      var b = bottomLeft.blend( bottomRight, 3 / 4 );
+      var c = topLeft.blend( topRight, 1 / 4 );
+      var d = bottomLeft.blend( bottomRight, 1 / 4 );
+      var e = topLeft.blend( topRight, 0.5 );
+      var f = bottomLeft.blend( bottomRight, 0.5 );
+      this.verticalGridLines[0].setLine( a.x, a.y, b.x, b.y );
+      this.verticalGridLines[1].setLine( c.x, c.y, d.x, d.y );
+      this.verticalGridLines[2].setLine( e.x, e.y, f.x, f.y );
 
       var centerRight = topRight.blend( bottomRight, 0.5 );
       var center = centerRight.blend( centerLeft, 0.5 );

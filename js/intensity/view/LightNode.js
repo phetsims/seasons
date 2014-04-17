@@ -21,7 +21,7 @@ define( function( require ) {
     this.panelInPlayAreaProperty = panelInPlayAreaProperty;
     var lightNode = this;
     Node.call( this, {pickable: false} );
-    this.beamNode = new Path( new Shape(), {opacity: 0.65, fill: 'white'} );
+    this.beamNode = new Path( new Shape(), {opacity: 0.3, fill: '#bdb9b9'} );
     this.addChild( this.beamNode );
     panelInPlayAreaProperty.onValue( false, function() {lightNode.setLightRect();} );
     flashlightOnProperty.linkAttribute( this, 'visible' );

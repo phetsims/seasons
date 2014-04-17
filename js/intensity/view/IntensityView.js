@@ -139,12 +139,6 @@ define( function( require ) {
 //    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );
 
 //    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
-
-    var pivot = new Circle( 1, {fill: 'white'} );
-    solarPanelNode.panelModel.property( 'position' ).link( function( position ) {
-      pivot.setTranslation( position.x, position.y );
-    } );
-    this.addChild( pivot );
   }
 
   return inherit( ScreenView, IntensityView );

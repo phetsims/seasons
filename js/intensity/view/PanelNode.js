@@ -43,18 +43,18 @@ define( function( require ) {
     this.frame = new Path( null, {stroke: options.stroke, lineWidth: 3} );
 
     var gridLineStroke = 'white';
-    var scale = 0.7;
-    var verticalGridLineWidth = 2.8 * scale;
-    var horizontalGridLineWidth = 4 * scale;
+    var s = 0.7;
+    this.verticalGridLineWidth = 2.8 * s;
+    this.horizontalGridLineWidth = 4 * s;
 
     this.horizontalGridLines = [];
     for ( var i = 0; i < options.numberHorizontalGridLines; i++ ) {
-      this.horizontalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: horizontalGridLineWidth, stroke: gridLineStroke} ) );
+      this.horizontalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: this.horizontalGridLineWidth, stroke: gridLineStroke} ) );
     }
 
     this.verticalGridLines = [];
     for ( var i = 0; i < options.numberVerticalGridLines; i++ ) {
-      this.verticalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: verticalGridLineWidth, stroke: gridLineStroke} ) );
+      this.verticalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: this.verticalGridLineWidth, stroke: gridLineStroke} ) );
     }
 
     this.lightPath = new Path( null, {fill: 'white'} );
@@ -273,6 +273,10 @@ define( function( require ) {
         this.horizontalGridLines[0].setLine( nearTopLeft.x, nearTopLeft.y, nearTopRight.x, nearTopRight.y );
         this.horizontalGridLines[1].setLine( centerLeft.x, centerLeft.y, centerRight.x, centerRight.y );
         this.horizontalGridLines[2].setLine( nearBottomLeft.x, nearBottomLeft.y, nearBottomRight.x, nearBottomRight.y );
+
+        this.horizontalGridLines[0].lineWidth = this.horizontalGridLineWidth * scale;
+        this.horizontalGridLines[1].lineWidth = this.horizontalGridLineWidth * scale;
+        this.horizontalGridLines[2].lineWidth = this.horizontalGridLineWidth * scale;
       }
 
       if ( this.verticalGridLines.length ) {
@@ -285,6 +289,10 @@ define( function( require ) {
         this.verticalGridLines[0].setLine( a.x, a.y, b.x, b.y );
         this.verticalGridLines[1].setLine( c.x, c.y, d.x, d.y );
         this.verticalGridLines[2].setLine( e.x, e.y, f.x, f.y );
+
+        this.verticalGridLines[0].lineWidth = this.verticalGridLineWidth * scale;
+        this.verticalGridLines[1].lineWidth = this.verticalGridLineWidth * scale;
+        this.verticalGridLines[2].lineWidth = this.verticalGridLineWidth * scale;
       }
 
       var centerRight = topRight.blend( bottomRight, 0.5 );

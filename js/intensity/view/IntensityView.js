@@ -14,7 +14,7 @@ define( function( require ) {
   var AccordionBox = require( 'SUN/AccordionBox' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var ResetAllButton2 = require( 'SUN/experimental/buttons/ResetAllButton2' );
+  var ResetAllButton = require( 'SUN/experimental/buttons/ResetAllButton' );
   var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
   var LightNode = require( 'SEASONS/intensity/view/LightNode' );
   var Toolbox = require( 'SEASONS/intensity/view/Toolbox' );
@@ -34,7 +34,7 @@ define( function( require ) {
     var intensityView = this;
     ScreenView.call( this, { renderer: 'svg' } );
 
-    var resetAllButton = new ResetAllButton2( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10, listener: function() {model.reset();}} );
+    var resetAllButton = new ResetAllButton( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10, listener: function() {model.reset();}} );
     this.addChild( resetAllButton );
 
     var toolbox = new Toolbox( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} );

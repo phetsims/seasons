@@ -10,7 +10,7 @@ define( function( require ) {
 
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var RoundStickyToggleButton = require( 'SUN/experimental/buttons/RoundStickyToggleButton' );
+  var BooleanRoundStickyToggleButton = require( 'SUN/buttons/BooleanRoundStickyToggleButton' );
   var Color = require( 'SCENERY/util/Color' );
   var Image = require( 'SCENERY/nodes/Image' );
   var flashlightImage = require( 'image!SEASONS/flashlight.png' );
@@ -19,7 +19,7 @@ define( function( require ) {
     var flashlightImageNode = new Image( flashlightImage, {scale: 0.53} );
     Node.call( this, { children: [
       flashlightImageNode,
-      new RoundStickyToggleButton( flashlightOnProperty, {
+      new BooleanRoundStickyToggleButton( flashlightOnProperty, {
 
         radius: 17,
         //TODO: we should make roundPushButton support css color nicknames

@@ -16,13 +16,14 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
 
   var FONT = new PhetFont( 16 );
   var HEIGHT = 200;
   var WIDTH = 75;
   var BAR_WIDTH = 8;
 
-  function BarChartNode( valueProperty, options ) {
+  function BarChartNode( valueProperty, centeredPanelProperty, options ) {
 
     this.valueProperty = valueProperty;
     //TODO: Move to options
@@ -33,28 +34,51 @@ define( function( require ) {
     this.barNode = new Rectangle( 0, 0, 0, 0, {fill: 'white'} );
     this.text = new Text( '', {font: FONT} );
 
+    var thermometer = new ThermometerNode( 0, 1, valueProperty, { stroke: 'white', tubeHeight: 120 } );
+
+    // this is a hacky way of handling the thermometer positioning which should probably change
+    // there are still a few tweaks needed in thermometerNode to help with this
+    thermometer.centerX = 36;
+    thermometer.centerY = 100;
+    thermometer.visible = false;
+    this.addChild( thermometer );
+
     valueProperty.link( function() {barChartNode.updateReadout();} );
+
+    var graphBorderNode = new Node( {
+      children: [
+        //The arrow that points up
+        new ArrowNode( 0, 0, 0, -HEIGHT, {
+          headHeight: 8,
+          headWidth: 8,
+          tailWidth: 1,
+          fill: 'white',
+          stroke: null
+        } ),
+
+        //The horizontal axis
+        new Line( 0, 0, WIDTH, 0, {stroke: 'white'} ),
+        barChartNode.barNode
+      ]
+    } );
+
+    // make either the bar graph or the thermometer visible depending on if we are on temperature mode
+    if ( centeredPanelProperty ) {
+      var barNode = this.barNode;
+      centeredPanelProperty.link( function( centeredPanel ) {
+        if ( centeredPanel ) {
+          var temperatureMode = centeredPanel.type === 'heat';
+          thermometer.visible = temperatureMode;
+          barNode.visible = graphBorderNode.visible = !temperatureMode;
+        }
+      } );
+    }
 
     this.addChild( new VBox( {
         spacing: 5,
         children: [
 
-          new Node( {
-            children: [
-              //The arrow that points up
-              new ArrowNode( 0, 0, 0, -HEIGHT, {
-                headHeight: 8,
-                headWidth: 8,
-                tailWidth: 1,
-                fill: 'white',
-                stroke: null
-              } ),
-
-              //The horizontal axis
-              new Line( 0, 0, WIDTH, 0, {stroke: 'white'} ),
-              barChartNode.barNode
-            ]
-          } ),
+          graphBorderNode,
 
           new Node( {
             children: [

@@ -103,7 +103,7 @@ define( function( require ) {
                0.5 / Math.sin( intensityPanelAngle - Math.PI / 2 );//intensity, see http://mathcentral.uregina.ca/QQ/database/QQ.09.98/connor1.html
       } );
 
-    var secondaryBarChart = new BarChartNode( secondaryProperty );
+    var secondaryBarChart = new BarChartNode( secondaryProperty, model.centeredPanelProperty );
 
     var secondBoxTitleProperty = model.centeredPanelProperty.map( function( centeredPanel ) {
       return centeredPanel === null ? '-' :

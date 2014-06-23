@@ -239,7 +239,7 @@ define( function( require ) {
       //Layout dimensions
       var HEIGHT = 240 * 0.85;
 
-      var scale = this.panelModel.scale;
+      var scale = ( this.panelModel.type === 'solar' ) ? this.panelModel.scale * 0.4275 : this.panelModel.scale;
 
       var x = this.panelModel.position.x;
       var y = this.panelModel.position.y;

@@ -34,13 +34,15 @@ define( function( require ) {
     this.barNode = new Rectangle( 0, 0, 0, 0, {fill: 'white'} );
     this.text = new Text( '', {font: FONT} );
 
-    var thermometer = new ThermometerNode( 0, 1, valueProperty, { stroke: 'white', tubeHeight: 120 } );
+    var thermometer = new ThermometerNode( 0, 1, valueProperty,
+      {
+        outlineStroke: 'white',
+        tubeHeight: 120,
+        centerX: 36,
+        centerY: 100,
+        visible: false
+      } );
 
-    // this is a hacky way of handling the thermometer positioning which should probably change
-    // there are still a few tweaks needed in thermometerNode to help with this
-    thermometer.centerX = 36;
-    thermometer.centerY = 100;
-    thermometer.visible = false;
     this.addChild( thermometer );
 
     valueProperty.link( function() {barChartNode.updateReadout();} );

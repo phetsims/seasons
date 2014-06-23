@@ -309,6 +309,10 @@ define( function( require ) {
         var ellipseTail = new Vector2( 0, ry ).rotated( this.panelModel.angle ).plus( center );
         var ellipseTip = new Vector2( 0, -ry ).rotated( this.panelModel.angle ).plus( center );
         this.setLightProjection( ellipseTip.x, ellipseTail.x, center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
+
+        // TODO: might need to extend shape bounds a bit to account for stroke
+        // another alternative would be to make the background all pink and add the content on top with a slightly smaller size
+        this.lightPath.clipArea = shape;
       }
     },
 

@@ -21,6 +21,9 @@ define( function( require ) {
   var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
   var Line = require( 'SCENERY/nodes/Line' );
 
+  //constants
+  var FRAME_LINE_WIDTH = 3;
+
   function PanelNode( panelModel, playAreaCenter, sendOtherPanelsHome, flashlightOnProperty, setLightTipAndTail, options ) {
     this.panelModel = panelModel;
     this.setLightProjection = setLightTipAndTail;
@@ -40,7 +43,7 @@ define( function( require ) {
     //Separate background and frame into separate layers so the grid lines (if any) can intervene
     //TODO: to improve performance, join these layers if no gridlines?
     this.background = new Path( null, {fill: options.fill} );
-    this.frame = new Path( null, {stroke: options.stroke, lineWidth: 3} );
+    this.frame = new Path( null, {stroke: options.stroke, lineWidth: FRAME_LINE_WIDTH} );
 
     var gridLineStroke = 'white';
     var s = 0.7;
@@ -310,9 +313,17 @@ define( function( require ) {
         var ellipseTip = new Vector2( 0, -ry ).rotated( this.panelModel.angle ).plus( center );
         this.setLightProjection( ellipseTip.x, ellipseTail.x, center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
 
-        // TODO: might need to extend shape bounds a bit to account for stroke
-        // another alternative would be to make the background all pink and add the content on top with a slightly smaller size
-        this.lightPath.clipArea = shape;
+        // extend shape bounds a bit to account for the stroke.
+        // another alternative would be to make the background all pink and add the content on top with a slightly smaller size.
+        // I didn't use this approach because the current code overlaps the frame shape over the grid, which wouldn't
+        // work if the frame was on the bottom
+        var frameOffset = FRAME_LINE_WIDTH / 2;
+        this.lightPath.clipArea = new Shape().
+                                        moveToPoint( bottomLeft.plusXY( -frameOffset, frameOffset ) ).
+                                        lineToPoint( topLeft.plusXY( -frameOffset, -frameOffset ) ).
+                                        lineToPoint( topRight.plusXY( frameOffset, -frameOffset ) ).
+                                        lineToPoint( bottomRight.plusXY( frameOffset, frameOffset ) ).
+                                        close();
       }
     },
 

@@ -311,7 +311,7 @@ define( function( require ) {
         this.lightPath.shape = Shape.ellipse( center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
         var ellipseTail = new Vector2( 0, ry ).rotated( this.panelModel.angle ).plus( center );
         var ellipseTip = new Vector2( 0, -ry ).rotated( this.panelModel.angle ).plus( center );
-        this.setLightProjection( ellipseTip.x, ellipseTail.x, center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
+        this.setLightProjection( ellipseTip.x, ellipseTail.x, center.x, center.y, ellipseWidth, ry, this.panelModel.angle, bottomLeft.y, topLeft.y, this.panelModel.type );
 
         // extend shape bounds a bit to account for the stroke.
         // another alternative would be to make the background all pink and add the content on top with a slightly smaller size.

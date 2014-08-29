@@ -90,7 +90,7 @@ define( function( require ) {
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {left: this.layoutBounds.right - 93, centerY: playAreaCenter.y} ) );
 
     //Accordion boxes for charts
-    var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {title: 'Intensity', initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
+    var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {title: 'Intensity', initiallyExpanded: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
 
     //Map the values for the secondary properties for each of the panels
     var temperatureMap = new LinearFunction( 0.5, 1, 0.2, 0.8, true );
@@ -125,13 +125,13 @@ define( function( require ) {
       secondaryBarChart.barNode.fill = centeredPanel === model.heatPanel ? HeatMap.intensityToColor( heatPanelIntensity ) : 'white';
     } );
 
-    var secondBox = new AccordionBox( secondaryBarChart, {title: secondBoxTitleProperty.value, initiallyOpen: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
+    var secondBox = new AccordionBox( secondaryBarChart, {title: secondBoxTitleProperty.value, initiallyExpanded: false, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
     secondBoxTitleProperty.linkAttribute( secondBox, 'title' );
 
     //Close the accordion boxes on reset
     model.on( 'reset', function() {
-      intensityBox.open.reset();
-      secondBox.open.reset();
+      intensityBox.expandedProperty.reset();
+      secondBox.expandedProperty.reset();
     } );
 
     this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );

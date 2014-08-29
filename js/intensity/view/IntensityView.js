@@ -26,6 +26,7 @@ define( function( require ) {
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var LinearFunction = require( 'DOT/LinearFunction' );
   var PropertySet = require( 'AXON/PropertySet' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
 
   //For comparing to mockup
 //  var mockupImage = require( 'image!SEASONS/app-768.png' );
@@ -96,7 +97,11 @@ define( function( require ) {
     this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {left: this.layoutBounds.right - 93, centerY: playAreaCenter.y} ) );
 
     //Accordion boxes for charts
-    var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {title: 'Intensity', expandedProperty: viewProperties.intensityBoxExpandedProperty, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
+    var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {
+      titleNode: new Text( 'Intensity', { font: new PhetFont( 15 ), fill: 'white' } ),
+      expandedProperty: viewProperties.intensityBoxExpandedProperty,
+      fill: 'black', stroke: 'white'
+    } );
 
     //Map the values for the secondary properties for each of the panels
     var temperatureMap = new LinearFunction( 0.5, 1, 0.2, 0.8, true );
@@ -131,7 +136,10 @@ define( function( require ) {
       secondaryBarChart.barNode.fill = centeredPanel === model.heatPanel ? HeatMap.intensityToColor( heatPanelIntensity ) : 'white';
     } );
 
-    var secondBox = new AccordionBox( secondaryBarChart, {title: secondBoxTitleProperty.value, expandedProperty: viewProperties.secondBoxExpandedProperty, fill: 'black', titleFill: 'white', stroke: 'white', font: '15px Arial'} );
+    var secondBox = new AccordionBox( secondaryBarChart, {
+      titleNode: new Text( secondBoxTitleProperty.value, { font: new PhetFont( 15 ), fill: 'white' } ),
+      expandedProperty: viewProperties.secondBoxExpandedProperty,
+      fill: 'black', stroke: 'white' } );
     secondBoxTitleProperty.linkAttribute( secondBox, 'title' );
 
     // Reset view properties

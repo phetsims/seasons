@@ -27,6 +27,7 @@ define( function( require ) {
   var LinearFunction = require( 'DOT/LinearFunction' );
   var PropertySet = require( 'AXON/PropertySet' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Text = require( 'SCENERY/nodes/Text' );
 
   //For comparing to mockup
 //  var mockupImage = require( 'image!SEASONS/app-768.png' );

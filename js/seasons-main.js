@@ -20,8 +20,8 @@ define( function( require ) {
   var simOptions = {
     credits: {
       leadDesign: 'Bryce Gruneich',
-      softwareDevelopment: 'Sam Reid (lead) & Aaron Davis',
-      designTeam: 'Bryce Gruneich, Ariel Paul, Trish Loeblein, Kathy Perkins'
+      softwareDevelopment: 'Sam Reid, Aaron Davis',
+      team: 'Bryce Gruneich, Trish Loeblein, Ariel Paul, Kathy Perkins'
     }
   };
 

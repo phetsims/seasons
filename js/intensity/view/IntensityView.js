@@ -14,7 +14,7 @@ define( function( require ) {
   var AccordionBox = require( 'SUN/AccordionBox' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var ResetAllButton = require( 'SCENERY_PHET/ResetAllButton' );
+  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
   var LightNode = require( 'SEASONS/intensity/view/LightNode' );
   var Toolbox = require( 'SEASONS/intensity/view/Toolbox' );

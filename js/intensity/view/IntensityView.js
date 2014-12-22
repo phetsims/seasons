@@ -8,6 +8,7 @@
 define( function( require ) {
   'use strict';
 
+  // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var BarChartNode = require( 'SEASONS/intensity/view/BarChartNode' );
   var ScreenView = require( 'JOIST/ScreenView' );
@@ -28,6 +29,7 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var Bounds2 = require( 'DOT/Bounds2' );
 
   //For comparing to mockup
 //  var mockupImage = require( 'image!SEASONS/app-768.png' );
@@ -35,7 +37,7 @@ define( function( require ) {
 
   function IntensityView( model ) {
     var intensityView = this;
-    ScreenView.call( this, { renderer: 'svg' } );
+    ScreenView.call( this, { renderer: 'svg', layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
 
     var viewProperties = new PropertySet( {
       intensityBoxExpanded: false,

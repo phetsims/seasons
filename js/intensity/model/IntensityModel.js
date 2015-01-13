@@ -30,25 +30,25 @@ define( function( require ) {
       or( this.heatPanel.property( 'state' ).valueEquals( 'dragging' ) ).
       or( this.intensityPanel.property( 'state' ).valueEquals( 'dragging' ) );
 
-    this.centeredPanelProperty = new DerivedProperty( [this.solarPanel.stateProperty, this.heatPanel.stateProperty, this.intensityPanel.stateProperty], function( solarPanelState, heatPanelState, intensityPanelState ) {
+    this.centeredPanelProperty = new DerivedProperty( [ this.solarPanel.stateProperty, this.heatPanel.stateProperty, this.intensityPanel.stateProperty ], function( solarPanelState, heatPanelState, intensityPanelState ) {
       return solarPanelState === 'center' ? intensityModel.solarPanel :
              heatPanelState === 'center' ? intensityModel.heatPanel :
              intensityPanelState === 'center' ? intensityModel.intensityPanel :
              null;
     } );
 
-    this.anyPanelCenteredProperty = new DerivedProperty( [this.centeredPanelProperty], function( centeredPanel ) {
+    this.anyPanelCenteredProperty = new DerivedProperty( [ this.centeredPanelProperty ], function( centeredPanel ) {
       return centeredPanel !== null;
     } );
 
     //Property for the angle of the panel in the center, or null if no panel is in the center.
-    this.centeredPanelAngleProperty = new DerivedProperty( [this.centeredPanelProperty, this.solarPanel.angleProperty, this.heatPanel.angleProperty, this.intensityPanel.angleProperty],
+    this.centeredPanelAngleProperty = new DerivedProperty( [ this.centeredPanelProperty, this.solarPanel.angleProperty, this.heatPanel.angleProperty, this.intensityPanel.angleProperty ],
       function( centeredPanel ) {
         return centeredPanel ? centeredPanel.angle :
                null;
       } );
 
-    this.intensityProperty = new DerivedProperty( [this.centeredPanelAngleProperty, this.flashlightOnProperty], function( centeredPanelAngle, flashlightOn ) {
+    this.intensityProperty = new DerivedProperty( [ this.centeredPanelAngleProperty, this.flashlightOnProperty ], function( centeredPanelAngle, flashlightOn ) {
       return (centeredPanelAngle === null || !flashlightOn) ? 0 : Math.abs( Math.cos( centeredPanelAngle ) );
     } );
 

@@ -40,7 +40,7 @@ define( function( require ) {
       //Not used for Solar panel and Intensity panel
       timeAveragedIntensity: 0
     } );
-    this.addDerivedProperty( 'angle', ['unclampedAngle'], function( unclampedAngle ) {
+    this.addDerivedProperty( 'angle', [ 'unclampedAngle' ], function( unclampedAngle ) {
       var sixtyDegrees = 60 * Math.PI / 180;
 
       //TODO: Better clamping code

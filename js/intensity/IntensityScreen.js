@@ -23,7 +23,7 @@ define( function( require ) {
       new Text( 'hello' ),
       function() { return new IntensityModel(); },
       function( model ) { return new IntensityView( model, ModelViewTransform2.createIdentity() ); },
-      {backgroundColor: 'black'}
+      { backgroundColor: 'black' }
     );
   }
 

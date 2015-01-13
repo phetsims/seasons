@@ -44,10 +44,14 @@ define( function( require ) {
       secondBoxExpanded: false
     } );
 
-    var resetAllButton = new ResetAllButton( {right: this.layoutBounds.right - 10, bottom: this.layoutBounds.bottom - 10, listener: function() {model.reset();}} );
+    var resetAllButton = new ResetAllButton( {
+      right:  this.layoutBounds.right - 10,
+      bottom: this.layoutBounds.bottom - 10,
+      listener: function() {model.reset();}
+    } );
     this.addChild( resetAllButton );
 
-    var toolbox = new Toolbox( {centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10} );
+    var toolbox = new Toolbox( { centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom - 10 } );
     this.addChild( toolbox );
 
     //Allow some room for the control panel at the bottom
@@ -78,12 +82,23 @@ define( function( require ) {
 
     this.addChild( new TickMarksNode( playAreaCenter ) );
 
-    var lightNode = new LightNode( playAreaCenter.y, model.property( 'flashlightOn' ).and( model.anyPanelDraggingProperty.derivedNot() ), model.anyPanelCenteredProperty, this.layoutBounds.right - 20, {centerY: playAreaCenter.y} );
+    var lightNode = new LightNode( playAreaCenter.y, model.property( 'flashlightOn' ).and( model.anyPanelDraggingProperty.derivedNot() ), model.anyPanelCenteredProperty, this.layoutBounds.right - 20, { centerY: playAreaCenter.y } );
 
     //Create the different types of panels
-    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {stroke: '#d30e78', fill: '#1b179f', numberHorizontalGridLines: 3, numberVerticalGridLines: 3} );
-    var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {stroke: '#cccccd', fill: '#0f104a'} );
-    var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {stroke: '#cccccd', fill: 'black'} );
+    var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {
+      stroke: '#d30e78',
+      fill: '#1b179f',
+      numberHorizontalGridLines: 3,
+      numberVerticalGridLines: 3
+    } );
+    var heatPanelNode = new PanelNode( model.heatPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {
+      stroke: '#cccccd',
+      fill: '#0f104a'
+    } );
+    var intensityPanelNode = new PanelNode( model.intensityPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {
+      stroke: '#cccccd',
+      fill: 'black'
+    } );
 
     var panelInCenter = solarPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ).
       or( heatPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) ).
@@ -92,12 +107,12 @@ define( function( require ) {
     this.addChild( targetOutlineNode );
 
     //Panels should go in front of the target outline
-    var panelLayer = new Node( {children: [solarPanelNode, heatPanelNode, intensityPanelNode]} );
+    var panelLayer = new Node( { children: [ solarPanelNode, heatPanelNode, intensityPanelNode ] } );
     this.addChild( panelLayer );
 
     this.addChild( lightNode );
 
-    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {left: this.layoutBounds.right - 93, centerY: playAreaCenter.y} ) );
+    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), { left: this.layoutBounds.right - 93, centerY: playAreaCenter.y } ) );
 
     //Accordion boxes for charts
     var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {
@@ -109,7 +124,7 @@ define( function( require ) {
     //Map the values for the secondary properties for each of the panels
     var temperatureMap = new LinearFunction( 0.5, 1, 0.2, 0.8, true );
     var secondaryProperty = new DerivedProperty( [
-        model.intensityPanel.angleProperty, model.centeredPanelProperty, model.intensityProperty, model.heatPanel.timeAveragedIntensityProperty],
+        model.intensityPanel.angleProperty, model.centeredPanelProperty, model.intensityProperty, model.heatPanel.timeAveragedIntensityProperty ],
       function( intensityPanelAngle, centeredPanel, intensity, heatPanelIntensity ) {
         return centeredPanel === null || intensity === 0 ? 0 :
                centeredPanel.type === 'solar' ? intensity / 2 :
@@ -135,14 +150,15 @@ define( function( require ) {
 
     //Update the color of the secondary bar chart
     //TODO: No need to call the heat map twice, if it is too expensive.  Could factor it to a heat panel property
-    DerivedProperty.multilink( [model.heatPanel.timeAveragedIntensityProperty, model.centeredPanelProperty], function( heatPanelIntensity, centeredPanel ) {
+    DerivedProperty.multilink( [ model.heatPanel.timeAveragedIntensityProperty, model.centeredPanelProperty ], function( heatPanelIntensity, centeredPanel ) {
       secondaryBarChart.barNode.fill = centeredPanel === model.heatPanel ? HeatMap.intensityToColor( heatPanelIntensity ) : 'white';
     } );
 
     var secondBox = new AccordionBox( secondaryBarChart, {
       titleNode: new Text( secondBoxTitleProperty.value, { font: new PhetFont( 15 ), fill: 'white' } ),
       expandedProperty: viewProperties.secondBoxExpandedProperty,
-      fill: 'black', stroke: 'white' } );
+      fill: 'black', stroke: 'white'
+    } );
     secondBoxTitleProperty.linkAttribute( secondBox, 'title' );
 
     // Reset view properties
@@ -150,7 +166,7 @@ define( function( require ) {
       viewProperties.reset();
     } );
 
-    this.addChild( new HBox( {x: 10, y: 10, children: [intensityBox, secondBox], spacing: 20} ) );
+    this.addChild( new HBox( { x: 10, y: 10, children: [ intensityBox, secondBox ], spacing: 20 } ) );
 
 //    this.addChild( new Rectangle( playAreaCenter.x, playAreaCenter.y, 2, 2, {fill: 'green'} ) );
 //    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );

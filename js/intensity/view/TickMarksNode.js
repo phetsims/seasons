@@ -30,7 +30,7 @@ define( function( require ) {
       var lineWidth = (i === 0 || i === 6) ? 1.5 : 1;
       var pt1 = Vector2.createPolar( startDistance, angle ).plus( centroid );
       var pt2 = Vector2.createPolar( startDistance + tickLength, angle ).plus( centroid );
-      var line = new Line( pt1.x, pt1.y, pt2.x, pt2.y, {stroke: 'white', lineWidth: lineWidth} );
+      var line = new Line( pt1.x, pt1.y, pt2.x, pt2.y, { stroke: 'white', lineWidth: lineWidth } );
       this.addChild( line );
     }
     this.mutate( options );

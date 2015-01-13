@@ -14,30 +14,30 @@ define( function( require ) {
   var Util = require( 'DOT/Util' );
 
   var heatMap = [
-    [0, 23, 34],
-    [0, 6 , 72],
-    [34, 0, 121],
-    [60, 2, 140],
-    [103, 0, 158],
-    [125, 3, 166],
-    [151, 4, 157],
-    [171, 20, 151],
-    [196, 28, 124],
-    [202, 41, 109],
-    [218, 57, 91],
-    [231, 72, 76],
-    [242, 94, 48],
-    [251, 110, 31],
-    [254, 134, 14],
-    [252, 156, 0],
-    [255, 169, 1],
-    [251, 188, 0],
-    [251, 205, 5],
-    [250, 219, 32],
-    [250, 239, 63],
-    [242, 242, 110],
-    [245, 255, 177],
-    [241, 251, 240]
+    [ 0, 23, 34 ],
+    [ 0, 6, 72 ],
+    [ 34, 0, 121 ],
+    [ 60, 2, 140 ],
+    [ 103, 0, 158 ],
+    [ 125, 3, 166 ],
+    [ 151, 4, 157 ],
+    [ 171, 20, 151 ],
+    [ 196, 28, 124 ],
+    [ 202, 41, 109 ],
+    [ 218, 57, 91 ],
+    [ 231, 72, 76 ],
+    [ 242, 94, 48 ],
+    [ 251, 110, 31 ],
+    [ 254, 134, 14 ],
+    [ 252, 156, 0 ],
+    [ 255, 169, 1 ],
+    [ 251, 188, 0 ],
+    [ 251, 205, 5 ],
+    [ 250, 219, 32 ],
+    [ 250, 239, 63 ],
+    [ 242, 242, 110 ],
+    [ 245, 255, 177 ],
+    [ 241, 251, 240 ]
   ];
 
   function HeatMap() {
@@ -69,9 +69,9 @@ define( function( require ) {
         if ( floor === ceil ) {
           floor = ceil - 1;
         }
-        var red = Util.linear( floor, ceil, heatMap[floor][0], heatMap[ceil][0], floatingPointIndex );
-        var green = Util.linear( floor, ceil, heatMap[floor][1], heatMap[ceil][1], floatingPointIndex );
-        var blue = Util.linear( floor, ceil, heatMap[floor][2], heatMap[ceil][2], floatingPointIndex );
+        var red = Util.linear( floor, ceil, heatMap[ floor ][ 0 ], heatMap[ ceil ][ 0 ], floatingPointIndex );
+        var green = Util.linear( floor, ceil, heatMap[ floor ][ 1 ], heatMap[ ceil ][ 1 ], floatingPointIndex );
+        var blue = Util.linear( floor, ceil, heatMap[ floor ][ 2 ], heatMap[ ceil ][ 2 ], floatingPointIndex );
 
         //TODO: Remove this debug code
 //        if ( flashlightOnProperty.value ) {

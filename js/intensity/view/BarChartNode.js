@@ -31,8 +31,8 @@ define( function( require ) {
     var barChartNode = this;
     Node.call( this );
 
-    this.barNode = new Rectangle( 0, 0, 0, 0, {fill: 'white'} );
-    this.text = new Text( '', {font: FONT} );
+    this.barNode = new Rectangle( 0, 0, 0, 0, { fill: 'white' } );
+    this.text = new Text( '', { font: FONT } );
 
     var thermometer = new ThermometerNode( 0, 1, valueProperty,
       {
@@ -59,7 +59,7 @@ define( function( require ) {
         } ),
 
         //The horizontal axis
-        new Line( 0, 0, WIDTH, 0, {stroke: 'white'} ),
+        new Line( 0, 0, WIDTH, 0, { stroke: 'white' } ),
         barChartNode.barNode
       ]
     } );
@@ -84,11 +84,12 @@ define( function( require ) {
 
           new Node( {
             children: [
-              new Rectangle( 0, 0, WIDTH * 0.8, 26, 10, 10, {fill: 'white'} ),
+              new Rectangle( 0, 0, WIDTH * 0.8, 26, 10, 10, { fill: 'white' } ),
               this.text//TODO: MessageFormat
             ]
           } )
-        ]} )
+        ]
+      } )
     );
     this.mutate( options );
   }

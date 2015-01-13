@@ -16,17 +16,19 @@ define( function( require ) {
   var flashlightImage = require( 'image!SEASONS/flashlight.png' );
 
   function FlashlightNode( flashlightOnProperty, options ) {
-    var flashlightImageNode = new Image( flashlightImage, {scale: 0.53} );
-    Node.call( this, { children: [
-      flashlightImageNode,
-      new BooleanRoundStickyToggleButton( flashlightOnProperty, {
+    var flashlightImageNode = new Image( flashlightImage, { scale: 0.53 } );
+    Node.call( this, {
+      children: [
+        flashlightImageNode,
+        new BooleanRoundStickyToggleButton( flashlightOnProperty, {
 
-        radius: 17,
-        //TODO: we should make roundPushButton support css color nicknames
-        baseColor: new Color( 255, 0, 0 ),
-        x: 46, y: flashlightImageNode.height / 2
-      } )
-    ]} );
+          radius: 17,
+          //TODO: we should make roundPushButton support css color nicknames
+          baseColor: new Color( 255, 0, 0 ),
+          x: 46, y: flashlightImageNode.height / 2
+        } )
+      ]
+    } );
     this.mutate( options );
   }
 

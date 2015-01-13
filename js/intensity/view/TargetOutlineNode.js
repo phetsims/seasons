@@ -17,8 +17,8 @@ define( function( require ) {
     this.playAreaCenter = playAreaCenter;
     Node.call( this );
 
-    var fullDash = [10, 4];
-    var partialDash = [10 / 3, 4 / 3];
+    var fullDash = [ 10, 4 ];
+    var partialDash = [ 10 / 3, 4 / 3 ];
 
     //TODO: factor out this geometry with geometry in PanelNode
     var HEIGHT = 240 * 0.85;
@@ -37,10 +37,10 @@ define( function( require ) {
     var topRight = topLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( topLeft ).normalized().times( extensionLength ) );
     var bottomRight = bottomLeft.plus( new Vector2( this.playAreaCenter.x * 2 + x, y ).minus( bottomLeft ).normalized().times( extensionLength ) );
 
-    this.addChild( new Line( bottomLeft, topLeft, {stroke: 'white', lineDash: fullDash} ) );
-    this.addChild( new Line( topLeft, topRight, {stroke: 'white', lineDash: partialDash} ) );
-    this.addChild( new Line( topRight, bottomRight, {stroke: 'white', lineDash: fullDash} ) );
-    this.addChild( new Line( bottomRight, bottomLeft, {stroke: 'white', lineDash: partialDash} ) );
+    this.addChild( new Line( bottomLeft, topLeft, { stroke: 'white', lineDash: fullDash } ) );
+    this.addChild( new Line( topLeft, topRight, { stroke: 'white', lineDash: partialDash } ) );
+    this.addChild( new Line( topRight, bottomRight, { stroke: 'white', lineDash: fullDash } ) );
+    this.addChild( new Line( bottomRight, bottomLeft, { stroke: 'white', lineDash: partialDash } ) );
 
     visibleProperty.linkAttribute( this, 'visible' );
   }

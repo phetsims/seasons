@@ -15,7 +15,7 @@ define( function( require ) {
   // strings
   var simTitle = require( 'string!SEASONS/seasons.name' );
 
-  var screens = [new IntensityScreen()];
+  var screens = [ new IntensityScreen() ];
 
   var simOptions = {
     credits: {

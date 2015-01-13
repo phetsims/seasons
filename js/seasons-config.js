@@ -8,7 +8,7 @@
  */
 require.config( {
 
-  deps: ['seasons-main'],
+  deps: [ 'seasons-main' ],
 
   paths: {
 

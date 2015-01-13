@@ -21,16 +21,16 @@ define( function( require ) {
     var content = new Rectangle( 0, 0, WIDTH, HEIGHT );
     var fractionToSideLabels = 0.2;
     var textBottom = HEIGHT - 4;
-    var solarText = new Text( 'Solar', {fill: 'white', font: FONT, centerX: WIDTH * fractionToSideLabels, bottom: textBottom} );
+    var solarText = new Text( 'Solar', { fill: 'white', font: FONT, centerX: WIDTH * fractionToSideLabels, bottom: textBottom } );
     content.addChild( solarText );
-    var heatText = new Text( 'Heat', {fill: 'white', font: FONT, centerX: WIDTH / 2, bottom: textBottom} );
+    var heatText = new Text( 'Heat', { fill: 'white', font: FONT, centerX: WIDTH / 2, bottom: textBottom } );
     content.addChild( heatText );
-    var intensityText = new Text( 'Intensity', {fill: 'white', font: FONT, centerX: WIDTH * (1 - fractionToSideLabels), bottom: textBottom} );
+    var intensityText = new Text( 'Intensity', { fill: 'white', font: FONT, centerX: WIDTH * (1 - fractionToSideLabels), bottom: textBottom } );
     content.addChild( intensityText );
 
-    this.texts = [solarText, heatText, intensityText];
+    this.texts = [ solarText, heatText, intensityText ];
 
-    Panel.call( this, content, {fill: null, stroke: 'white'} );
+    Panel.call( this, content, { fill: null, stroke: 'white' } );
 
     this.mutate( options );
   }
@@ -39,7 +39,7 @@ define( function( require ) {
 
     //Get the position each panel should take.  Panels positioned in view coordinates since their model is trivial
     getGlobalPanelPosition: function( index ) {
-      var text = this.texts[index];
+      var text = this.texts[ index ];
       return text.parentToGlobalPoint( text.centerTop );
     }
   } );

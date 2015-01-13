@@ -38,12 +38,12 @@ define( function( require ) {
     }, options );
 
     //The handle
-    this.knobNode = new Image( knobImage, {scale: 0.5} );
+    this.knobNode = new Image( knobImage, { scale: 0.5 } );
 
     //Separate background and frame into separate layers so the grid lines (if any) can intervene
     //TODO: to improve performance, join these layers if no gridlines?
-    this.background = new Path( null, {fill: options.fill} );
-    this.frame = new Path( null, {stroke: options.stroke, lineWidth: FRAME_LINE_WIDTH} );
+    this.background = new Path( null, { fill: options.fill } );
+    this.frame = new Path( null, { stroke: options.stroke, lineWidth: FRAME_LINE_WIDTH } );
 
     var gridLineStroke = 'white';
     var s = 0.7;
@@ -53,15 +53,15 @@ define( function( require ) {
     this.horizontalGridLines = [];
     var i;
     for ( i = 0; i < options.numberHorizontalGridLines; i++ ) {
-      this.horizontalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: this.horizontalGridLineWidth, stroke: gridLineStroke} ) );
+      this.horizontalGridLines.push( new Line( 0, 0, 0, 0, { lineWidth: this.horizontalGridLineWidth, stroke: gridLineStroke } ) );
     }
 
     this.verticalGridLines = [];
     for ( i = 0; i < options.numberVerticalGridLines; i++ ) {
-      this.verticalGridLines.push( new Line( 0, 0, 0, 0, {lineWidth: this.verticalGridLineWidth, stroke: gridLineStroke} ) );
+      this.verticalGridLines.push( new Line( 0, 0, 0, 0, { lineWidth: this.verticalGridLineWidth, stroke: gridLineStroke } ) );
     }
 
-    this.lightPath = new Path( null, {fill: 'white'} );
+    this.lightPath = new Path( null, { fill: 'white' } );
 
     var linearFunction = new LinearFunction( 0, 1, 0.5, 1 );
 
@@ -94,15 +94,15 @@ define( function( require ) {
     panelModel.property( 'animating' ).onValue( false, function() {panelNode.updateShape();} );
 
     //TODO: separate the background and border but only where grid lines applied (for performance)
-    var children = [this.background];
+    var children = [ this.background ];
     for ( i = 0; i < this.horizontalGridLines.length; i++ ) {
-      children.push( this.horizontalGridLines[i] );
+      children.push( this.horizontalGridLines[ i ] );
     }
     for ( i = 0; i < this.verticalGridLines.length; i++ ) {
-      children.push( this.verticalGridLines[i] );
+      children.push( this.verticalGridLines[ i ] );
     }
     children.push( this.frame, this.knobNode, this.lightPath );
-    Node.call( this, {children: children} );
+    Node.call( this, { children: children } );
 
     // click in the track to change the value, continue dragging if desired
     var translate = function( event ) {
@@ -133,8 +133,8 @@ define( function( require ) {
           panelModel.property( 'state' ).set( 'dragging' );
           translate( event );
 
-          new TWEEN.Tween( {scale: panelModel.scale} )
-            .to( {scale: 1}, 500 )
+          new TWEEN.Tween( { scale: panelModel.scale } )
+            .to( { scale: 1 }, 500 )
             .easing( TWEEN.Easing.Cubic.InOut )
             .onUpdate( function() { panelModel.scale = this.scale; } )
             .start();
@@ -192,7 +192,7 @@ define( function( require ) {
 
     this.mutate( options );
 
-    panelModel.multilink( ['position', 'angle', 'scale'], function() {
+    panelModel.multilink( [ 'position', 'angle', 'scale' ], function() {
       panelNode.updateShape();
     } );
   }
@@ -203,8 +203,8 @@ define( function( require ) {
     animateToCenter: function() {
       this.panelModel.animating = true;
       var panelNode = this;
-      new TWEEN.Tween( {x: panelNode.panelModel.position.x, y: panelNode.panelModel.position.y} )
-        .to( {x: this.comparePosition.x, y: this.comparePosition.y }, 500 )
+      new TWEEN.Tween( { x: panelNode.panelModel.position.x, y: panelNode.panelModel.position.y } )
+        .to( { x: this.comparePosition.x, y: this.comparePosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() {
           panelNode.panelModel.position = new Vector2( this.x, this.y );
@@ -222,8 +222,18 @@ define( function( require ) {
 
       //Shrink & Move to the toolbox
       this.panelModel.animating = true;
-      new TWEEN.Tween( {angle: panelNode.panelModel.angle, scale: panelNode.panelModel.scale, x: panelNode.panelModel.position.x, y: panelNode.panelModel.position.y} )
-        .to( {angle: panelNode.panelModel.angleProperty.initialValue, scale: 0.5, x: panelNode.panelModel.positionProperty.initialValue.x, y: panelNode.panelModel.positionProperty.initialValue.y }, 500 )
+      new TWEEN.Tween( {
+        angle: panelNode.panelModel.angle,
+        scale: panelNode.panelModel.scale,
+        x: panelNode.panelModel.position.x,
+        y: panelNode.panelModel.position.y
+      } )
+        .to( {
+          angle: panelNode.panelModel.angleProperty.initialValue,
+          scale: 0.5,
+          x: panelNode.panelModel.positionProperty.initialValue.x,
+          y: panelNode.panelModel.positionProperty.initialValue.y
+        }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() {
           panelNode.panelModel.position = new Vector2( this.x, this.y );
@@ -274,13 +284,13 @@ define( function( require ) {
         var nearTopRight = bottomRight.blend( topRight, 3 / 4 );
         var nearBottomLeft = bottomLeft.blend( topLeft, 1 / 4 );
         var nearBottomRight = bottomRight.blend( topRight, 1 / 4 );
-        this.horizontalGridLines[0].setLine( nearTopLeft.x, nearTopLeft.y, nearTopRight.x, nearTopRight.y );
-        this.horizontalGridLines[1].setLine( centerLeft.x, centerLeft.y, centerRight.x, centerRight.y );
-        this.horizontalGridLines[2].setLine( nearBottomLeft.x, nearBottomLeft.y, nearBottomRight.x, nearBottomRight.y );
+        this.horizontalGridLines[ 0 ].setLine( nearTopLeft.x, nearTopLeft.y, nearTopRight.x, nearTopRight.y );
+        this.horizontalGridLines[ 1 ].setLine( centerLeft.x, centerLeft.y, centerRight.x, centerRight.y );
+        this.horizontalGridLines[ 2 ].setLine( nearBottomLeft.x, nearBottomLeft.y, nearBottomRight.x, nearBottomRight.y );
 
-        this.horizontalGridLines[0].lineWidth = this.horizontalGridLineWidth * scale;
-        this.horizontalGridLines[1].lineWidth = this.horizontalGridLineWidth * scale;
-        this.horizontalGridLines[2].lineWidth = this.horizontalGridLineWidth * scale;
+        this.horizontalGridLines[ 0 ].lineWidth = this.horizontalGridLineWidth * scale;
+        this.horizontalGridLines[ 1 ].lineWidth = this.horizontalGridLineWidth * scale;
+        this.horizontalGridLines[ 2 ].lineWidth = this.horizontalGridLineWidth * scale;
       }
 
       if ( this.verticalGridLines.length ) {
@@ -290,13 +300,13 @@ define( function( require ) {
         var d = bottomLeft.blend( bottomRight, 1 / 4 );
         var e = topLeft.blend( topRight, 0.5 );
         var f = bottomLeft.blend( bottomRight, 0.5 );
-        this.verticalGridLines[0].setLine( a.x, a.y, b.x, b.y );
-        this.verticalGridLines[1].setLine( c.x, c.y, d.x, d.y );
-        this.verticalGridLines[2].setLine( e.x, e.y, f.x, f.y );
+        this.verticalGridLines[ 0 ].setLine( a.x, a.y, b.x, b.y );
+        this.verticalGridLines[ 1 ].setLine( c.x, c.y, d.x, d.y );
+        this.verticalGridLines[ 2 ].setLine( e.x, e.y, f.x, f.y );
 
-        this.verticalGridLines[0].lineWidth = this.verticalGridLineWidth * scale;
-        this.verticalGridLines[1].lineWidth = this.verticalGridLineWidth * scale;
-        this.verticalGridLines[2].lineWidth = this.verticalGridLineWidth * scale;
+        this.verticalGridLines[ 0 ].lineWidth = this.verticalGridLineWidth * scale;
+        this.verticalGridLines[ 1 ].lineWidth = this.verticalGridLineWidth * scale;
+        this.verticalGridLines[ 2 ].lineWidth = this.verticalGridLineWidth * scale;
       }
 
       var center = centerRight.blend( centerLeft, 0.5 );
@@ -319,11 +329,11 @@ define( function( require ) {
         // work if the frame was on the bottom
         var frameOffset = FRAME_LINE_WIDTH / 2;
         this.lightPath.clipArea = new Shape().
-                                        moveToPoint( bottomLeft.plusXY( -frameOffset, frameOffset ) ).
-                                        lineToPoint( topLeft.plusXY( -frameOffset, -frameOffset ) ).
-                                        lineToPoint( topRight.plusXY( frameOffset, -frameOffset ) ).
-                                        lineToPoint( bottomRight.plusXY( frameOffset, frameOffset ) ).
-                                        close();
+          moveToPoint( bottomLeft.plusXY( -frameOffset, frameOffset ) ).
+          lineToPoint( topLeft.plusXY( -frameOffset, -frameOffset ) ).
+          lineToPoint( topRight.plusXY( frameOffset, -frameOffset ) ).
+          lineToPoint( bottomRight.plusXY( frameOffset, frameOffset ) ).
+          close();
       }
     },
 

@@ -83,7 +83,11 @@ define( function( require ) {
 
     this.addChild( new TickMarksNode( playAreaCenter ) );
 
-    var lightNode = new LightNode( playAreaCenter.y, model.property( 'flashlightOn' ).and( model.anyPanelDraggingProperty.derivedNot() ), model.anyPanelCenteredProperty, this.layoutBounds.right - 20, { centerY: playAreaCenter.y } );
+    var flashLightOnAndAnyPanelDraggingProperty = new DerivedProperty( [model.property( 'flashlightOn' ), model.anyPanelDraggingProperty],
+      function( flashlightOn, anyPanelDragging ) {
+        return flashlightOn && !anyPanelDragging;
+      } );
+    var lightNode = new LightNode( playAreaCenter.y, flashLightOnAndAnyPanelDraggingProperty, model.anyPanelCenteredProperty, this.layoutBounds.right - 20, { centerY: playAreaCenter.y } );
 
     //Create the different types of panels
     var solarPanelNode = new PanelNode( model.solarPanel, playAreaCenter, sendOtherPanelsHome, model.flashlightOnProperty, lightNode.setLightProjection.bind( lightNode ), {
@@ -106,7 +110,10 @@ define( function( require ) {
       function( solarPanelState, heatPanelState, intensityPanelState ) {
         return solarPanelState === 'center' || heatPanelState === 'center' || intensityPanelState === 'center';
       } );
-    var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), playAreaCenter );
+    var targetOutlineNode = new TargetOutlineNode( new DerivedProperty( [panelInCenter],
+      function( panelInCenter ) {
+        return !panelInCenter;
+      } ), playAreaCenter );
     this.addChild( targetOutlineNode );
 
     //Panels should go in front of the target outline

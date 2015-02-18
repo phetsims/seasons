@@ -20,6 +20,7 @@ define( function( require ) {
   var LinearFunction = require( 'DOT/LinearFunction' );
   var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
   var Line = require( 'SCENERY/nodes/Line' );
+  var DerivedProperty = require( 'AXON/DerivedProperty' );
 
   //constants
   var FRAME_LINE_WIDTH = 3;
@@ -88,7 +89,11 @@ define( function( require ) {
     //Update the knob location when the panel arrives in the center
     panelModel.property( 'state' ).onValue( 'center', function() {panelNode.updateShape();} );
 
-    panelModel.animatingProperty.derivedNot().and( panelModel.property( 'state' ).valueEquals( 'center' ) ).linkAttribute( this.knobNode, 'visible' );
+    var tmp = new DerivedProperty( [panelModel.animatingProperty, panelModel.property( 'state' )],
+      function( animating, state ) {
+        return !animating && state === 'center';
+      } );
+    tmp.linkAttribute( this.knobNode, 'visible' );
 
     //Update the knob location after the panel animates to the center
     panelModel.property( 'animating' ).onValue( false, function() {panelNode.updateShape();} );

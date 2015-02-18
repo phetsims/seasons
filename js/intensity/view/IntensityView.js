@@ -101,9 +101,11 @@ define( function( require ) {
       fill: 'black'
     } );
 
-    var panelInCenter = solarPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ).
-      or( heatPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) ).
-      or( intensityPanelNode.panelModel.property( 'state' ).valueEquals( 'center' ) );
+    var panelInCenter = new DerivedProperty(
+      [solarPanelNode.panelModel.property( 'state' ), heatPanelNode.panelModel.property( 'state' ), intensityPanelNode.panelModel.property( 'state' )],
+      function( solarPanelState, heatPanelState, intensityPanelState ) {
+        return solarPanelState === 'center' || heatPanelState === 'center' || intensityPanelState === 'center';
+      } );
     var targetOutlineNode = new TargetOutlineNode( panelInCenter.derivedNot(), playAreaCenter );
     this.addChild( targetOutlineNode );
 

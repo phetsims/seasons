@@ -26,9 +26,11 @@ define( function( require ) {
     this.intensityPanel = new PanelModel( 'intensity' );
 
     //Properties to determine if any panel is dragging or centered, so that the flashlight can be toggled off during dragging
-    this.anyPanelDraggingProperty = this.solarPanel.property( 'state' ).valueEquals( 'dragging' ).
-      or( this.heatPanel.property( 'state' ).valueEquals( 'dragging' ) ).
-      or( this.intensityPanel.property( 'state' ).valueEquals( 'dragging' ) );
+    this.anyPanelDraggingProperty = new DerivedProperty(
+      [this.solarPanel.property( 'state' ), this.heatPanel.property( 'state' ), this.intensityPanel.property( 'state' )],
+      function( solarPanelState, heatPanelState, intensityPanelState ) {
+        return solarPanelState === 'dragging' || heatPanelState === 'dragging' || intensityPanelState === 'dragging';
+      } );
 
     this.centeredPanelProperty = new DerivedProperty( [ this.solarPanel.stateProperty, this.heatPanel.stateProperty, this.intensityPanel.stateProperty ], function( solarPanelState, heatPanelState, intensityPanelState ) {
       return solarPanelState === 'center' ? intensityModel.solarPanel :

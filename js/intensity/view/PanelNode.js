@@ -80,7 +80,6 @@ define( function( require ) {
       } );
     }
 
-//    flashlightOnProperty.and( panelModel.stateProperty.valueEquals( 'center' ) ).and( panelModel.animatingProperty.valueEquals( false ) ).linkAttribute( this.lightPath, 'visible' );
     new DerivedProperty( [flashlightOnProperty, panelModel.stateProperty, panelModel.animatingProperty],
       function( flashlightOn, state, animating ) {
         return flashlightOn && state === 'center' && !animating;

@@ -80,7 +80,11 @@ define( function( require ) {
       } );
     }
 
-    flashlightOnProperty.and( panelModel.stateProperty.valueEquals( 'center' ) ).and( panelModel.animatingProperty.valueEquals( false ) ).linkAttribute( this.lightPath, 'visible' );
+//    flashlightOnProperty.and( panelModel.stateProperty.valueEquals( 'center' ) ).and( panelModel.animatingProperty.valueEquals( false ) ).linkAttribute( this.lightPath, 'visible' );
+    new DerivedProperty( [flashlightOnProperty, panelModel.stateProperty, panelModel.animatingProperty],
+      function( flashlightOn, state, animating ) {
+        return flashlightOn && state === 'center' && !animating;
+      } ).linkAttribute( this.lightPath, 'visible' );
 
     //Location where objects can be put in front of the flashlight.
     //Account for the size of the knob here so the panel will still be centered

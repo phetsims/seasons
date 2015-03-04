@@ -144,14 +144,14 @@ define( function( require ) {
 
     var secondaryBarChart = new BarChartNode( secondaryProperty, model.centeredPanelProperty );
 
-    var secondBoxTitleProperty = model.centeredPanelProperty.map( function( centeredPanel ) {
+    var secondBoxTitleProperty = new DerivedProperty( [model.centeredPanelProperty], function( centeredPanel ) {
       return centeredPanel === null ? '-' :
              centeredPanel.type === 'intensity' ? 'Light Area' :
              centeredPanel.type === 'heat' ? 'Temperature' :
              'Power';
     } );
 
-    model.centeredPanelProperty.map( function( centeredPanel ) {
+    new DerivedProperty( [model.centeredPanelProperty], function( centeredPanel ) {
       return centeredPanel === null ? '' :
              centeredPanel.type === 'intensity' ? ' m^2' :
              centeredPanel.type === 'heat' ? ' \u2103' :

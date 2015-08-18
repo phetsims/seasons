@@ -16,9 +16,6 @@
   "phet": {
     "requirejsNamespace": "SEASONS",
     "simTitleStringKey": "SEASONS/seasons.name",
-    "phetLibs": [
-      "seasons"
-    ],
     "preload": [
       "../sherpa/lib/Tween-r12.js"
     ]

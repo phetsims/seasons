@@ -13,7 +13,7 @@ define( function( require ) {
   var IntensityScreen = require( 'SEASONS/intensity/IntensityScreen' );
 
   // strings
-  var simTitle = require( 'string!SEASONS/seasons.name' );
+  var simTitle = require( 'string!SEASONS/seasons.title' );
 
   var screens = [ new IntensityScreen() ];
 

@@ -73,7 +73,6 @@ define( function( require ) {
 
     //Overwrite the initial position so it will reset there, since the model was populated with dummy values before the view layout was produced
     var offset = new Vector2( 12, 64 );
-    var getPanelPosition = function( index ) { return intensityView.globalToParentPoint( toolbox.getGlobalPanelPosition( index ) ).minus( offset );};
     model.solarPanel.positionProperty.reset();
     model.heatPanel.positionProperty.reset();
     model.intensityPanel.positionProperty.reset();

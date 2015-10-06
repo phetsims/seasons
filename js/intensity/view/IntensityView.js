@@ -37,7 +37,6 @@ define( function( require ) {
 //  var Image = require( 'SCENERY/nodes/Image' );
 
   function IntensityView( model ) {
-    var intensityView = this;
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
 
     var viewProperties = new PropertySet( {
@@ -72,7 +71,6 @@ define( function( require ) {
     };
 
     //Overwrite the initial position so it will reset there, since the model was populated with dummy values before the view layout was produced
-    var offset = new Vector2( 12, 64 );
     model.solarPanel.positionProperty.reset();
     model.heatPanel.positionProperty.reset();
     model.intensityPanel.positionProperty.reset();

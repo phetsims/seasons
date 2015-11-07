@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2014, University of Colorado Boulder
 
 /**
  * Copied from fractions-intro, should be factored out//TODO

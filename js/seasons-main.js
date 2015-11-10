@@ -13,7 +13,7 @@ define( function( require ) {
   var IntensityScreen = require( 'SEASONS/intensity/IntensityScreen' );
 
   // strings
-  var simTitle = require( 'string!SEASONS/seasons.title' );
+  var seasonsTitleString = require( 'string!SEASONS/seasons.title' );
 
   var screens = [ new IntensityScreen() ];
 
@@ -26,7 +26,7 @@ define( function( require ) {
   };
 
   SimLauncher.launch( function() {
-    var sim = new Sim( simTitle, screens, simOptions );
+    var sim = new Sim( seasonsTitleString, screens, simOptions );
     sim.start();
   } );
 } );

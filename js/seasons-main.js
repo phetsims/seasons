@@ -15,8 +15,6 @@ define( function( require ) {
   // strings
   var seasonsTitleString = require( 'string!SEASONS/seasons.title' );
 
-  var screens = [ new IntensityScreen() ];
-
   var simOptions = {
     credits: {
       leadDesign: 'Bryce Gruneich',
@@ -26,7 +24,7 @@ define( function( require ) {
   };
 
   SimLauncher.launch( function() {
-    var sim = new Sim( seasonsTitleString, screens, simOptions );
+    var sim = new Sim( seasonsTitleString, [ new IntensityScreen() ], simOptions );
     sim.start();
   } );
 } );

@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Screen = require( 'JOIST/Screen' );
@@ -28,5 +29,7 @@ define( function( require ) {
     );
   }
 
+  seasons.register( 'IntensityScreen', IntensityScreen );
+  
   return inherit( Screen, IntensityScreen );
 } );

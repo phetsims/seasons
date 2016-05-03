@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
@@ -95,6 +96,8 @@ define( function( require ) {
     this.mutate( options );
   }
 
+  seasons.register( 'BarChartNode', BarChartNode );
+  
   return inherit( Node, BarChartNode, {
     set units( u ) { this._units = u; },
     get units() {return this._units;},

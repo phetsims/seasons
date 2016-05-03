@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Color = require( 'SCENERY/util/Color' );
   var LinearFunction = require( 'DOT/LinearFunction' );
@@ -45,6 +46,8 @@ define( function( require ) {
     Object.call( this );
   }
 
+  seasons.register( 'HeatMap', HeatMap );
+  
   return inherit( Object, HeatMap, {},
 
     //static

@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var PropertySet = require( 'AXON/PropertySet' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -58,6 +59,8 @@ define( function( require ) {
     } );
   }
 
+  seasons.register( 'PanelModel', PanelModel );
+  
   return inherit( PropertySet, PanelModel, {
 
     //Only for the heat panel, show time average of intensity on heat panel to account for latency of heating up/cooling down

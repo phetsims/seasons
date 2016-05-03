@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var BarChartNode = require( 'SEASONS/intensity/view/BarChartNode' );
   var ScreenView = require( 'JOIST/ScreenView' );
@@ -45,7 +46,7 @@ define( function( require ) {
     } );
 
     var resetAllButton = new ResetAllButton( {
-      right:  this.layoutBounds.right - 10,
+      right: this.layoutBounds.right - 10,
       bottom: this.layoutBounds.bottom - 10,
       listener: function() {model.reset();}
     } );
@@ -77,7 +78,7 @@ define( function( require ) {
 
     this.addChild( new TickMarksNode( playAreaCenter ) );
 
-    var flashLightOnAndAnyPanelDraggingProperty = new DerivedProperty( [model.property( 'flashlightOn' ), model.anyPanelDraggingProperty],
+    var flashLightOnAndAnyPanelDraggingProperty = new DerivedProperty( [ model.property( 'flashlightOn' ), model.anyPanelDraggingProperty ],
       function( flashlightOn, anyPanelDragging ) {
         return flashlightOn && !anyPanelDragging;
       } );
@@ -100,11 +101,11 @@ define( function( require ) {
     } );
 
     var panelInCenter = new DerivedProperty(
-      [solarPanelNode.panelModel.property( 'state' ), heatPanelNode.panelModel.property( 'state' ), intensityPanelNode.panelModel.property( 'state' )],
+      [ solarPanelNode.panelModel.property( 'state' ), heatPanelNode.panelModel.property( 'state' ), intensityPanelNode.panelModel.property( 'state' ) ],
       function( solarPanelState, heatPanelState, intensityPanelState ) {
         return solarPanelState === 'center' || heatPanelState === 'center' || intensityPanelState === 'center';
       } );
-    var targetOutlineNode = new TargetOutlineNode( new DerivedProperty( [panelInCenter],
+    var targetOutlineNode = new TargetOutlineNode( new DerivedProperty( [ panelInCenter ],
       function( panelInCenter ) {
         return !panelInCenter;
       } ), playAreaCenter );
@@ -116,7 +117,10 @@ define( function( require ) {
 
     this.addChild( lightNode );
 
-    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), { left: this.layoutBounds.right - 93, centerY: playAreaCenter.y } ) );
+    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {
+      left: this.layoutBounds.right - 93,
+      centerY: playAreaCenter.y
+    } ) );
 
     //Accordion boxes for charts
     var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {
@@ -138,14 +142,14 @@ define( function( require ) {
 
     var secondaryBarChart = new BarChartNode( secondaryProperty, model.centeredPanelProperty );
 
-    var secondBoxTitleProperty = new DerivedProperty( [model.centeredPanelProperty], function( centeredPanel ) {
+    var secondBoxTitleProperty = new DerivedProperty( [ model.centeredPanelProperty ], function( centeredPanel ) {
       return centeredPanel === null ? '-' :
              centeredPanel.type === 'intensity' ? 'Light Area' :
              centeredPanel.type === 'heat' ? 'Temperature' :
              'Power';
     } );
 
-    new DerivedProperty( [model.centeredPanelProperty], function( centeredPanel ) {
+    new DerivedProperty( [ model.centeredPanelProperty ], function( centeredPanel ) {
       return centeredPanel === null ? '' :
              centeredPanel.type === 'intensity' ? ' m^2' :
              centeredPanel.type === 'heat' ? ' \u2103' :
@@ -178,5 +182,7 @@ define( function( require ) {
 //    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
   }
 
+  seasons.register( 'IntensityView', IntensityView );
+  
   return inherit( ScreenView, IntensityView );
 } );

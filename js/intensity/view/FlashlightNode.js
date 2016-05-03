@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var BooleanRoundStickyToggleButton = require( 'SUN/buttons/BooleanRoundStickyToggleButton' );
@@ -33,5 +34,7 @@ define( function( require ) {
     this.mutate( options );
   }
 
+  seasons.register( 'FlashlightNode', FlashlightNode );
+  
   return inherit( Node, FlashlightNode );
 } );

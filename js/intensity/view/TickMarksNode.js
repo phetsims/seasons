@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Line = require( 'SCENERY/nodes/Line' );
@@ -37,5 +38,7 @@ define( function( require ) {
     this.mutate( options );
   }
 
+  seasons.register( 'TickMarksNode', TickMarksNode );
+  
   return inherit( Node, TickMarksNode );
 } );

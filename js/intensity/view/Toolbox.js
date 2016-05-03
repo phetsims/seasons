@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Panel = require( 'SUN/Panel' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -22,11 +23,21 @@ define( function( require ) {
     var content = new Rectangle( 0, 0, WIDTH, HEIGHT );
     var fractionToSideLabels = 0.2;
     var textBottom = HEIGHT - 4;
-    var solarText = new Text( 'Solar', { fill: 'white', font: FONT, centerX: WIDTH * fractionToSideLabels, bottom: textBottom } );
+    var solarText = new Text( 'Solar', {
+      fill: 'white',
+      font: FONT,
+      centerX: WIDTH * fractionToSideLabels,
+      bottom: textBottom
+    } );
     content.addChild( solarText );
     var heatText = new Text( 'Heat', { fill: 'white', font: FONT, centerX: WIDTH / 2, bottom: textBottom } );
     content.addChild( heatText );
-    var intensityText = new Text( 'Intensity', { fill: 'white', font: FONT, centerX: WIDTH * (1 - fractionToSideLabels), bottom: textBottom } );
+    var intensityText = new Text( 'Intensity', {
+      fill: 'white',
+      font: FONT,
+      centerX: WIDTH * (1 - fractionToSideLabels),
+      bottom: textBottom
+    } );
     content.addChild( intensityText );
 
     this.texts = [ solarText, heatText, intensityText ];
@@ -35,6 +46,8 @@ define( function( require ) {
 
     this.mutate( options );
   }
+
+  seasons.register( 'Toolbox', Toolbox );
 
   return inherit( Panel, Toolbox, {
 

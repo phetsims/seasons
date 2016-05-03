@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var PropertySet = require( 'AXON/PropertySet' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PanelModel = require( 'SEASONS/intensity/model/PanelModel' );
@@ -28,7 +29,7 @@ define( function( require ) {
 
     //Properties to determine if any panel is dragging or centered, so that the flashlight can be toggled off during dragging
     this.anyPanelDraggingProperty = new DerivedProperty(
-      [this.solarPanel.property( 'state' ), this.heatPanel.property( 'state' ), this.intensityPanel.property( 'state' )],
+      [ this.solarPanel.property( 'state' ), this.heatPanel.property( 'state' ), this.intensityPanel.property( 'state' ) ],
       function( solarPanelState, heatPanelState, intensityPanelState ) {
         return solarPanelState === 'dragging' || heatPanelState === 'dragging' || intensityPanelState === 'dragging';
       } );
@@ -71,6 +72,8 @@ define( function( require ) {
     } );
   }
 
+  seasons.register( 'IntensityModel', IntensityModel );
+  
   return inherit( PropertySet, IntensityModel, {
     step: function( dt ) {
       if ( this.centeredPanelProperty.value === this.heatPanel ) {

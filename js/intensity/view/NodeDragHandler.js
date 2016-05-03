@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -49,6 +50,8 @@ define( function( require ) {
     } );
   }
 
+  seasons.register( 'NodeDragHandler', NodeDragHandler );
+  
   inherit( SimpleDragHandler, NodeDragHandler );
 
   /**

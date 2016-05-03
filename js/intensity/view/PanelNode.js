@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
   var Shape = require( 'KITE/Shape' );
@@ -55,12 +56,18 @@ define( function( require ) {
     this.horizontalGridLines = [];
     var i;
     for ( i = 0; i < options.numberHorizontalGridLines; i++ ) {
-      this.horizontalGridLines.push( new Line( 0, 0, 0, 0, { lineWidth: this.horizontalGridLineWidth, stroke: gridLineStroke } ) );
+      this.horizontalGridLines.push( new Line( 0, 0, 0, 0, {
+        lineWidth: this.horizontalGridLineWidth,
+        stroke: gridLineStroke
+      } ) );
     }
 
     this.verticalGridLines = [];
     for ( i = 0; i < options.numberVerticalGridLines; i++ ) {
-      this.verticalGridLines.push( new Line( 0, 0, 0, 0, { lineWidth: this.verticalGridLineWidth, stroke: gridLineStroke } ) );
+      this.verticalGridLines.push( new Line( 0, 0, 0, 0, {
+        lineWidth: this.verticalGridLineWidth,
+        stroke: gridLineStroke
+      } ) );
     }
 
     this.lightPath = new Path( null, { fill: 'white' } );
@@ -81,7 +88,7 @@ define( function( require ) {
       } );
     }
 
-    new DerivedProperty( [flashlightOnProperty, panelModel.stateProperty, panelModel.animatingProperty],
+    new DerivedProperty( [ flashlightOnProperty, panelModel.stateProperty, panelModel.animatingProperty ],
       function( flashlightOn, state, animating ) {
         return flashlightOn && state === 'center' && !animating;
       } ).linkAttribute( this.lightPath, 'visible' );
@@ -93,7 +100,7 @@ define( function( require ) {
     //Update the knob location when the panel arrives in the center
     panelModel.property( 'state' ).onValue( 'center', function() {panelNode.updateShape();} );
 
-    var tmp = new DerivedProperty( [panelModel.animatingProperty, panelModel.property( 'state' )],
+    var tmp = new DerivedProperty( [ panelModel.animatingProperty, panelModel.property( 'state' ) ],
       function( animating, state ) {
         return !animating && state === 'center';
       } );
@@ -206,6 +213,8 @@ define( function( require ) {
     } );
   }
 
+  seasons.register( 'PanelNode', PanelNode );
+  
   return inherit( Node, PanelNode, {
 
     //Animate the PanelNode to move to the target region
@@ -337,12 +346,7 @@ define( function( require ) {
         // I didn't use this approach because the current code overlaps the frame shape over the grid, which wouldn't
         // work if the frame was on the bottom
         var frameOffset = FRAME_LINE_WIDTH / 2;
-        this.lightPath.clipArea = new Shape().
-          moveToPoint( bottomLeft.plusXY( -frameOffset, frameOffset ) ).
-          lineToPoint( topLeft.plusXY( -frameOffset, -frameOffset ) ).
-          lineToPoint( topRight.plusXY( frameOffset, -frameOffset ) ).
-          lineToPoint( bottomRight.plusXY( frameOffset, frameOffset ) ).
-          close();
+        this.lightPath.clipArea = new Shape().moveToPoint( bottomLeft.plusXY( -frameOffset, frameOffset ) ).lineToPoint( topLeft.plusXY( -frameOffset, -frameOffset ) ).lineToPoint( topRight.plusXY( frameOffset, -frameOffset ) ).lineToPoint( bottomRight.plusXY( frameOffset, frameOffset ) ).close();
       }
     },
 

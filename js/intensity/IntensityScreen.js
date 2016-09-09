@@ -15,14 +15,9 @@ define( function( require ) {
   var Screen = require( 'JOIST/Screen' );
   var IntensityModel = require( 'SEASONS/intensity/model/IntensityModel' );
   var IntensityView = require( 'SEASONS/intensity/view/IntensityView' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-
-  var screenTitle = 'Intensity';
 
   function IntensityScreen() {
     Screen.call( this,
-      screenTitle,
-      new Rectangle( 0, 0, Screen.HOME_SCREEN_ICON_SIZE.width, Screen.HOME_SCREEN_ICON_SIZE.height, { fill: 'white' } ),
       function() { return new IntensityModel(); },
       function( model ) { return new IntensityView( model, ModelViewTransform2.createIdentity() ); },
       { backgroundColor: 'black' }

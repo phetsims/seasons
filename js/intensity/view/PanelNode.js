@@ -153,7 +153,7 @@ define( function( require ) {
             .to( { scale: 1 }, 500 )
             .easing( TWEEN.Easing.Cubic.InOut )
             .onUpdate( function() { panelModel.scale = this.scale; } )
-            .start();
+            .start( phet.joist.elapsedTime );
         }
         else {
 
@@ -214,7 +214,7 @@ define( function( require ) {
   }
 
   seasons.register( 'PanelNode', PanelNode );
-  
+
   return inherit( Node, PanelNode, {
 
     //Animate the PanelNode to move to the target region
@@ -231,7 +231,7 @@ define( function( require ) {
           panelNode.panelModel.state = 'center';
           panelNode.panelModel.animating = false;
         } )
-        .start();
+        .start( phet.joist.elapsedTime );
     },
 
     //Animate the panel to its starting location in the toolbox
@@ -262,7 +262,7 @@ define( function( require ) {
           panelNode.panelModel.state = 'toolbox';
           panelNode.panelModel.animating = false;
         } )
-        .start();
+        .start( phet.joist.elapsedTime );
     },
 
     //TODO: Performance on iPad3

@@ -30,7 +30,7 @@ define( function( require ) {
     this.valueProperty = valueProperty;
     //TODO: Move to options
     this._units = '%';
-    var barChartNode = this;
+    var self = this;
     Node.call( this );
 
     this.barNode = new Rectangle( 0, 0, 0, 0, { fill: 'white' } );
@@ -47,7 +47,7 @@ define( function( require ) {
 
     this.addChild( thermometer );
 
-    valueProperty.link( function() {barChartNode.updateReadout();} );
+    valueProperty.link( function() {self.updateReadout();} );
 
     var graphBorderNode = new Node( {
       children: [
@@ -62,7 +62,7 @@ define( function( require ) {
 
         //The horizontal axis
         new Line( 0, 0, WIDTH, 0, { stroke: 'white' } ),
-        barChartNode.barNode
+        self.barNode
       ]
     } );
 

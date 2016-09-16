@@ -16,7 +16,7 @@ define( function( require ) {
   var DerivedProperty = require( 'AXON/DerivedProperty' );
 
   function IntensityModel() {
-    var intensityModel = this;
+    var self = this;
     PropertySet.call( this, {
 
       //Boolean property indicating whether the flashlight button has been pressed
@@ -35,9 +35,9 @@ define( function( require ) {
       } );
 
     this.centeredPanelProperty = new DerivedProperty( [ this.solarPanel.stateProperty, this.heatPanel.stateProperty, this.intensityPanel.stateProperty ], function( solarPanelState, heatPanelState, intensityPanelState ) {
-      return solarPanelState === 'center' ? intensityModel.solarPanel :
-             heatPanelState === 'center' ? intensityModel.heatPanel :
-             intensityPanelState === 'center' ? intensityModel.intensityPanel :
+      return solarPanelState === 'center' ? self.solarPanel :
+             heatPanelState === 'center' ? self.heatPanel :
+             intensityPanelState === 'center' ? self.intensityPanel :
              null;
     } );
 
@@ -58,16 +58,16 @@ define( function( require ) {
 
     //Forward intensity values to the panels, to update the light view in the panel node.
     this.intensityProperty.link( function( intensity ) {
-      if ( intensity !== null && intensityModel.centeredPanelProperty.value !== null ) {
-        intensityModel.centeredPanelProperty.value.intensity = intensity;
+      if ( intensity !== null && self.centeredPanelProperty.value !== null ) {
+        self.centeredPanelProperty.value.intensity = intensity;
       }
     } );
 
     //Clear the heat from the heat panel when it is removed
     this.centeredPanelProperty.link( function( centeredPanel, oldCenteredPanel ) {
-      if ( oldCenteredPanel === intensityModel.heatPanel ) {
-        intensityModel.heatPanel.intensity = 0;
-        intensityModel.heatPanel.timeAveragedIntensity = 0;
+      if ( oldCenteredPanel === self.heatPanel ) {
+        self.heatPanel.intensity = 0;
+        self.heatPanel.timeAveragedIntensity = 0;
       }
     } );
   }

@@ -31,7 +31,7 @@ define( function( require ) {
     this.panelModel = panelModel;
     this.setLightProjection = setLightTipAndTail;
     this.playAreaCenter = playAreaCenter;
-    var panelNode = this;
+    var self = this;
     options = _.extend( {
       fill: null,
       cursor: 'pointer',
@@ -77,14 +77,14 @@ define( function( require ) {
     //For the intensity panel, show opacity
     if ( panelModel.type === 'intensity' ) {
       panelModel.intensityProperty.link( function( intensity ) {
-        panelNode.lightPath.opacity = linearFunction( intensity );
+        self.lightPath.opacity = linearFunction( intensity );
       } );
     }
 
     //Link heat map intensity to color
     if ( panelModel.type === 'heat' ) {
       panelModel.timeAveragedIntensityProperty.link( function( intensity ) {
-        panelNode.lightPath.fill = HeatMap.intensityToColor( intensity );
+        self.lightPath.fill = HeatMap.intensityToColor( intensity );
       } );
     }
 
@@ -98,7 +98,7 @@ define( function( require ) {
     this.comparePosition = playAreaCenter;
 
     //Update the knob location when the panel arrives in the center
-    panelModel.property( 'state' ).onValue( 'center', function() {panelNode.updateShape();} );
+    panelModel.property( 'state' ).onValue( 'center', function() {self.updateShape();} );
 
     var tmp = new DerivedProperty( [ panelModel.animatingProperty, panelModel.property( 'state' ) ],
       function( animating, state ) {
@@ -107,7 +107,7 @@ define( function( require ) {
     tmp.linkAttribute( this.knobNode, 'visible' );
 
     //Update the knob location after the panel animates to the center
-    panelModel.property( 'animating' ).onValue( false, function() {panelNode.updateShape();} );
+    panelModel.property( 'animating' ).onValue( false, function() {self.updateShape();} );
 
     //TODO: separate the background and border but only where grid lines applied (for performance)
     var children = [ this.background ];
@@ -122,11 +122,11 @@ define( function( require ) {
 
     // click in the track to change the value, continue dragging if desired
     var translate = function( event ) {
-      panelModel.position = panelNode.globalToParentPoint( event.pointer.point );//TODO: GC
+      panelModel.position = self.globalToParentPoint( event.pointer.point );//TODO: GC
     };
 
     var rotate = function( event ) {
-      var point = panelNode.globalToParentPoint( event.pointer.point );
+      var point = self.globalToParentPoint( event.pointer.point );
       var x = point.minus( panelModel.position );
       panelModel.unclampedAngle = originalAngle + x.angle() - angleRelativeToPivot;
 //      console.log( point.x, point.y, x.x, x.y, panelModel.unclampedAngle, panelModel.angle );
@@ -145,7 +145,7 @@ define( function( require ) {
         //TODO: cancel all tweens
 
         if ( panelModel.state === 'toolbox' ) {
-          panelNode.moveToFront();
+          self.moveToFront();
           panelModel.property( 'state' ).set( 'dragging' );
           translate( event );
 
@@ -157,7 +157,7 @@ define( function( require ) {
         }
         else {
 
-          var dx = panelNode.globalToParentPoint( event.pointer.point ).minus( panelModel.position );
+          var dx = self.globalToParentPoint( event.pointer.point ).minus( panelModel.position );
           angleRelativeToPivot = dx.angle();
           originalAngle = panelModel.angle;
           console.log( 'angleRelativeToPivot', angleRelativeToPivot, 'originalAngle', panelModel.angle );
@@ -173,8 +173,8 @@ define( function( require ) {
 
 
           //If the user dragged far enough from the center of the panel, it should snap to the touch event and become translation again
-          var position = panelNode.globalToParentPoint( event.pointer.point );
-          var home = panelNode.panelModel.positionProperty.initialValue;
+          var position = self.globalToParentPoint( event.pointer.point );
+          var home = self.panelModel.positionProperty.initialValue;
           var distanceToHome = home.distance( position );
           if ( distanceToHome < 50 ) {
             panelModel.state = 'dragging';
@@ -191,16 +191,16 @@ define( function( require ) {
       end: function( event ) {
         if ( panelModel.state === 'dragging' ) {
           //Move to the start position or compare position, whichever is closer.
-          var position = panelNode.panelModel.position;
-          var distToStart = panelNode.panelModel.positionProperty.initialValue.distance( position );
-          var distToCenter = panelNode.comparePosition.distance( position );
+          var position = self.panelModel.position;
+          var distToStart = self.panelModel.positionProperty.initialValue.distance( position );
+          var distToCenter = self.comparePosition.distance( position );
 
           if ( distToStart < distToCenter ) {
-            panelNode.animateToToolbox();
+            self.animateToToolbox();
           }
           else {
-            sendOtherPanelsHome( panelNode );
-            panelNode.animateToCenter();
+            sendOtherPanelsHome( self );
+            self.animateToCenter();
           }
         }
       }
@@ -209,7 +209,7 @@ define( function( require ) {
     this.mutate( options );
 
     panelModel.multilink( [ 'position', 'angle', 'scale' ], function() {
-      panelNode.updateShape();
+      self.updateShape();
     } );
   }
 
@@ -220,47 +220,47 @@ define( function( require ) {
     //Animate the PanelNode to move to the target region
     animateToCenter: function() {
       this.panelModel.animating = true;
-      var panelNode = this;
-      new TWEEN.Tween( { x: panelNode.panelModel.position.x, y: panelNode.panelModel.position.y } )
+      var self = this;
+      new TWEEN.Tween( { x: self.panelModel.position.x, y: self.panelModel.position.y } )
         .to( { x: this.comparePosition.x, y: this.comparePosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() {
-          panelNode.panelModel.position = new Vector2( this.x, this.y );
+          self.panelModel.position = new Vector2( this.x, this.y );
         } )
         .onComplete( function() {
-          panelNode.panelModel.state = 'center';
-          panelNode.panelModel.animating = false;
+          self.panelModel.state = 'center';
+          self.panelModel.animating = false;
         } )
         .start( phet.joist.elapsedTime );
     },
 
     //Animate the panel to its starting location in the toolbox
     animateToToolbox: function() {
-      var panelNode = this;
+      var self = this;
 
       //Shrink & Move to the toolbox
       this.panelModel.animating = true;
       new TWEEN.Tween( {
-        angle: panelNode.panelModel.angle,
-        scale: panelNode.panelModel.scale,
-        x: panelNode.panelModel.position.x,
-        y: panelNode.panelModel.position.y
+        angle: self.panelModel.angle,
+        scale: self.panelModel.scale,
+        x: self.panelModel.position.x,
+        y: self.panelModel.position.y
       } )
         .to( {
-          angle: panelNode.panelModel.angleProperty.initialValue,
+          angle: self.panelModel.angleProperty.initialValue,
           scale: 0.5,
-          x: panelNode.panelModel.positionProperty.initialValue.x,
-          y: panelNode.panelModel.positionProperty.initialValue.y
+          x: self.panelModel.positionProperty.initialValue.x,
+          y: self.panelModel.positionProperty.initialValue.y
         }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() {
-          panelNode.panelModel.position = new Vector2( this.x, this.y );
-          panelNode.panelModel.scale = this.scale;
-          panelNode.panelModel.unclampedAngle = this.angle;
+          self.panelModel.position = new Vector2( this.x, this.y );
+          self.panelModel.scale = this.scale;
+          self.panelModel.unclampedAngle = this.angle;
         } )
         .onComplete( function() {
-          panelNode.panelModel.state = 'toolbox';
-          panelNode.panelModel.animating = false;
+          self.panelModel.state = 'toolbox';
+          self.panelModel.animating = false;
         } )
         .start( phet.joist.elapsedTime );
     },

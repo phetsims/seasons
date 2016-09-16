@@ -21,11 +21,11 @@ define( function( require ) {
     this.beamTop = beamCenterY - beamWidth / 2;
     this.beamBottom = beamCenterY + beamWidth / 2;
     this.panelInPlayAreaProperty = panelInPlayAreaProperty;
-    var lightNode = this;
+    var self = this;
     Node.call( this, { pickable: false } );
     this.beamNode = new Path( new Shape(), { opacity: 0.3, fill: '#bdb9b9' } );
     this.addChild( this.beamNode );
-    panelInPlayAreaProperty.onValue( false, function() {lightNode.setLightRect();} );
+    panelInPlayAreaProperty.onValue( false, function() {self.setLightRect();} );
     flashlightOnProperty.linkAttribute( this, 'visible' );
     this.mutate( options );
   }

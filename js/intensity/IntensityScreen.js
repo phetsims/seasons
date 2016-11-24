@@ -15,12 +15,14 @@ define( function( require ) {
   var Screen = require( 'JOIST/Screen' );
   var IntensityModel = require( 'SEASONS/intensity/model/IntensityModel' );
   var IntensityView = require( 'SEASONS/intensity/view/IntensityView' );
+  var Property = require( 'AXON/Property' );
+  var Color = require( 'SCENERY/util/Color' );
 
   function IntensityScreen() {
     Screen.call( this,
       function() { return new IntensityModel(); },
       function( model ) { return new IntensityView( model, ModelViewTransform2.createIdentity() ); },
-      { backgroundColor: 'black' }
+      { backgroundColorProperty: new Property( Color.toColor( 'black' ) ) }
     );
   }
 

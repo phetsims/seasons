@@ -23,6 +23,7 @@ define( function( require ) {
   var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
   var Line = require( 'SCENERY/nodes/Line' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
+  var Property = require( 'AXON/Property' );
 
   //constants
   var FRAME_LINE_WIDTH = 3;
@@ -98,16 +99,16 @@ define( function( require ) {
     this.comparePosition = playAreaCenter;
 
     //Update the knob location when the panel arrives in the center
-    panelModel.property( 'state' ).onValue( 'center', function() {self.updateShape();} );
+    panelModel.stateProperty.onValue( 'center', function() {self.updateShape();} );
 
-    var tmp = new DerivedProperty( [ panelModel.animatingProperty, panelModel.property( 'state' ) ],
+    var tmp = new DerivedProperty( [ panelModel.animatingProperty, panelModel.stateProperty ],
       function( animating, state ) {
         return !animating && state === 'center';
       } );
     tmp.linkAttribute( this.knobNode, 'visible' );
 
     //Update the knob location after the panel animates to the center
-    panelModel.property( 'animating' ).onValue( false, function() {self.updateShape();} );
+    panelModel.animatingProperty.onValue( false, function() {self.updateShape();} );
 
     //TODO: separate the background and border but only where grid lines applied (for performance)
     var children = [ this.background ];
@@ -122,15 +123,16 @@ define( function( require ) {
 
     // click in the track to change the value, continue dragging if desired
     var translate = function( event ) {
-      panelModel.position = self.globalToParentPoint( event.pointer.point );//TODO: GC
+      panelModel.positionProperty.value = self.globalToParentPoint( event.pointer.point );//TODO: GC
     };
 
     var rotate = function( event ) {
       var point = self.globalToParentPoint( event.pointer.point );
-      var x = point.minus( panelModel.position );
-      panelModel.unclampedAngle = originalAngle + x.angle() - angleRelativeToPivot;
-//      console.log( point.x, point.y, x.x, x.y, panelModel.unclampedAngle, panelModel.angle );
-//      console.log( panelModel.position, x );
+      //TODO bad name, x is a Vector2
+      var x = point.minus( panelModel.positionProperty.value );
+      panelModel.unclampedAngleProperty.value = originalAngle + x.angle() - angleRelativeToPivot;
+//      console.log( point.x, point.y, x.x, x.y, panelModel.unclampedAngleProperty.value, panelModel.angleProperty.value );
+//      console.log( panelModel.positionProperty.value, x );
     };
 
     var angleRelativeToPivot = 0;
@@ -144,23 +146,23 @@ define( function( require ) {
 
         //TODO: cancel all tweens
 
-        if ( panelModel.state === 'toolbox' ) {
+        if ( panelModel.stateProperty.value === 'toolbox' ) {
           self.moveToFront();
-          panelModel.property( 'state' ).set( 'dragging' );
+          panelModel.stateProperty.value = 'dragging';
           translate( event );
 
-          new TWEEN.Tween( { scale: panelModel.scale } )
+          new TWEEN.Tween( { scale: panelModel.scaleProperty.value } )
             .to( { scale: 1 }, 500 )
             .easing( TWEEN.Easing.Cubic.InOut )
-            .onUpdate( function() { panelModel.scale = this.scale; } )
+            .onUpdate( function() { panelModel.scaleProperty.value = this.scale; } )
             .start( phet.joist.elapsedTime );
         }
         else {
-
-          var dx = self.globalToParentPoint( event.pointer.point ).minus( panelModel.position );
+          //TODO bad name, dx is a Vector2
+          var dx = self.globalToParentPoint( event.pointer.point ).minus( panelModel.positionProperty.value );
           angleRelativeToPivot = dx.angle();
-          originalAngle = panelModel.angle;
-          console.log( 'angleRelativeToPivot', angleRelativeToPivot, 'originalAngle', panelModel.angle );
+          originalAngle = panelModel.angleProperty.value;
+          console.log( 'angleRelativeToPivot', angleRelativeToPivot, 'originalAngle', panelModel.angleProperty.value );
         }
       },
 
@@ -169,7 +171,7 @@ define( function( require ) {
 
       drag: function( event ) {
 
-        if ( panelModel.state === 'center' ) {
+        if ( panelModel.stateProperty.value === 'center' ) {
 
 
           //If the user dragged far enough from the center of the panel, it should snap to the touch event and become translation again
@@ -177,7 +179,7 @@ define( function( require ) {
           var home = self.panelModel.positionProperty.initialValue;
           var distanceToHome = home.distance( position );
           if ( distanceToHome < 50 ) {
-            panelModel.state = 'dragging';
+            panelModel.stateProperty.value = 'dragging';
           }
           else {
             rotate( event );
@@ -189,9 +191,9 @@ define( function( require ) {
       },
 
       end: function( event ) {
-        if ( panelModel.state === 'dragging' ) {
+        if ( panelModel.stateProperty.value === 'dragging' ) {
           //Move to the start position or compare position, whichever is closer.
-          var position = self.panelModel.position;
+          var position = self.panelModel.positionProperty.value;
           var distToStart = self.panelModel.positionProperty.initialValue.distance( position );
           var distToCenter = self.comparePosition.distance( position );
 
@@ -208,9 +210,10 @@ define( function( require ) {
 
     this.mutate( options );
 
-    panelModel.multilink( [ 'position', 'angle', 'scale' ], function() {
-      self.updateShape();
-    } );
+    Property.multilink( [ panelModel.positionProperty, panelModel.angleProperty, panelModel.scaleProperty ],
+      function() {
+        self.updateShape();
+      } );
   }
 
   seasons.register( 'PanelNode', PanelNode );
@@ -219,17 +222,17 @@ define( function( require ) {
 
     //Animate the PanelNode to move to the target region
     animateToCenter: function() {
-      this.panelModel.animating = true;
+      this.panelModel.animatingProperty.value = true;
       var self = this;
-      new TWEEN.Tween( { x: self.panelModel.position.x, y: self.panelModel.position.y } )
+      new TWEEN.Tween( { x: self.panelModel.positionProperty.value.x, y: self.panelModel.positionProperty.value.y } )
         .to( { x: this.comparePosition.x, y: this.comparePosition.y }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() {
-          self.panelModel.position = new Vector2( this.x, this.y );
+          self.panelModel.positionProperty.value = new Vector2( this.x, this.y );
         } )
         .onComplete( function() {
-          self.panelModel.state = 'center';
-          self.panelModel.animating = false;
+          self.panelModel.stateProperty.value = 'center';
+          self.panelModel.animatingProperty.value = false;
         } )
         .start( phet.joist.elapsedTime );
     },
@@ -239,12 +242,12 @@ define( function( require ) {
       var self = this;
 
       //Shrink & Move to the toolbox
-      this.panelModel.animating = true;
+      this.panelModel.animatingProperty.value = true;
       new TWEEN.Tween( {
-        angle: self.panelModel.angle,
-        scale: self.panelModel.scale,
-        x: self.panelModel.position.x,
-        y: self.panelModel.position.y
+        angle: self.panelModel.angleProperty.value,
+        scale: self.panelModel.scaleProperty.value,
+        x: self.panelModel.positionProperty.value.x,
+        y: self.panelModel.positionProperty.value.y
       } )
         .to( {
           angle: self.panelModel.angleProperty.initialValue,
@@ -254,13 +257,13 @@ define( function( require ) {
         }, 500 )
         .easing( TWEEN.Easing.Cubic.Out )
         .onUpdate( function() {
-          self.panelModel.position = new Vector2( this.x, this.y );
-          self.panelModel.scale = this.scale;
-          self.panelModel.unclampedAngle = this.angle;
+          self.panelModel.positionProperty.value = new Vector2( this.x, this.y );
+          self.panelModel.scaleProperty.value = this.scale;
+          self.panelModel.unclampedAngleProperty.value = this.angle;
         } )
         .onComplete( function() {
-          self.panelModel.state = 'toolbox';
-          self.panelModel.animating = false;
+          self.panelModel.stateProperty.value = 'toolbox';
+          self.panelModel.animatingProperty.value = false;
         } )
         .start( phet.joist.elapsedTime );
     },
@@ -270,11 +273,11 @@ define( function( require ) {
       //Layout dimensions
       var HEIGHT = 240 * 0.85;
 
-      var scale = ( this.panelModel.type === 'solar' ) ? this.panelModel.scale * 0.4275 : this.panelModel.scale;
+      var scale = ( this.panelModel.type === 'solar' ) ? this.panelModel.scaleProperty.value * 0.4275 : this.panelModel.scaleProperty.value;
 
-      var x = this.panelModel.position.x;
-      var y = this.panelModel.position.y;
-      var up = Vector2.createPolar( HEIGHT, this.panelModel.angle + Math.PI / 2 );
+      var x = this.panelModel.positionProperty.value.x;
+      var y = this.panelModel.positionProperty.value.y;
+      var up = Vector2.createPolar( HEIGHT, this.panelModel.angleProperty.value + Math.PI / 2 );
       var centerLeft = new Vector2( x, y );
       var bottomLeft = centerLeft.plus( up.times( -0.5 * scale ) );
       var topLeft = bottomLeft.plus( up.times( scale ) );
@@ -286,7 +289,7 @@ define( function( require ) {
 
       //Translating the knob slows performance considerably (on iPad3), so only do it when the knob is visible
       //TODO: Rotate the knob
-      if ( this.panelModel.state !== 'dragging' && !this.panelModel.animating ) {
+      if ( this.panelModel.stateProperty.value !== 'dragging' && !this.panelModel.animatingProperty.value ) {
         this.knobNode.centerTop = bottomLeft;
       }
       var shape = new Shape().moveToPoint( bottomLeft ).lineToPoint( topLeft ).lineToPoint( topRight ).lineToPoint( bottomRight ).close();
@@ -329,17 +332,17 @@ define( function( require ) {
 
       var center = centerRight.blend( centerLeft, 0.5 );
 
-      if ( this.panelModel.state === 'center' ) {
-        var ry = this.guessY( center, this.panelModel.angle );
+      if ( this.panelModel.stateProperty.value === 'center' ) {
+        var ry = this.guessY( center, this.panelModel.angleProperty.value );
         //guess the light shape that gives the correct cross section
 
         //Meh, it's a heuristic that seems to work
-        var ellipseWidth = centerRight.distance( centerLeft ) * 0.4 * Math.pow( Math.abs( Math.cos( this.panelModel.angle ) ), 1.5 );
+        var ellipseWidth = centerRight.distance( centerLeft ) * 0.4 * Math.pow( Math.abs( Math.cos( this.panelModel.angleProperty.value ) ), 1.5 );
 
-        this.lightPath.shape = Shape.ellipse( center.x, center.y, ellipseWidth, ry, this.panelModel.angle );
-        var ellipseTail = new Vector2( 0, ry ).rotated( this.panelModel.angle ).plus( center );
-        var ellipseTip = new Vector2( 0, -ry ).rotated( this.panelModel.angle ).plus( center );
-        this.setLightProjection( ellipseTip.x, ellipseTail.x, center.x, center.y, ellipseWidth, ry, this.panelModel.angle, bottomLeft.y, topLeft.y, this.panelModel.type );
+        this.lightPath.shape = Shape.ellipse( center.x, center.y, ellipseWidth, ry, this.panelModel.angleProperty.value );
+        var ellipseTail = new Vector2( 0, ry ).rotated( this.panelModel.angleProperty.value ).plus( center );
+        var ellipseTip = new Vector2( 0, -ry ).rotated( this.panelModel.angleProperty.value ).plus( center );
+        this.setLightProjection( ellipseTip.x, ellipseTail.x, center.x, center.y, ellipseWidth, ry, this.panelModel.angleProperty.value, bottomLeft.y, topLeft.y, this.panelModel.type );
 
         // extend shape bounds a bit to account for the stroke.
         // another alternative would be to make the background all pink and add the content on top with a slightly smaller size.
@@ -373,7 +376,7 @@ define( function( require ) {
     },
 
     calculateY: function( center, guessY ) {
-      var ellipse = Shape.ellipse( center.x, center.y, 10, guessY, this.panelModel.angle );
+      var ellipse = Shape.ellipse( center.x, center.y, 10, guessY, this.panelModel.angleProperty.value );
       return ellipse.bounds.top;
     }
   } );

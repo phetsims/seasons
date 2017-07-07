@@ -10,26 +10,26 @@ define( function( require ) {
 
   // modules
   var seasons = require( 'SEASONS/seasons' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PanelModel = require( 'SEASONS/intensity/model/PanelModel' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
 
   function IntensityModel() {
-    var self = this;
-    PropertySet.call( this, {
 
-      //Boolean property indicating whether the flashlight button has been pressed
-      //Whether the light is visible also depends on whether a panel is in the target area
-      flashlightOn: false
-    } );
+    var self = this;
+
+    // @public Indicates whether the flashlight button has been pressed.
+    // Whether the light is visible also depends on whether a panel is in the target area.
+    this.flashlightOnProperty = new BooleanProperty( false );
+
     this.solarPanel = new PanelModel( 'solar' );
     this.heatPanel = new PanelModel( 'heat' );
     this.intensityPanel = new PanelModel( 'intensity' );
 
     //Properties to determine if any panel is dragging or centered, so that the flashlight can be toggled off during dragging
     this.anyPanelDraggingProperty = new DerivedProperty(
-      [ this.solarPanel.property( 'state' ), this.heatPanel.property( 'state' ), this.intensityPanel.property( 'state' ) ],
+      [ this.solarPanel.stateProperty, this.heatPanel.stateProperty, this.intensityPanel.stateProperty ],
       function( solarPanelState, heatPanelState, intensityPanelState ) {
         return solarPanelState === 'dragging' || heatPanelState === 'dragging' || intensityPanelState === 'dragging';
       } );
@@ -48,8 +48,7 @@ define( function( require ) {
     //Property for the angle of the panel in the center, or null if no panel is in the center.
     this.centeredPanelAngleProperty = new DerivedProperty( [ this.centeredPanelProperty, this.solarPanel.angleProperty, this.heatPanel.angleProperty, this.intensityPanel.angleProperty ],
       function( centeredPanel ) {
-        return centeredPanel ? centeredPanel.angle :
-               null;
+        return centeredPanel ? centeredPanel.angleProperty.value : null;
       } );
 
     this.intensityProperty = new DerivedProperty( [ this.centeredPanelAngleProperty, this.flashlightOnProperty ], function( centeredPanelAngle, flashlightOn ) {
@@ -66,26 +65,25 @@ define( function( require ) {
     //Clear the heat from the heat panel when it is removed
     this.centeredPanelProperty.link( function( centeredPanel, oldCenteredPanel ) {
       if ( oldCenteredPanel === self.heatPanel ) {
-        self.heatPanel.intensity = 0;
-        self.heatPanel.timeAveragedIntensity = 0;
+        self.heatPanel.intensityProperty.value = 0;
+        self.heatPanel.timeAveragedIntensityProperty.value = 0;
       }
     } );
   }
 
   seasons.register( 'IntensityModel', IntensityModel );
   
-  return inherit( PropertySet, IntensityModel, {
+  return inherit( Object, IntensityModel, {
     step: function( dt ) {
       if ( this.centeredPanelProperty.value === this.heatPanel ) {
         this.heatPanel.step( dt );
       }
     },
     reset: function() {
-      PropertySet.prototype.reset.call( this );
+      this.flashlightOnProperty.reset();
       this.solarPanel.reset();
       this.heatPanel.reset();
       this.intensityPanel.reset();
-      this.trigger( 'reset' );
     }
   } );
 } );

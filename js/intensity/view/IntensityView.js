@@ -28,7 +28,7 @@ define( function( require ) {
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var Property = require( 'AXON/Property' );
   var LinearFunction = require( 'DOT/LinearFunction' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Bounds2 = require( 'DOT/Bounds2' );
@@ -40,15 +40,22 @@ define( function( require ) {
   function IntensityView( model ) {
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
 
-    var viewProperties = new PropertySet( {
-      intensityBoxExpanded: false,
-      secondBoxExpanded: false
-    } );
+    // var viewProperties = new PropertySet( {
+    //   intensityBoxExpanded: false,
+    //   secondBoxExpanded: false
+    // } );
+
+    var intensityBoxExpandedProperty = new BooleanProperty( false );
+    var secondBoxExpandedProperty = new BooleanProperty( false );
 
     var resetAllButton = new ResetAllButton( {
       right: this.layoutBounds.right - 10,
       bottom: this.layoutBounds.bottom - 10,
-      listener: function() {model.reset();}
+      listener: function() {
+        model.reset();
+        intensityBoxExpandedProperty.reset();
+        secondBoxExpandedProperty.reset();
+      }
     } );
     this.addChild( resetAllButton );
 
@@ -78,7 +85,7 @@ define( function( require ) {
 
     this.addChild( new TickMarksNode( playAreaCenter ) );
 
-    var flashLightOnAndAnyPanelDraggingProperty = new DerivedProperty( [ model.property( 'flashlightOn' ), model.anyPanelDraggingProperty ],
+    var flashLightOnAndAnyPanelDraggingProperty = new DerivedProperty( [ model.flashlightOnProperty, model.anyPanelDraggingProperty ],
       function( flashlightOn, anyPanelDragging ) {
         return flashlightOn && !anyPanelDragging;
       } );
@@ -101,7 +108,7 @@ define( function( require ) {
     } );
 
     var panelInCenter = new DerivedProperty(
-      [ solarPanelNode.panelModel.property( 'state' ), heatPanelNode.panelModel.property( 'state' ), intensityPanelNode.panelModel.property( 'state' ) ],
+      [ solarPanelNode.panelModel.stateProperty, heatPanelNode.panelModel.stateProperty, intensityPanelNode.panelModel.stateProperty ],
       function( solarPanelState, heatPanelState, intensityPanelState ) {
         return solarPanelState === 'center' || heatPanelState === 'center' || intensityPanelState === 'center';
       } );
@@ -117,7 +124,7 @@ define( function( require ) {
 
     this.addChild( lightNode );
 
-    this.addChild( new FlashlightNode( model.property( 'flashlightOn' ), {
+    this.addChild( new FlashlightNode( model.flashlightOnProperty, {
       left: this.layoutBounds.right - 93,
       centerY: playAreaCenter.y
     } ) );
@@ -125,7 +132,7 @@ define( function( require ) {
     //Accordion boxes for charts
     var intensityBox = new AccordionBox( new BarChartNode( model.intensityProperty ), {
       titleNode: new Text( 'Intensity', { font: new PhetFont( 15 ), fill: 'white' } ),
-      expandedProperty: viewProperties.intensityBoxExpandedProperty,
+      expandedProperty: intensityBoxExpandedProperty,
       fill: 'black', stroke: 'white'
     } );
 
@@ -164,20 +171,15 @@ define( function( require ) {
 
     var secondBox = new AccordionBox( secondaryBarChart, {
       titleNode: new Text( secondBoxTitleProperty.value, { font: new PhetFont( 15 ), fill: 'white' } ),
-      expandedProperty: viewProperties.secondBoxExpandedProperty,
+      expandedProperty: secondBoxExpandedProperty,
       fill: 'black', stroke: 'white'
     } );
     secondBoxTitleProperty.linkAttribute( secondBox, 'title' );
 
-    // Reset view properties
-    model.on( 'reset', function() {
-      viewProperties.reset();
-    } );
-
     this.addChild( new HBox( { x: 10, y: 10, children: [ intensityBox, secondBox ], spacing: 20 } ) );
 
 //    this.addChild( new Rectangle( playAreaCenter.x, playAreaCenter.y, 2, 2, {fill: 'green'} ) );
-//    this.addChild( new Rectangle( model.solarPanel.position.x, model.solarPanel.position.y, 2, 2, {fill: 'yellow'} ) );
+//    this.addChild( new Rectangle( model.solarPanel.positionProperty.value.x, model.solarPanel.positionProperty.value.y, 2, 2, {fill: 'yellow'} ) );
 
 //    this.addChild( new Image( mockupImage, {center: this.layoutBounds.center, opacity: 0.2, pickable: false} ) );
   }

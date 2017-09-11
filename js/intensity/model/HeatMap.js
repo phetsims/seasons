@@ -9,10 +9,10 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var seasons = require( 'SEASONS/seasons' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var Color = require( 'SCENERY/util/Color' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var LinearFunction = require( 'DOT/LinearFunction' );
+  var seasons = require( 'SEASONS/seasons' );
   var Util = require( 'DOT/Util' );
 
   var heatMap = [

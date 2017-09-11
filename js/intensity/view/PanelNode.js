@@ -10,20 +10,20 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var seasons = require( 'SEASONS/seasons' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Shape = require( 'KITE/Shape' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var knobImage = require( 'image!SEASONS/knob.png' );
-  var LinearFunction = require( 'DOT/LinearFunction' );
-  var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
-  var Line = require( 'SCENERY/nodes/Line' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
+  var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
+  var Image = require( 'SCENERY/nodes/Image' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var knobImage = require( 'image!SEASONS/knob.png' );
+  var Line = require( 'SCENERY/nodes/Line' );
+  var LinearFunction = require( 'DOT/LinearFunction' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var Property = require( 'AXON/Property' );
+  var seasons = require( 'SEASONS/seasons' );
+  var Shape = require( 'KITE/Shape' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   //constants
   var FRAME_LINE_WIDTH = 3;

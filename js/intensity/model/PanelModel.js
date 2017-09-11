@@ -9,11 +9,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var seasons = require( 'SEASONS/seasons' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
-  var Property = require( 'AXON/Property' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
+  var seasons = require( 'SEASONS/seasons' );
   var Vector2 = require( 'DOT/Vector2' );
 
   function PanelModel( type ) {

@@ -9,16 +9,16 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var seasons = require( 'SEASONS/seasons' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var Text = require( 'SCENERY/nodes/Text' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var seasons = require( 'SEASONS/seasons' );
+  var Text = require( 'SCENERY/nodes/Text' );
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
 
   var FONT = new PhetFont( 16 );
   var HEIGHT = 200;

@@ -9,10 +9,10 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var seasons = require( 'SEASONS/seasons' );
   var Shape = require( 'KITE/Shape' );
 
   function LightNode( beamCenterY, flashlightOnProperty, panelInPlayAreaProperty, right, options ) {

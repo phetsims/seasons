@@ -9,13 +9,13 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var seasons = require( 'SEASONS/seasons' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var Screen = require( 'JOIST/Screen' );
   var IntensityModel = require( 'SEASONS/intensity/model/IntensityModel' );
   var IntensityView = require( 'SEASONS/intensity/view/IntensityView' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Property = require( 'AXON/Property' );
+  var Screen = require( 'JOIST/Screen' );
+  var seasons = require( 'SEASONS/seasons' );
 
   function IntensityScreen() {
     Screen.call( this,

@@ -9,33 +9,33 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var seasons = require( 'SEASONS/seasons' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var BarChartNode = require( 'SEASONS/intensity/view/BarChartNode' );
-  var ScreenView = require( 'JOIST/ScreenView' );
   var AccordionBox = require( 'SUN/AccordionBox' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
-  var LightNode = require( 'SEASONS/intensity/view/LightNode' );
-  var Toolbox = require( 'SEASONS/intensity/view/Toolbox' );
-  var PanelNode = require( 'SEASONS/intensity/view/PanelNode' );
-  var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
-  var TargetOutlineNode = require( 'SEASONS/intensity/view/TargetOutlineNode' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
-  var DerivedProperty = require( 'AXON/DerivedProperty' );
-  var Property = require( 'AXON/Property' );
-  var LinearFunction = require( 'DOT/LinearFunction' );
+  var BarChartNode = require( 'SEASONS/intensity/view/BarChartNode' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Text = require( 'SCENERY/nodes/Text' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var DerivedProperty = require( 'AXON/DerivedProperty' );
+  var FlashlightNode = require( 'SEASONS/intensity/view/FlashlightNode' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
+  var HeatMap = require( 'SEASONS/intensity/model/HeatMap' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var LightNode = require( 'SEASONS/intensity/view/LightNode' );
+  var LinearFunction = require( 'DOT/LinearFunction' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var PanelNode = require( 'SEASONS/intensity/view/PanelNode' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Property = require( 'AXON/Property' );
+  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var ScreenView = require( 'JOIST/ScreenView' );
+  var seasons = require( 'SEASONS/seasons' );
+  var TargetOutlineNode = require( 'SEASONS/intensity/view/TargetOutlineNode' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var TickMarksNode = require( 'SEASONS/intensity/view/TickMarksNode' );
+  var Toolbox = require( 'SEASONS/intensity/view/Toolbox' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   //For comparing to mockup
-//  var mockupImage = require( 'image!SEASONS/app-768.png' );
 //  var Image = require( 'SCENERY/nodes/Image' );
+//  var mockupImage = require( 'image!SEASONS/app-768.png' );
 
   function IntensityView( model ) {
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );

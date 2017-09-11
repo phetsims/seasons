@@ -9,9 +9,9 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var IntensityScreen = require( 'SEASONS/intensity/IntensityScreen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
-  var IntensityScreen = require( 'SEASONS/intensity/IntensityScreen' );
 
   // strings
   var seasonsTitleString = require( 'string!SEASONS/seasons.title' );

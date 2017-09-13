@@ -40,11 +40,6 @@ define( function( require ) {
   function IntensityView( model ) {
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
 
-    // var viewProperties = new PropertySet( {
-    //   intensityBoxExpanded: false,
-    //   secondBoxExpanded: false
-    // } );
-
     var intensityBoxExpandedProperty = new BooleanProperty( false );
     var secondBoxExpandedProperty = new BooleanProperty( false );
 
@@ -185,6 +180,6 @@ define( function( require ) {
   }
 
   seasons.register( 'IntensityView', IntensityView );
-  
+
   return inherit( ScreenView, IntensityView );
 } );

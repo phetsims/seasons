@@ -25,13 +25,17 @@ define( function( require ) {
     Node.call( this, { pickable: false } );
     this.beamNode = new Path( new Shape(), { opacity: 0.3, fill: '#bdb9b9' } );
     this.addChild( this.beamNode );
-    panelInPlayAreaProperty.onValue( false, function() {self.setLightRect();} );
+    panelInPlayAreaProperty.link( function( panelInPlayArea ) {
+      if ( !panelInPlayArea ) {
+        self.setLightRect();
+      }
+    } );
     flashlightOnProperty.linkAttribute( this, 'visible' );
     this.mutate( options );
   }
 
   seasons.register( 'LightNode', LightNode );
-  
+
   return inherit( Node, LightNode, {
 
     //The shape of the light when no panel is in the way, and it passes through

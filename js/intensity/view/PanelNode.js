@@ -99,7 +99,11 @@ define( function( require ) {
     this.comparePosition = playAreaCenter;
 
     //Update the knob location when the panel arrives in the center
-    panelModel.stateProperty.onValue( 'center', function() {self.updateShape();} );
+    panelModel.stateProperty.link( function( state ) {
+      if ( state === 'center' ) {
+        self.updateShape();
+      }
+    } );
 
     var tmp = new DerivedProperty( [ panelModel.animatingProperty, panelModel.stateProperty ],
       function( animating, state ) {
@@ -107,8 +111,12 @@ define( function( require ) {
       } );
     tmp.linkAttribute( this.knobNode, 'visible' );
 
-    //Update the knob location after the panel animates to the center
-    panelModel.animatingProperty.onValue( false, function() {self.updateShape();} );
+    // Update the knob location after the panel animates to the center
+    panelModel.animatingProperty.link( function( animating ) {
+      if ( !animating ) {
+        self.updateShape();
+      }
+    } );
 
     //TODO: separate the background and border but only where grid lines applied (for performance)
     var children = [ this.background ];
@@ -273,7 +281,7 @@ define( function( require ) {
       //Layout dimensions
       var HEIGHT = 240 * 0.85;
 
-      var scale = ( this.panelModel.type === 'solar' ) ? this.panelModel.scaleProperty.value * 0.4275 : this.panelModel.scaleProperty.value;
+      var scale = (this.panelModel.type === 'solar') ? this.panelModel.scaleProperty.value * 0.4275 : this.panelModel.scaleProperty.value;
 
       var x = this.panelModel.positionProperty.value.x;
       var y = this.panelModel.positionProperty.value.y;

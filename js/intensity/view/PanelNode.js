@@ -138,7 +138,7 @@ define( function( require ) {
       var point = self.globalToParentPoint( event.pointer.point );
       //TODO bad name, x is a Vector2
       var x = point.minus( panelModel.positionProperty.value );
-      panelModel.unclampedAngleProperty.value = originalAngle + x.angle() - angleRelativeToPivot;
+      panelModel.unclampedAngleProperty.value = originalAngle + x.angle - angleRelativeToPivot;
 //      console.log( point.x, point.y, x.x, x.y, panelModel.unclampedAngleProperty.value, panelModel.angleProperty.value );
 //      console.log( panelModel.positionProperty.value, x );
     };
@@ -168,7 +168,7 @@ define( function( require ) {
         else {
           //TODO bad name, dx is a Vector2
           var dx = self.globalToParentPoint( event.pointer.point ).minus( panelModel.positionProperty.value );
-          angleRelativeToPivot = dx.angle();
+          angleRelativeToPivot = dx.angle;
           originalAngle = panelModel.angleProperty.value;
           console.log( 'angleRelativeToPivot', angleRelativeToPivot, 'originalAngle', panelModel.angleProperty.value );
         }

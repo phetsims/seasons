@@ -15,6 +15,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var seasons = require( 'SEASONS/seasons' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Vector2Property = require( 'DOT/Vector2Property' );
 
   function PanelModel( type ) {
 
@@ -30,7 +31,7 @@ define( function( require ) {
     this.scaleProperty = new Property( 0.5 );
 
     //In screen coordinates.  Initial value will be set by the view once it is instantiated
-    this.positionProperty = new Property( new Vector2( 0, 0 ) );
+    this.positionProperty = new Vector2Property( new Vector2( 0, 0 ) );
 
     //State: whether dragging, in the toolbox or in the center
     this.stateProperty = new Property( 'toolbox' );
